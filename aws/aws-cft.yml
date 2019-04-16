@@ -15,10 +15,9 @@ Parameters:
 Mappings:
   RegionMap:
     us-east-1:
-      FirewallAmi:  ami-a2fa3bdf
-      WebServerAmi: ami-028d6461780695a43
-    us-west-1:
-      FirewallAmi: ami-a95b4fc9
+      FirewallAmi: ami-a2fa3bdf
+      WebServerAmi: ami-0080e4c5bc078760e
+      CloudShellAmi: ami-0d540645bac31396e
 
 Resources:
 
@@ -166,6 +165,33 @@ Resources:
       RouteTableId: !Ref DbRouteTable
 
   #####################################################################
+  # CloudShell                                                        #
+  #####################################################################
+
+  CloudShell:
+    Type: AWS::EC2::Instance
+    DependsOn: PublicSubnet
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "CloudShellAmi"]
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            DeleteOnTermination: True
+            VolumeSize: 8
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          PrivateIpAddress: 10.0.0.50
+          SubnetId: !Ref PublicSubnet
+          GroupSet:
+            - !Ref FirewallPublicSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-CloudShell"]]
+
+  #####################################################################
   # Firewall                                                          #
   #####################################################################
 
@@ -304,7 +330,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref KeyName
       BlockDeviceMappings:
-        - DeviceName: /dev/sda1
+        - DeviceName: /dev/xvda
           Ebs:
             VolumeType: gp2
             DeleteOnTermination: True
@@ -328,7 +354,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref KeyName
       BlockDeviceMappings:
-        - DeviceName: /dev/sda1
+        - DeviceName: /dev/xvda
           Ebs:
             VolumeType: gp2
             DeleteOnTermination: True
@@ -349,6 +375,11 @@ Outputs:
   FirewallMgmt:
     Value: !Ref FirewallMgmtInterfaceEip
     Description: IP address of firewall management interface
+
   FirewallPublicIp:
     Value: !Ref FirewallPublicInterfaceEip
     Description: IP address of firewall public interface (ethernet1/1)
+
+  CloudShellPublicIp:
+    Value: !GetAtt CloudShell.PublicIp
+    Description: IP address of Cloud Shell instance
