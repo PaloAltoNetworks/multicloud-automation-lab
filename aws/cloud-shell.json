@@ -20,7 +20,8 @@
             },
             "instance_type": "t2.micro",
             "ssh_username": "ec2-user",
-            "ami_name": "multicloud-automation-{{isotime \"2006.01.02-15.04.05\" }}"
+            "ami_name": "multicloud-automation-cloudshell-{{isotime \"2006.01.02-15.04.05\" }}",
+            "ami_groups": "all"
         }
     ],
     "provisioners": [
