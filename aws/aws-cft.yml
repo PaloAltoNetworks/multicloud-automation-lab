@@ -15,9 +15,8 @@ Parameters:
 Mappings:
   RegionMap:
     us-east-1:
-      FirewallAmi: ami-a2fa3bdf
-      WebServerAmi: ami-0080e4c5bc078760e
-      CloudShellAmi: ami-0d540645bac31396e
+      FirewallAmi: ami-0eb87cdca730cfc42
+      ServerAmi: ami-028d6461780695a43
 
 Resources:
 
@@ -165,33 +164,6 @@ Resources:
       RouteTableId: !Ref DbRouteTable
 
   #####################################################################
-  # CloudShell                                                        #
-  #####################################################################
-
-  CloudShell:
-    Type: AWS::EC2::Instance
-    DependsOn: PublicSubnet
-    Properties:
-      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "CloudShellAmi"]
-      InstanceType: t2.micro
-      KeyName: !Ref KeyName
-      BlockDeviceMappings:
-        - DeviceName: /dev/xvda
-          Ebs:
-            VolumeType: gp2
-            DeleteOnTermination: True
-            VolumeSize: 8
-      NetworkInterfaces:
-        - DeviceIndex: 0
-          PrivateIpAddress: 10.0.0.50
-          SubnetId: !Ref PublicSubnet
-          GroupSet:
-            - !Ref FirewallPublicSecurityGroup
-      Tags:
-        - Key: Name
-          Value: !Join ["", [!Ref "AWS::StackName", "-CloudShell"]]
-
-  #####################################################################
   # Firewall                                                          #
   #####################################################################
 
@@ -201,7 +173,7 @@ Resources:
     Properties:
       Description: Firewall management interface
       SubnetId: !Ref PublicSubnet
-      PrivateIpAddress: 10.0.0.10
+      PrivateIpAddress: 10.0.0.99
       GroupSet:
         - !Ref FirewallMgmtSecurityGroup
 
@@ -224,7 +196,7 @@ Resources:
       Description: Firewall public subnet interface (ethernet1/1)
       SubnetId: !Ref PublicSubnet
       SourceDestCheck: False
-      PrivateIpAddress: 10.0.0.20
+      PrivateIpAddress: 10.0.0.100
       GroupSet:
         - !Ref FirewallPublicSecurityGroup
 
@@ -247,7 +219,7 @@ Resources:
       Description: Firewall web subnet interface (ethernet1/2)
       SubnetId: !Ref WebSubnet
       SourceDestCheck: False
-      PrivateIpAddress: 10.0.1.20
+      PrivateIpAddress: 10.0.1.11
 
   FirewallDbInterface:
     Type: AWS::EC2::NetworkInterface
@@ -256,7 +228,7 @@ Resources:
       Description: Firewall DB subnet interface (ethernet1/3)
       SubnetId: !Ref DbSubnet
       SourceDestCheck: False
-      PrivateIpAddress: 10.0.2.20
+      PrivateIpAddress: 10.0.2.11
 
   Firewall:
     Type: AWS::EC2::Instance
@@ -285,6 +257,9 @@ Resources:
           NetworkInterfaceId: !Ref FirewallWebInterface
         - DeviceIndex: 3
           NetworkInterfaceId: !Ref FirewallDbInterface
+      IamInstanceProfile: !Ref BootstrapInstanceProfile
+      UserData:
+        Fn::Base64: !Join ["", [vmseries-bootstrap-aws-s3bucket=, !Ref BootstrapBucketName]]
       Tags:
         - Key: Name
           Value: !Join ["", [!Ref "AWS::StackName", "-Firewall"]]
@@ -320,13 +295,48 @@ Resources:
           Value: !Join ["", [!Ref "AWS::StackName", "-FirewallPublicSecurityGroup"]]
 
   #####################################################################
-  # Web Server                                                        #
+  # Firewall Bootstrap                                                #
+  #####################################################################
+  
+  BootstrapInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - Ref: BootstrapRole
+
+  BootstrapRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: ec2.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action: s3:ListBucket
+            Effect: Allow
+            Resource: !Join ["", ["arn:aws:s3:::", !Ref BootstrapBucketName]]
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: !Join ["", ["arn:aws:s3:::", !Ref BootstrapBucketName, /*]]
+          Version: '2012-10-17'
+        PolicyName: BootstrapRolePolicy
+
+  #####################################################################
+  # Launchpad                                                         #
   #####################################################################
 
-  WebServer1:
+  Launchpad:
     Type: AWS::EC2::Instance
+    DependsOn: PublicSubnet
     Properties:
-      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "WebServerAmi"]
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "ServerAmi"]
       InstanceType: t2.micro
       KeyName: !Ref KeyName
       BlockDeviceMappings:
@@ -337,7 +347,45 @@ Resources:
             VolumeSize: 8
       NetworkInterfaces:
         - DeviceIndex: 0
-          PrivateIpAddress: 10.0.1.50
+          PrivateIpAddress: 10.0.0.101
+          SubnetId: !Ref PublicSubnet
+          GroupSet:
+            - !Ref FirewallPublicSecurityGroup
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            apt-get update -y
+            apt-get install -y python-pip unzip
+            cd /tmp
+            wget https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+            unzip terraform_0.11.13_linux_amd64.zip -d /usr/local/bin
+            rm -f terraform_0.11.13_linux_amd64.zip
+            pip install ansible pan-python pandevice
+            ansible-galaxy install -p /etc/ansible/roles PaloAltoNetworks.paloaltonetworks
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-Launchpad"]]
+
+  #####################################################################
+  # Web Server                                                        #
+  #####################################################################
+
+  WebServer1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "ServerAmi"]
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            DeleteOnTermination: True
+            VolumeSize: 8
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          PrivateIpAddress: 10.0.1.101
           SubnetId: !Ref WebSubnet
       Tags:
         - Key: Name
@@ -350,7 +398,7 @@ Resources:
   DbServer1:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "WebServerAmi"]
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "ServerAmi"]
       InstanceType: t2.micro
       KeyName: !Ref KeyName
       BlockDeviceMappings:
@@ -361,7 +409,7 @@ Resources:
             VolumeSize: 8
       NetworkInterfaces:
         - DeviceIndex: 0
-          PrivateIpAddress: 10.0.2.50
+          PrivateIpAddress: 10.0.2.101
           SubnetId: !Ref DbSubnet
       Tags:
         - Key: Name
@@ -373,13 +421,13 @@ Resources:
 
 Outputs:
   FirewallMgmt:
-    Value: !Ref FirewallMgmtInterfaceEip
-    Description: IP address of firewall management interface
+    Value: !Join ["", ["https://", !Ref FirewallMgmtInterfaceEip]]
+    Description: VM-Series management interfaces URL
 
   FirewallPublicIp:
     Value: !Ref FirewallPublicInterfaceEip
     Description: IP address of firewall public interface (ethernet1/1)
 
-  CloudShellPublicIp:
-    Value: !GetAtt CloudShell.PublicIp
-    Description: IP address of Cloud Shell instance
+  LaunchpadPublicIp:
+    Value: !GetAtt Launchpad.PublicIp
+    Description: IP address of Launchpad instance
