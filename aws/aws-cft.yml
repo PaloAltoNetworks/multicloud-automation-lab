@@ -15,7 +15,7 @@ Parameters:
 Mappings:
   RegionMap:
     us-east-1:
-      FirewallAmi: ami-0eb87cdca730cfc42
+      FirewallAmi: ami-050725600cf371a1c
       ServerAmi: ami-028d6461780695a43
 
 Resources:
