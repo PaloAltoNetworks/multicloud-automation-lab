@@ -1,0 +1,433 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Ignite 2019 Multicloud Automation Lab (AWS version)
+
+Parameters:
+  KeyName:
+    Description: SSH key pair for new instances
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing keypair
+
+  BootstrapBucketName:
+    Description: Bucket name containing firewall bootstrap
+    Type: String
+    Default: ignite2019-automation-aws
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      FirewallAmi: ami-0eb87cdca730cfc42
+      ServerAmi: ami-028d6461780695a43
+
+Resources:
+
+  #####################################################################
+  # VPC                                                               #
+  #####################################################################
+
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: True
+      EnableDnsHostnames: True
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-VPC"]]
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-InternetGateway"]]
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref "InternetGateway"
+      VpcId: !Ref "Vpc"
+
+  #####################################################################
+  # Subnets                                                           #
+  #####################################################################
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    DependsOn: Vpc
+    Properties:
+      VpcId: !Ref "Vpc"
+      AvailabilityZone: !Select 
+        - 0
+        - Fn::GetAZs: !Ref "AWS::Region"
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: True
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-PublicSubnet"]]
+
+  WebSubnet:
+    Type: AWS::EC2::Subnet
+    DependsOn: Vpc
+    Properties:
+      VpcId: !Ref "Vpc"
+      AvailabilityZone: !Select 
+        - 0
+        - Fn::GetAZs: !Ref "AWS::Region"
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: False
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-WebSubnet"]]
+
+  DbSubnet:
+    Type: AWS::EC2::Subnet
+    DependsOn: Vpc
+    Properties:
+      VpcId: !Ref "Vpc"
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref "AWS::Region"
+      CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: False
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-DbSubnet"]]
+
+  #####################################################################
+  # Route Tables                                                      #
+  #####################################################################
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-PublicRouteTable"]]
+
+  PublicRouteTableDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  WebRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-WebRouteTable"]]
+
+  WebRouteTableDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: FirewallWebInterface
+    Properties:
+      RouteTableId: !Ref WebRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NetworkInterfaceId: !Ref FirewallWebInterface
+
+  WebRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref WebSubnet
+      RouteTableId: !Ref WebRouteTable
+
+  DbRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-DbRouteTable"]]
+
+  DbRouteTableDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: FirewallDbInterface
+    Properties:
+      RouteTableId: !Ref DbRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NetworkInterfaceId: !Ref FirewallDbInterface
+
+  DbRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref DbSubnet
+      RouteTableId: !Ref DbRouteTable
+
+  #####################################################################
+  # Firewall                                                          #
+  #####################################################################
+
+  FirewallMgmtInterface:
+    Type: AWS::EC2::NetworkInterface
+    DependsOn: PublicSubnet
+    Properties:
+      Description: Firewall management interface
+      SubnetId: !Ref PublicSubnet
+      PrivateIpAddress: 10.0.0.99
+      GroupSet:
+        - !Ref FirewallMgmtSecurityGroup
+
+  FirewallMgmtInterfaceEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  FirewallMgmtInterfaceEipAssoc:
+    Type: AWS::EC2::EIPAssociation
+    DependsOn: FirewallMgmtInterfaceEip
+    Properties:
+      AllocationId: !GetAtt FirewallMgmtInterfaceEip.AllocationId
+      NetworkInterfaceId: !Ref FirewallMgmtInterface
+
+  FirewallPublicInterface:
+    Type: AWS::EC2::NetworkInterface
+    DependsOn: PublicSubnet
+    Properties:
+      Description: Firewall public subnet interface (ethernet1/1)
+      SubnetId: !Ref PublicSubnet
+      SourceDestCheck: False
+      PrivateIpAddress: 10.0.0.100
+      GroupSet:
+        - !Ref FirewallPublicSecurityGroup
+
+  FirewallPublicInterfaceEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  FirewallPublicInterfaceEipAssoc:
+    Type: AWS::EC2::EIPAssociation
+    DependsOn: FirewallPublicInterfaceEip
+    Properties:
+      AllocationId: !GetAtt FirewallPublicInterfaceEip.AllocationId
+      NetworkInterfaceId: !Ref FirewallPublicInterface
+
+  FirewallWebInterface:
+    Type: AWS::EC2::NetworkInterface
+    DependsOn: WebSubnet
+    Properties:
+      Description: Firewall web subnet interface (ethernet1/2)
+      SubnetId: !Ref WebSubnet
+      SourceDestCheck: False
+      PrivateIpAddress: 10.0.1.11
+
+  FirewallDbInterface:
+    Type: AWS::EC2::NetworkInterface
+    DependsOn: DbSubnet
+    Properties:
+      Description: Firewall DB subnet interface (ethernet1/3)
+      SubnetId: !Ref DbSubnet
+      SourceDestCheck: False
+      PrivateIpAddress: 10.0.2.11
+
+  Firewall:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - FirewallMgmtInterface
+      - FirewallPublicInterface
+      - FirewallWebInterface
+      - FirewallDbInterface
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "FirewallAmi"]
+      InstanceType: m4.xlarge
+      KeyName: !Ref KeyName
+      EbsOptimized: True
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            DeleteOnTermination: True
+            VolumeSize: 60
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          NetworkInterfaceId: !Ref FirewallMgmtInterface
+        - DeviceIndex: 1
+          NetworkInterfaceId: !Ref FirewallPublicInterface
+        - DeviceIndex: 2
+          NetworkInterfaceId: !Ref FirewallWebInterface
+        - DeviceIndex: 3
+          NetworkInterfaceId: !Ref FirewallDbInterface
+      IamInstanceProfile: !Ref BootstrapInstanceProfile
+      UserData:
+        Fn::Base64: !Join ["", [vmseries-bootstrap-aws-s3bucket=, !Ref BootstrapBucketName]]
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-Firewall"]]
+
+  FirewallMgmtSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Inbound access to firewall management interface
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-FirewallMgmtSecurityGroup"]]
+
+  FirewallPublicSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Wide open security group for firewall external interface
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-FirewallPublicSecurityGroup"]]
+
+  #####################################################################
+  # Firewall Bootstrap                                                #
+  #####################################################################
+  
+  BootstrapInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - Ref: BootstrapRole
+
+  BootstrapRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: ec2.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action: s3:ListBucket
+            Effect: Allow
+            Resource: !Join ["", ["arn:aws:s3:::", !Ref BootstrapBucketName]]
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: !Join ["", ["arn:aws:s3:::", !Ref BootstrapBucketName, /*]]
+          Version: '2012-10-17'
+        PolicyName: BootstrapRolePolicy
+
+  #####################################################################
+  # Launchpad                                                         #
+  #####################################################################
+
+  Launchpad:
+    Type: AWS::EC2::Instance
+    DependsOn: PublicSubnet
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "ServerAmi"]
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            DeleteOnTermination: True
+            VolumeSize: 8
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          PrivateIpAddress: 10.0.0.101
+          SubnetId: !Ref PublicSubnet
+          GroupSet:
+            - !Ref FirewallPublicSecurityGroup
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            apt-get update -y
+            apt-get install -y python-pip unzip
+            cd /tmp
+            wget https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+            unzip terraform_0.11.13_linux_amd64.zip -d /usr/local/bin
+            rm -f terraform_0.11.13_linux_amd64.zip
+            pip install ansible pan-python pandevice
+            ansible-galaxy install -p /etc/ansible/roles PaloAltoNetworks.paloaltonetworks
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-Launchpad"]]
+
+  #####################################################################
+  # Web Server                                                        #
+  #####################################################################
+
+  WebServer1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "ServerAmi"]
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            DeleteOnTermination: True
+            VolumeSize: 8
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          PrivateIpAddress: 10.0.1.101
+          SubnetId: !Ref WebSubnet
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-WebServer1"]]
+
+  #####################################################################
+  # DB Server                                                         #
+  #####################################################################
+
+  DbServer1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "ServerAmi"]
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            DeleteOnTermination: True
+            VolumeSize: 8
+      NetworkInterfaces:
+        - DeviceIndex: 0
+          PrivateIpAddress: 10.0.2.101
+          SubnetId: !Ref DbSubnet
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-DbServer1"]]
+
+#######################################################################
+# Outputs                                                             #
+#######################################################################
+
+Outputs:
+  FirewallMgmt:
+    Value: !Join ["", ["https://", !Ref FirewallMgmtInterfaceEip]]
+    Description: VM-Series management interfaces URL
+
+  FirewallPublicIp:
+    Value: !Ref FirewallPublicInterfaceEip
+    Description: IP address of firewall public interface (ethernet1/1)
+
+  LaunchpadPublicIp:
+    Value: !GetAtt Launchpad.PublicIp
+    Description: IP address of Launchpad instance
