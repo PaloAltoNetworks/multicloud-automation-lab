@@ -1,22 +1,15 @@
 <?xml version="1.0"?>
-<config urldb="paloaltonetworks" version="8.1.0">
+<config urldb="paloaltonetworks" version="9.0.0">
   <mgt-config>
     <users>
-      <entry name="paloalto">
-        <permissions>
-          <role-based>
-            <superuser>yes</superuser>
-          </role-based>
-        </permissions>
-        <phash>$1$omtpasik$JVuMCKVuxaIHBIkdrbR4k.</phash>
-      </entry>
       <entry name="admin">
         <permissions>
           <role-based>
             <superuser>yes</superuser>
           </role-based>
         </permissions>
-        <phash>$1$kpolrmjb$lJ5t7tCjS7Ghd8tachjOJ.</phash>
+        <phash>$1$noewhtbb$Pamy5VKqMsP5MDDiXzpYM0</phash>
+        <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFEZHVZZENtY0xDamRSeTV2Wkk5bSs2UkRKOEoxLzJvYUtFSWM5NlFndTdudksxVHZDVUNNRXZ0ZWZLYW44S0pOeFdnb0FwRUs0WHpCVWptVVNEUkluTDVOTjFkdXJSWE42WEIrS1ZXS0pWMk13ci9lQ1VxK1h3ZE04azFaZW8vNXY4M0p1TUwvZmo4MWU1VXBkK29uS2piZmliRDZpTk95SWFMSW1pb1NYZVl0RmlMbXpxYUdETTZUc3Z2NXhHa2hBSjNvUE1Ga2pIWWN3MFRpWDc0WXlVVFRDMkhpeEUvRHhxb3E2NGdwWnQ1cU1sZGVPaHdmVVpCU2RXZVBKejd2eW93RDVmNnEvMWlZNTBkYS9uYWorVG5YcXFGV2t1NG00THk4cUFrVitlWVBIQnZ3eVdoZzRMRVppTlZBWnZULzdkSmw0TGQvUVpoVnFwVExBUnFlQmQgcm9iZXJ0aGFnZW5AU0pDTUFDOTI2WkczUVI=</public-key>
       </entry>
     </users>
   </mgt-config>
@@ -457,6 +450,7 @@
           <management>
             <hostname-type-in-syslog>FQDN</hostname-type-in-syslog>
             <initcfg>
+              <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFEZHVZZENtY0xDamRSeTV2Wkk5bSs2UkRKOEoxLzJvYUtFSWM5NlFndTdudksxVHZDVUNNRXZ0ZWZLYW44S0pOeFdnb0FwRUs0WHpCVWptVVNEUkluTDVOTjFkdXJSWE42WEIrS1ZXS0pWMk13ci9lQ1VxK1h3ZE04azFaZW8vNXY4M0p1TUwvZmo4MWU1VXBkK29uS2piZmliRDZpTk95SWFMSW1pb1NYZVl0RmlMbXpxYUdETTZUc3Z2NXhHa2hBSjNvUE1Ga2pIWWN3MFRpWDc0WXlVVFRDMkhpeEUvRHhxb3E2NGdwWnQ1cU1sZGVPaHdmVVpCU2RXZVBKejd2eW93RDVmNnEvMWlZNTBkYS9uYWorVG5YcXFGV2t1NG00THk4cUFrVitlWVBIQnZ3eVdoZzRMRVppTlZBWnZULzdkSmw0TGQvUVpoVnFwVExBUnFlQmQgcm9iZXJ0aGFnZW5AU0pDTUFDOTI2WkczUVI=</public-key>
               <type>
                 <dhcp-client>
                   <send-hostname>yes</send-hostname>
@@ -466,8 +460,6 @@
                 </dhcp-client>
               </type>
               <hostname>gcp-fw</hostname>
-              <dns-primary>8.8.8.8</dns-primary>
-              <dns-secondary>8.8.4.4</dns-secondary>
             </initcfg>
           </management>
         </setting>
@@ -477,21 +469,21 @@
           <application/>
           <application-group/>
           <zone>
-            <entry name="Untrust">
+            <entry name="untrust-zone">
               <network>
                 <layer3>
                   <member>ethernet1/1</member>
                 </layer3>
               </network>
             </entry>
-            <entry name="Web">
+            <entry name="web-zone">
               <network>
                 <layer3>
                   <member>ethernet1/2</member>
                 </layer3>
               </network>
             </entry>
-            <entry name="Db">
+            <entry name="db-zone">
               <network>
                 <layer3>
                   <member>ethernet1/3</member>
@@ -527,12 +519,12 @@
           <rulebase>
             <security>
               <rules>
-                <entry name="SSH inbound">
+                <entry name="Allow ping" uuid="b2b37d98-0410-4e9d-9354-b40d670c56e5">
                   <to>
-                    <member>Web</member>
+                    <member>any</member>
                   </to>
                   <from>
-                    <member>Untrust</member>
+                    <member>any</member>
                   </from>
                   <source>
                     <member>any</member>
@@ -548,7 +540,6 @@
                   </category>
                   <application>
                     <member>ping</member>
-                    <member>ssh</member>
                   </application>
                   <service>
                     <member>application-default</member>
@@ -559,15 +550,14 @@
                   <log-start>yes</log-start>
                   <log-end>yes</log-end>
                   <action>allow</action>
-                  <disabled>yes</disabled>
                 </entry>
-                <entry name="SSH 221-222 inbound">
+                <entry name="SSH inbound" uuid="19ad5889-bd6a-4683-b242-782b85396847">
                   <to>
-                    <member>Db</member>
-                    <member>Web</member>
+                    <member>db-zone</member>
+                    <member>web-zone</member>
                   </to>
                   <from>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </from>
                   <source>
                     <member>any</member>
@@ -596,45 +586,14 @@
                   <log-end>yes</log-end>
                   <action>allow</action>
                   <disabled>no</disabled>
+                  <description>Allow SSH inbound on NAT ports</description>
                 </entry>
-                <entry name="Allow all ping">
+                <entry name="Web inbound" uuid="e6729529-08a6-4f55-81f9-11351511ce31">
                   <to>
-                    <member>any</member>
+                    <member>web-zone</member>
                   </to>
                   <from>
-                    <member>any</member>
-                  </from>
-                  <source>
-                    <member>any</member>
-                  </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
-                  <source-user>
-                    <member>any</member>
-                  </source-user>
-                  <category>
-                    <member>any</member>
-                  </category>
-                  <application>
-                    <member>ping</member>
-                  </application>
-                  <service>
-                    <member>application-default</member>
-                  </service>
-                  <hip-profiles>
-                    <member>any</member>
-                  </hip-profiles>
-                  <log-start>yes</log-start>
-                  <log-end>yes</log-end>
-                  <action>allow</action>
-                </entry>
-                <entry name="Web browsing">
-                  <to>
-                    <member>Web</member>
-                  </to>
-                  <from>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </from>
                   <source>
                     <member>any</member>
@@ -660,41 +619,9 @@
                   <log-start>yes</log-start>
                   <log-end>yes</log-end>
                   <action>allow</action>
+                  <description>Allow all inbound web traffic</description>
                 </entry>
-                <entry name="Allow all outbound">
-                  <to>
-                    <member>Untrust</member>
-                  </to>
-                  <from>
-                    <member>Db</member>
-                    <member>Web</member>
-                  </from>
-                  <source>
-                    <member>any</member>
-                  </source>
-                  <destination>
-                    <member>any</member>
-                  </destination>
-                  <source-user>
-                    <member>any</member>
-                  </source-user>
-                  <category>
-                    <member>any</member>
-                  </category>
-                  <application>
-                    <member>any</member>
-                  </application>
-                  <service>
-                    <member>application-default</member>
-                  </service>
-                  <hip-profiles>
-                    <member>any</member>
-                  </hip-profiles>
-                  <log-start>yes</log-start>
-                  <log-end>yes</log-end>
-                  <action>allow</action>
-                </entry>
-                <entry name="Web to DB">
+                <entry name="Web to DB" uuid="df5f70fd-fe92-46ff-ae65-72ce3f72714e">
                   <to>
                     <member>any</member>
                   </to>
@@ -702,10 +629,10 @@
                     <member>any</member>
                   </from>
                   <source>
-                    <member>web-object</member>
+                    <member>web-srv</member>
                   </source>
                   <destination>
-                    <member>db-object</member>
+                    <member>db-srv</member>
                   </destination>
                   <source-user>
                     <member>any</member>
@@ -726,20 +653,51 @@
                   <log-end>yes</log-end>
                   <action>allow</action>
                   <profile-setting>
-                    <profiles>
-                      <vulnerability>
-                        <member>Test Drive</member>
-                      </vulnerability>
-                    </profiles>
+                    <profiles/>
                   </profile-setting>
+                  <description>Allow web to database traffic</description>
+                </entry>
+                <entry name="Allow outbound" uuid="b287315d-44c0-4399-b3a7-d1d655075462">
+                  <to>
+                    <member>untrust-zone</member>
+                  </to>
+                  <from>
+                    <member>db-zone</member>
+                    <member>web-zone</member>
+                  </from>
+                  <source>
+                    <member>any</member>
+                  </source>
+                  <destination>
+                    <member>any</member>
+                  </destination>
+                  <source-user>
+                    <member>any</member>
+                  </source-user>
+                  <category>
+                    <member>any</member>
+                  </category>
+                  <application>
+                    <member>any</member>
+                  </application>
+                  <service>
+                    <member>application-default</member>
+                  </service>
+                  <hip-profiles>
+                    <member>any</member>
+                  </hip-profiles>
+                  <log-start>yes</log-start>
+                  <log-end>yes</log-end>
+                  <action>allow</action>
+                  <description>Allow all outbound traffic</description>
                 </entry>
               </rules>
             </security>
             <nat>
               <rules>
-                <entry name="Web SSH">
+                <entry name="Web SSH" uuid="791a3438-e9da-4505-8369-9221de6cbb3a">
                   <destination-translation>
-                    <translated-address>web-object</translated-address>
+                    <translated-address>web-srv</translated-address>
                     <translated-port>22</translated-port>
                   </destination-translation>
                   <source-translation>
@@ -750,10 +708,10 @@
                     </dynamic-ip-and-port>
                   </source-translation>
                   <to>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </to>
                   <from>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </from>
                   <source>
                     <member>any</member>
@@ -764,9 +722,9 @@
                   <service>service-tcp-221</service>
                   <nat-type>ipv4</nat-type>
                 </entry>
-                <entry name="DB SSH">
+                <entry name="DB SSH" uuid="c036f754-a02c-4754-ab37-d73a60fc1b30">
                   <destination-translation>
-                    <translated-address>db-object</translated-address>
+                    <translated-address>db-srv</translated-address>
                     <translated-port>22</translated-port>
                   </destination-translation>
                   <source-translation>
@@ -777,10 +735,10 @@
                     </dynamic-ip-and-port>
                   </source-translation>
                   <to>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </to>
                   <from>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </from>
                   <source>
                     <member>any</member>
@@ -792,9 +750,9 @@
                   <nat-type>ipv4</nat-type>
                   <disabled>no</disabled>
                 </entry>
-                <entry name="WordPress NAT">
+                <entry name="WordPress NAT" uuid="7ef03c86-d95b-4380-a497-a62d40180df3">
                   <destination-translation>
-                    <translated-address>web-object</translated-address>
+                    <translated-address>web-srv</translated-address>
                     <translated-port>80</translated-port>
                   </destination-translation>
                   <source-translation>
@@ -805,10 +763,10 @@
                     </dynamic-ip-and-port>
                   </source-translation>
                   <to>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </to>
                   <from>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </from>
                   <source>
                     <member>any</member>
@@ -820,7 +778,7 @@
                   <nat-type>ipv4</nat-type>
                   <disabled>no</disabled>
                 </entry>
-                <entry name="Outbound nat">
+                <entry name="Outbound nat" uuid="4fd1e393-db7c-4dd2-8c7a-ba19afee939e">
                   <source-translation>
                     <dynamic-ip-and-port>
                       <interface-address>
@@ -829,7 +787,7 @@
                     </dynamic-ip-and-port>
                   </source-translation>
                   <to>
-                    <member>Untrust</member>
+                    <member>untrust-zone</member>
                   </to>
                   <from>
                     <member>any</member>
@@ -847,7 +805,7 @@
             </nat>
             <default-security-rules>
               <rules>
-                <entry name="interzone-default">
+                <entry name="interzone-default" uuid="3c2ff3c1-aef7-4fae-80d8-760f82b4df56">
                   <action>deny</action>
                   <log-start>yes</log-start>
                   <log-end>yes</log-end>
@@ -978,13 +936,16 @@
                 <description>WW's profile</description>
               </entry>
             </vulnerability>
+            <custom-url-category/>
           </profiles>
           <address>
-            <entry name="web-object">
+            <entry name="web-srv">
               <ip-netmask>10.5.2.5</ip-netmask>
+              <description>Web server</description>
             </entry>
-            <entry name="db-object">
+            <entry name="db-srv">
               <ip-netmask>10.5.3.5</ip-netmask>
+              <description>Database server</description>
             </entry>
           </address>
           <import>
