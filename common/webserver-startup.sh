@@ -16,31 +16,30 @@ while true
    fi
   sleep 10s
 done
-echo "Download content"
-while true
-  do
-   resp=$(curl -s -S -g --insecure "https://$FW_IP/api/?type=op&cmd=<request><content><upgrade><download><latest></latest></download></upgrade></content></request>&key=LUFRPT1reXlBaWVoVmJoSUJ4K1RPejEwMUpveFUzRWM9MFNNYTI2OWVNaGpKblB0R1JLUjYxRnRFaGFWQkgzV08wNkt6NSt3bHNZcz0=")
-   echo $resp
-   if [[ $resp == *"success"* ]] ; then
-     break
-   fi
-  sleep 10s
-done
-echo "Install content"
-while true
-  do
-   resp=$(curl -s -S -g --insecure "https://$FW_IP/api/?type=op&cmd=<request><content><upgrade><install><version>latest</version></install></upgrade></content></request>&key=LUFRPT1reXlBaWVoVmJoSUJ4K1RPejEwMUpveFUzRWM9MFNNYTI2OWVNaGpKblB0R1JLUjYxRnRFaGFWQkgzV08wNkt6NSt3bHNZcz0=")
-   echo $resp
-   if [[ $resp == *"success"* ]] ; then
-     break
-   fi
-  sleep 10s
-done
+#echo "Download content"
+#while true
+#  do
+#   resp=$(curl -s -S -g --insecure "https://$FW_IP/api/?type=op&cmd=<request><content><upgrade><download><latest></latest></download></upgrade></content></request>&key=LUFRPT1reXlBaWVoVmJoSUJ4K1RPejEwMUpveFUzRWM9MFNNYTI2OWVNaGpKblB0R1JLUjYxRnRFaGFWQkgzV08wNkt6NSt3bHNZcz0=")
+#   echo $resp
+#   if [[ $resp == *"success"* ]] ; then
+#     break
+#   fi
+#  sleep 10s
+#done
+#echo "Install content"
+#while true
+#  do
+#   resp=$(curl -s -S -g --insecure "https://$FW_IP/api/?type=op&cmd=<request><content><upgrade><install><version>latest</version></install></upgrade></content></request>&key=LUFRPT1reXlBaWVoVmJoSUJ4K1RPejEwMUpveFUzRWM9MFNNYTI2OWVNaGpKblB0R1JLUjYxRnRFaGFWQkgzV08wNkt6NSt3bHNZcz0=")
+#   echo $resp
+#   if [[ $resp == *"success"* ]] ; then
+#     break
+#   fi
+#  sleep 10s
+#done
 
-
 while true
   do
-   resp=$(curl -s -S -g --insecure "https://raw.githubusercontent.com/PaloAltoNetworks/googlecloud/master/two-tier-template/ssh-to-db.cgi")
+   resp=$(curl -s -S -g --insecure "https://raw.githubusercontent.com/PaloAltoNetworks/multicloud-automation-lab/gcp/common/ssh-to-db.cgi")
    echo $resp
    if [[ $resp == *"DB-IP-ADDRESS"* ]] ; then
      break
@@ -63,13 +62,13 @@ bash /usr/share/doc/wordpress/examples/setup-mysql -n Demo -t $DB_IP $DB_IP
 sed -i "s/define('DB_USER'.*/define('DB_USER', 'demouser');/g" /etc/wordpress/config-$DB_IP.php
 sed -i "s/define('DB_PASSWORD'.*/define('DB_PASSWORD', 'PaloAlto123!');/g" /etc/wordpress/config-$DB_IP.php
 mv /etc/wordpress/config-$DB_IP.php /etc/wordpress/config-$FW_PublicIP.php
-wget -O /usr/lib/cgi-bin/guess-sql-root-password.cgi https://raw.githubusercontent.com/PaloAltoNetworks/googlecloud/master/two-tier-template/guess-sql-root-password.cgi
+wget -O /usr/lib/cgi-bin/guess-sql-root-password.cgi https://raw.githubusercontent.com/PaloAltoNetworks/multicloud-automation-lab/gcp/common/guess-sql-root-password.cgi
 chmod +x /usr/lib/cgi-bin/guess-sql-root-password.cgi
 sed -i "s/DB-IP-ADDRESS/$DB_IP/g" /usr/lib/cgi-bin/guess-sql-root-password.cgi
-wget -O /usr/lib/cgi-bin/ssh-to-db.cgi https://raw.githubusercontent.com/PaloAltoNetworks/googlecloud/master/two-tier-template/ssh-to-db.cgi
+wget -O /usr/lib/cgi-bin/ssh-to-db.cgi https://raw.githubusercontent.com/PaloAltoNetworks/multicloud-automation-lab/gcp/common/ssh-to-db.cgi
 chmod +x /usr/lib/cgi-bin/ssh-to-db.cgi
 sed -i "s/DB-IP-ADDRESS/$DB_IP/g" /usr/lib/cgi-bin/ssh-to-db.cgi
-wget -O /var/www/html/sql-attack.html https://raw.githubusercontent.com/PaloAltoNetworks/googlecloud/master/two-tier-template/sql-attack.html
+wget -O /var/www/html/sql-attack.html https://raw.githubusercontent.com/PaloAltoNetworks/multicloud-automation-lab/gcp/common/sql-attack.html
 ln -sf /etc/apache2/conf-available/serve-cgi-bin.conf /etc/apache2/conf-enabled/serve-cgi-bin.conf
 ln -sf /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/cgi.load
 systemctl restart apache2

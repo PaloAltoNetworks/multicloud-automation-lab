@@ -14,7 +14,7 @@ while true
     done
 while true
   do
-   resp=$(curl -s -S -g --insecure "https://raw.githubusercontent.com/PaloAltoNetworks/googlecloud/master/two-tier-template/ssh-to-db.cgi")
+   resp=$(curl -s -S -g --insecure "https://raw.githubusercontent.com/PaloAltoNetworks/multicloud-automation-lab/gcp/common/ssh-to-db.cgi")
    echo $resp
    if [[ $resp == *"DB-IP-ADDRESS"* ]] ; then
      break
