@@ -1,11 +1,10 @@
 #!/bin/bash
-exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 temp=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/zone" -H "Metadata-Flavor: Google")
 zone=$(basename $temp)
-FW_IP=$(gcloud compute instances describe vm-series --zone=$zone --format="value(networkInterfaces[3].networkIP)")
+firewall=$(gcloud compute instances describe vm-series --zone=$zone --format="value(networkInterfaces[3].networkIP)")
 while true
     do
-        resp=$(curl -s -S -g --insecure "https://$FW_IP/api/?type=op&cmd=<show><chassis-ready></chassis-ready></show>&key=LUFRPT1reXlBaWVoVmJoSUJ4K1RPejEwMUpveFUzRWM9MFNNYTI2OWVNaGpKblB0R1JLUjYxRnRFaGFWQkgzV08wNkt6NSt3bHNZcz0=")
+        resp=$(curl -s -S -g --insecure "https://$firewall/api/?type=op&cmd=<show><chassis-ready></chassis-ready></show>&key=LUFRPT1reXlBaWVoVmJoSUJ4K1RPejEwMUpveFUzRWM9MFNNYTI2OWVNaGpKblB0R1JLUjYxRnRFaGFWQkgzV08wNkt6NSt3bHNZcz0=")
 	echo $resp
         if [[ $resp == *"[CDATA[yes"* ]] ; then
             break
