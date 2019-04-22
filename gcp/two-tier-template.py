@@ -23,9 +23,9 @@ zone = "us-central1-b"
 bootstrap_bucket = "multicloud-automation-ignite19-us"
 scripts_bucket = "multicloud-automation-ignite19-us"
 #serviceaccount = ###GCP service account
-
-
 image = "vmseries-bundle2-901"
+
+
 mgmt_network = "mgmt-network"
 mgmt_subnet = "mgmt-subnet"
 web_network = "web-network"
@@ -83,8 +83,8 @@ def GenerateConfig(context):
           'web-subnet': web_subnet,
           'imageWeb': imageWeb,
           #'sshkey': sshkey,
-          'serviceaccount': context.env['project_number'] + '-compute@developer.gserviceaccount.com',
           'bootstrapbucket': scripts_bucket,
+          'serviceaccount': context.env['project_number'] + '-compute@developer.gserviceaccount.com'
       }
   },
     {
@@ -98,8 +98,8 @@ def GenerateConfig(context):
           'db-subnet': db_subnet,
           'imageWeb': imageWeb,
           #'sshkey': sshkey,
-          'serviceaccount': context.env['project_number'] + '-compute@developer.gserviceaccount.com',
           'bootstrapbucket': scripts_bucket,
+          'serviceaccount': context.env['project_number'] + '-compute@developer.gserviceaccount.com'
       }
   },
   {
