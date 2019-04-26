@@ -1,85 +1,95 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Multi-cloud deployment lab",
-    "Mappings": {
-        "RegionMap": {
-            "ap-northeast-1": {
-                "DB9AMD": "ami-0c4290d7ce45d7bbe"
-            },
-            "ap-northeast-2": {
-                "DB9AMD": "ami-0fa1392d5d545f9e8"
-            },
-            "ap-south-1": {
-                "DB9AMD": "ami-0b6490868957ce747"
-            },
-            "ap-southeast-1": {
-                "DB9AMD": "ami-04c9740a9ed018dba"
-            },
-            "ap-southeast-2": {
-                "DB9AMD": "ami-0b91189c4f9f5cd9e"
-            },
-            "ca-central-1": {
-                "DB9AMD": "ami-0857efbad274a1a89"
-            },
-            "eu-central-1": {
-                "DB9AMD": "ami-05449f21272b4ee56"
-            },
-            "eu-north-1": {
-                "DB9AMD": "ami-043a919b6dc7c51cc"
-            },
-            "eu-west-1": {
-                "DB9AMD": "ami-035c67e6a9ef8f024"
-            }
-            "eu-west-2": {
-                "DB9AMD": "ami-0ef10a4062f24d89d"
-            }
-            "eu-west-3": {
-                "DB9AMD": "ami-0cb185e7696ffe300"
-            }
-            "sa-east-1": {
-                "DB9AMD": "ami-0bc0ce4ab8b82305c"
-            },
-            "us-east-1": {
-                "DB9AMD": "ami-0f9e7e8867f55fd8e"
-            },
-            "us-east-2": {
-                "DB9AMD": "ami-00c5940f2b52c5d98"
-            },
-            "us-west-1": {
-                "DB9AMD": "ami-0afda78f1d0272d99"
-            },
-            "us-west-2": {
-                "DB9AMD": "ami-01d07e14f082b3ba1"
-            }
-        }
-    },
-    "Resources": {
-        "LpSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupDescription": "Allow SSH in",
-                "SecurityGroupIngress": [
-                    {"IpProtocol": "tcp", "FromPort": "22", "ToPort": "22", "CidrIp": "0.0.0.0/0"},
-                ],
-            },
-        },
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "Multi-cloud deployment lab",
+	"Mappings": {
+		"RegionMap": {
+			"ap-northeast-1": {
+				"DB9AMD": "ami-0c4290d7ce45d7bbe"
+			},
+			"ap-northeast-2": {
+				"DB9AMD": "ami-0fa1392d5d545f9e8"
+			},
+			"ap-south-1": {
+				"DB9AMD": "ami-0b6490868957ce747"
+			},
+			"ap-southeast-1": {
+				"DB9AMD": "ami-04c9740a9ed018dba"
+			},
+			"ap-southeast-2": {
+				"DB9AMD": "ami-0b91189c4f9f5cd9e"
+			},
+			"ca-central-1": {
+				"DB9AMD": "ami-0857efbad274a1a89"
+			},
+			"eu-central-1": {
+				"DB9AMD": "ami-05449f21272b4ee56"
+			},
+			"eu-north-1": {
+				"DB9AMD": "ami-043a919b6dc7c51cc"
+			},
+			"eu-west-1": {
+				"DB9AMD": "ami-035c67e6a9ef8f024"
+			},
+			"eu-west-2": {
+				"DB9AMD": "ami-0ef10a4062f24d89d"
+			},
+			"eu-west-3": {
+				"DB9AMD": "ami-0cb185e7696ffe300"
+			},
+			"sa-east-1": {
+				"DB9AMD": "ami-0bc0ce4ab8b82305c"
+			},
+			"us-east-1": {
+				"DB9AMD": "ami-0f9e7e8867f55fd8e"
+			},
+			"us-east-2": {
+				"DB9AMD": "ami-00c5940f2b52c5d98"
+			},
+			"us-west-1": {
+				"DB9AMD": "ami-0afda78f1d0272d99"
+			},
+			"us-west-2": {
+				"DB9AMD": "ami-01d07e14f082b3ba1"
+			}
+		}
+	},
+	"Resources": {
+		"LpSecurityGroup": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"GroupDescription": "Allow SSH in",
+				"SecurityGroupIngress": [{
+					"IpProtocol": "tcp",
+					"FromPort": "22",
+					"ToPort": "22",
+					"CidrIp": "0.0.0.0/0"
+				}]
+			}
+		},
 
-        "Launchpad": {
-            "Type": "AWS::EC2::Instance",
-            "Properties": {
-                "ImageId": { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "DB9AMD"]},
-                "InstanceType": "t2.micro",
-                "SecurityGroups": [ {"Ref": "LpSecurityGroup"} ],
-                "UserData":
-                "IyEvdXNyL2Jpbi9lbnYgYmFzaAoKIyBDb3B5cmlnaHQgMjAxOSBQYWxvIEFsdG8gTmV0d29ya3MuCiMKIyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZlcnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsKIyB5b3UgbWF5IG5vdCB1c2UgdGhpcyBmaWxlIGV4Y2VwdCBpbiBjb21wbGlhbmNlIHdpdGggdGhlIExpY2Vuc2UuCiMgWW91IG1heSBvYnRhaW4gYSBjb3B5IG9mIHRoZSBMaWNlbnNlIGF0CiMKIyAgIGh0dHA6Ly93d3cuYXBhY2hlLm9yZy9saWNlbnNlcy9MSUNFTlNFLTIuMAojCiMgVW5sZXNzIHJlcXVpcmVkIGJ5IGFwcGxpY2FibGUgbGF3IG9yIGFncmVlZCB0byBpbiB3cml0aW5nLCBzb2Z0d2FyZQojIGRpc3RyaWJ1dGVkIHVuZGVyIHRoZSBMaWNlbnNlIGlzIGRpc3RyaWJ1dGVkIG9uIGFuICJBUyBJUyIgQkFTSVMsCiMgV0lUSE9VVCBXQVJSQU5USUVTIE9SIENPTkRJVElPTlMgT0YgQU5ZIEtJTkQsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQuCiMgU2VlIHRoZSBMaWNlbnNlIGZvciB0aGUgc3BlY2lmaWMgbGFuZ3VhZ2UgZ292ZXJuaW5nIHBlcm1pc3Npb25zIGFuZAojIGxpbWl0YXRpb25zIHVuZGVyIHRoZSBMaWNlbnNlLgoKIyBGb3IgdXNlIG9uIERlYmlhbiA5IChTdHJldGNoKQoKZWNobyAiSW5zdGFsbGluZyByZXF1aXJlZCBwYWNrYWdlcyAuLi4iCmFwdCB1cGRhdGUgLXkgLXEKYXB0LWdldCBpbnN0YWxsIHVuemlwIGdpdCBqcSBweXRob24tcGlwIC15IC1xCgplY2hvICJTZXR0aW5nIHVwIHN0dWRlbnQgYWNjb3VudCAuLi4iCnVzZXJhZGQgLW0gLXMgL2Jpbi9iYXNoIHN0dWRlbnQKZWNobyAnc3R1ZGVudDpJZ25pdGUyMDE5JyB8IGNocGFzc3dkCnVzZXJtb2QgLWFHIHN1ZG8gc3R1ZGVudAoKZWNobyAiQ29uZmlndXJpbmcgU1NIIHNlcnZlciBmb3IgcGFzc3dvcmQgYXV0aGVudGljYXRpb24gLi4uIgptdiAvZXRjL3NzaC9zc2hkX2NvbmZpZyAvZXRjL3NzaC9zc2hkX2NvbmZpZy5vcmlnCmNhdCAvZXRjL3NzaC9zc2hkX2NvbmZpZy5vcmlnIHwgc2VkICdzL15QYXNzd29yZEF1dGhlbnRpY2F0aW9uIG5vL1Bhc3N3b3JkQXV0aGVudGljYXRpb24geWVzL2cnID4gL2V0Yy9zc2gvc3NoZF9jb25maWcKc2VydmljZSBzc2hkIHJlc3RhcnQKCmVjaG8gIkNyZWF0aW5nIC52aW1yYyAuLi4iCmNhdCA+IC9ob21lL3N0dWRlbnQvLnZpbXJjIDw8IEVPRgpzZXQgcnVsZXIKc2V0IHNob3dtb2RlCnNldCBzaG93bWF0Y2gKc2V0IHRhYnN0b3A9NApzZXQgc2hpZnR3aWR0aD00CnNldCBldApzZXQgbGFzdHN0YXR1cz0yCnNldCBwYXN0ZQpFT0YKCmVjaG8gIkluc3RhbGxpbmcgQW5zaWJsZSAuLi4iCnBpcCAtcSBpbnN0YWxsIHBhbi1weXRob24gcGFuZGV2aWNlIHhtbHRvZGljdCBhbnNpYmxlCi91c3IvbG9jYWwvYmluL2Fuc2libGUtZ2FsYXh5IGluc3RhbGwgUGFsb0FsdG9OZXR3b3Jrcy5wYWxvYWx0b25ldHdvcmtzCm12IC9yb290Ly5hbnNpYmxlIC9ob21lL3N0dWRlbnQKCmVjaG8gIkluc3RhbGxpbmcgVGVycmFmb3JtIC4uLiIKdGVycmFmb3JtX3VybD0kKGN1cmwgaHR0cHM6Ly9yZWxlYXNlcy5oYXNoaWNvcnAuY29tL2luZGV4Lmpzb24gfCBqcSAne3RlcnJhZm9ybX0nIHwgZWdyZXAgImxpbnV4LiphbWQ2NCIgfCBzb3J0IC0tdmVyc2lvbi1zb3J0IC1yIHwgZ3JlcCAtRXYgJ2FscGhhfGJldGEnIHwgaGVhZCAtMSB8IGF3ayAtRltcIl0gJ3twcmludCAkNH0nKQpjZCAvdG1wCmN1cmwgLW8gdGVycmFmb3JtLnppcCAkdGVycmFmb3JtX3VybAp1bnppcCB0ZXJyYWZvcm0uemlwCm12IHRlcnJhZm9ybSAvdXNyL2xvY2FsL2Jpbi8Kcm0gLWYgdGVycmFmb3JtLnppcAoKZWNobyAiRml4aW5nIGFsbCBwZXJtaXNzaW9ucyAuLi4iCmNob3duIC1SIHN0dWRlbnQ6c3R1ZGVudCAvaG9tZS9zdHVkZW50CgplY2hvICJEb25lIHdpdGggdXNlciBkYXRhIGluaXQhIgo="
-            },
-        },
-    },
+		"Launchpad": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {
+					"Fn::FindInMap": ["RegionMap", {
+						"Ref": "AWS::Region"
+					}, "DB9AMD"]
+				},
+				"InstanceType": "t2.micro",
+				"SecurityGroups": [{
+					"Ref": "LpSecurityGroup"
+				}],
+				"UserData": "IyEvdXNyL2Jpbi9lbnYgYmFzaAoKIyBDb3B5cmlnaHQgMjAxOSBQYWxvIEFsdG8gTmV0d29ya3MuCiMKIyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZlcnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsKIyB5b3UgbWF5IG5vdCB1c2UgdGhpcyBmaWxlIGV4Y2VwdCBpbiBjb21wbGlhbmNlIHdpdGggdGhlIExpY2Vuc2UuCiMgWW91IG1heSBvYnRhaW4gYSBjb3B5IG9mIHRoZSBMaWNlbnNlIGF0CiMKIyAgIGh0dHA6Ly93d3cuYXBhY2hlLm9yZy9saWNlbnNlcy9MSUNFTlNFLTIuMAojCiMgVW5sZXNzIHJlcXVpcmVkIGJ5IGFwcGxpY2FibGUgbGF3IG9yIGFncmVlZCB0byBpbiB3cml0aW5nLCBzb2Z0d2FyZQojIGRpc3RyaWJ1dGVkIHVuZGVyIHRoZSBMaWNlbnNlIGlzIGRpc3RyaWJ1dGVkIG9uIGFuICJBUyBJUyIgQkFTSVMsCiMgV0lUSE9VVCBXQVJSQU5USUVTIE9SIENPTkRJVElPTlMgT0YgQU5ZIEtJTkQsIGVpdGhlciBleHByZXNzIG9yIGltcGxpZWQuCiMgU2VlIHRoZSBMaWNlbnNlIGZvciB0aGUgc3BlY2lmaWMgbGFuZ3VhZ2UgZ292ZXJuaW5nIHBlcm1pc3Npb25zIGFuZAojIGxpbWl0YXRpb25zIHVuZGVyIHRoZSBMaWNlbnNlLgoKIyBGb3IgdXNlIG9uIERlYmlhbiA5IChTdHJldGNoKQoKZWNobyAiSW5zdGFsbGluZyByZXF1aXJlZCBwYWNrYWdlcyAuLi4iCmFwdCB1cGRhdGUgLXkgLXEKYXB0LWdldCBpbnN0YWxsIHVuemlwIGdpdCBqcSBweXRob24tcGlwIC15IC1xCgplY2hvICJTZXR0aW5nIHVwIHN0dWRlbnQgYWNjb3VudCAuLi4iCnVzZXJhZGQgLW0gLXMgL2Jpbi9iYXNoIHN0dWRlbnQKZWNobyAnc3R1ZGVudDpJZ25pdGUyMDE5JyB8IGNocGFzc3dkCnVzZXJtb2QgLWFHIHN1ZG8gc3R1ZGVudAoKZWNobyAiQ29uZmlndXJpbmcgU1NIIHNlcnZlciBmb3IgcGFzc3dvcmQgYXV0aGVudGljYXRpb24gLi4uIgptdiAvZXRjL3NzaC9zc2hkX2NvbmZpZyAvZXRjL3NzaC9zc2hkX2NvbmZpZy5vcmlnCmNhdCAvZXRjL3NzaC9zc2hkX2NvbmZpZy5vcmlnIHwgc2VkICdzL15QYXNzd29yZEF1dGhlbnRpY2F0aW9uIG5vL1Bhc3N3b3JkQXV0aGVudGljYXRpb24geWVzL2cnID4gL2V0Yy9zc2gvc3NoZF9jb25maWcKc2VydmljZSBzc2hkIHJlc3RhcnQKCmVjaG8gIkNyZWF0aW5nIC52aW1yYyAuLi4iCmNhdCA+IC9ob21lL3N0dWRlbnQvLnZpbXJjIDw8IEVPRgpzZXQgcnVsZXIKc2V0IHNob3dtb2RlCnNldCBzaG93bWF0Y2gKc2V0IHRhYnN0b3A9NApzZXQgc2hpZnR3aWR0aD00CnNldCBldApzZXQgbGFzdHN0YXR1cz0yCnNldCBwYXN0ZQpFT0YKCmVjaG8gIkluc3RhbGxpbmcgQW5zaWJsZSAuLi4iCnBpcCAtcSBpbnN0YWxsIHBhbi1weXRob24gcGFuZGV2aWNlIHhtbHRvZGljdCBhbnNpYmxlCi91c3IvbG9jYWwvYmluL2Fuc2libGUtZ2FsYXh5IGluc3RhbGwgUGFsb0FsdG9OZXR3b3Jrcy5wYWxvYWx0b25ldHdvcmtzCm12IC9yb290Ly5hbnNpYmxlIC9ob21lL3N0dWRlbnQKCmVjaG8gIkluc3RhbGxpbmcgVGVycmFmb3JtIC4uLiIKdGVycmFmb3JtX3VybD0kKGN1cmwgaHR0cHM6Ly9yZWxlYXNlcy5oYXNoaWNvcnAuY29tL2luZGV4Lmpzb24gfCBqcSAne3RlcnJhZm9ybX0nIHwgZWdyZXAgImxpbnV4LiphbWQ2NCIgfCBzb3J0IC0tdmVyc2lvbi1zb3J0IC1yIHwgZ3JlcCAtRXYgJ2FscGhhfGJldGEnIHwgaGVhZCAtMSB8IGF3ayAtRltcIl0gJ3twcmludCAkNH0nKQpjZCAvdG1wCmN1cmwgLW8gdGVycmFmb3JtLnppcCAkdGVycmFmb3JtX3VybAp1bnppcCB0ZXJyYWZvcm0uemlwCm12IHRlcnJhZm9ybSAvdXNyL2xvY2FsL2Jpbi8Kcm0gLWYgdGVycmFmb3JtLnppcAoKZWNobyAiRml4aW5nIGFsbCBwZXJtaXNzaW9ucyAuLi4iCmNob3duIC1SIHN0dWRlbnQ6c3R1ZGVudCAvaG9tZS9zdHVkZW50CgplY2hvICJEb25lIHdpdGggdXNlciBkYXRhIGluaXQhIgo="
+			}
+		}
+	},
 
-    "Outputs": {
-        "LaunchpadIp": {
-            "Value": { "Fn::GetAtt": ["Launchpad", "PublicIp"] },
-            "Description": "IP address of the launchpad host",
-        },
-    },
+	"Outputs": {
+		"LaunchpadIp": {
+			"Value": {
+				"Fn::GetAtt": ["Launchpad", "PublicIp"]
+			},
+			"Description": "IP address of the launchpad host"
+		}
+	}
 }
