@@ -1,0 +1,9 @@
+imports:
+  - path: vm-series-two-tier.py
+    name: vm-series-two-tier.py
+
+info:
+  title: Qwiklabs Template
+  author: Mauli Jadhav (usr@)
+  description: Qwiklabs Deployment Template
+  version: 1.0

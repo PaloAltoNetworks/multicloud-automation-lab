@@ -7,3 +7,6 @@
 
 # .tfvars files
 *.tfvars
+
+# VSCode files
+.vscode
