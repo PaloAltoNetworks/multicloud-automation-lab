@@ -16,10 +16,6 @@
 
 # For use on Debian 9 (Stretch) servers
 
-echo "Installing required packages ..."
-apt update -y -q
-apt-get install unzip git jq python-pip -y -q
-
 echo "Setting up student account ..."
 useradd -m -s /bin/bash student
 echo 'student:Ignite2019' | chpasswd
@@ -41,6 +37,10 @@ set et
 set laststatus=2
 set paste
 EOF
+
+echo "Installing required packages ..."
+apt update -y -q
+apt-get install unzip git jq python-pip -y -q
 
 echo "Installing Ansible ..."
 pip -q install pan-python pandevice xmltodict ansible
