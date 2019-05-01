@@ -85,7 +85,7 @@
 	},
 
 	"Outputs": {
-		"Launchpad IP": {
+		"LaunchpadIP": {
 			"Value": {
 				"Fn::GetAtt": ["Launchpad", "PublicIp"]
 			},
