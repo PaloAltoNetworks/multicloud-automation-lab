@@ -16,7 +16,7 @@
 // Configure the Google Cloud provider
 provider "google" {
   # credentials = "${file("Your_Credential_File.json")}"
-  project     = "${var.my_gcp_project}"
+  project     = "${var.project}"
   region      = "${var.region}"
 }
 
@@ -26,14 +26,14 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
   value = "${var.public_key}"
 }
 
-locals {
-  bucket1 = "bootstrap-bucket-${var.project}"
-  bucket2 = "scripts-bucket-${var.project}"
-}
+# locals {
+#   bucket1 = "bootstrap_bucket_${var.project}"
+#   bucket2 = "script_bucket_${var.project}"
+# }
 
 // Adding bootstrap bucket to Project
 resource "google_storage_bucket" "bootstrap_bucket_fw" {
-  name          = "${locals.bucket1}"
+  name          = "bootstrap_bucket_${var.project}"
   location      = "${var.region}"
   storage_class = "REGIONAL"
 }
