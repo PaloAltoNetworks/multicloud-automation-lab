@@ -1,10 +1,10 @@
-# Copyright 2016 Google Inc. All rights reserved.
+# Copyright 2019 Palo Alto Networks.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,13 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#Two Tier Terraform Sample Deployment
-# Version: 1.2
-# Date: 02/28/2018
 
 // Configure the Google Cloud provider
 provider "google" {
-  credentials = "${file("Your_Credential_File.json")}"
+  # credentials = "${file("Your_Credential_File.json")}"
   project     = "${var.my_gcp_project}"
   region      = "${var.region}"
 }
@@ -29,7 +26,35 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
   value = "${var.public_key}"
 }
 
-// Adding VPC Networks to Project  MANAGEMENT
+locals {
+  bucket1 = "bootstrap-bucket-${var.project}"
+  bucket2 = "scripts-bucket-${var.project}"
+}
+
+// Adding bootstrap bucket to Project
+resource "google_storage_bucket" "bootstrap_bucket_fw" {
+  name          = "${locals.bucket1}"
+  location      = "${var.region}"
+  storage_class = "REGIONAL"
+}
+
+// Adding folders to bootstrap bucket
+resource "google_storage_bucket_object" "bootstrap_folders_fw" {
+  count         = "${length(var.bootstrap_folders)}"
+  name          = "${element(var.bootstrap_folders, count.index)}"
+  content       = "${element(var.bootstrap_folders, count.index)}"
+  bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+}
+
+// Added files to bootstrap bucket
+resource "google_storage_bucket_object" "bootstrap_files_fw" {
+  count         = "${length(var.bootstrap_files)}"
+  name          = "config/${element(var.bootstrap_files, count.index)}"
+  source        = "${element(var.bootstrap_files, count.index)}"
+  bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+}
+
+// Adding VPC Networks to Project -- MANAGEMENT
 resource "google_compute_subnetwork" "management-sub" {
   name          = "management-subnet"
   ip_cidr_range = "10.5.0.0/24"
@@ -42,7 +67,7 @@ resource "google_compute_network" "management" {
   auto_create_subnetworks = "false"
 }
 
-// Adding VPC Networks to Project  UNTRUST
+// Adding VPC Networks to Project -- UNTRUST
 resource "google_compute_subnetwork" "untrust-sub" {
   name          = "untrust-subnet"
   ip_cidr_range = "10.5.1.0/24"
@@ -55,7 +80,7 @@ resource "google_compute_network" "untrust" {
   auto_create_subnetworks = "false"
 }
 
-// Adding VPC Networks to Project  WEB_TRUST 
+// Adding VPC Networks to Project -- WEB_TRUST 
 resource "google_compute_subnetwork" "web-trust-sub" {
   name          = "web-subnet"
   ip_cidr_range = "10.5.2.0/24"
@@ -68,7 +93,7 @@ resource "google_compute_network" "web" {
   auto_create_subnetworks = "false"
 }
 
-// Adding VPC Networks to Project  DB_TRUST 
+// Adding VPC Networks to Project -- DB_TRUST 
 resource "google_compute_subnetwork" "db-trust-sub" {
   name          = "db-subnet"
   ip_cidr_range = "10.5.3.0/24"

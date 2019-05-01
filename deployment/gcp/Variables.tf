@@ -1,18 +1,50 @@
+# Copyright 2019 Palo Alto Networks.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 // PROJECT Variables
 variable "my_gcp_project" {
   default = "Your_Project_ID"
 }
 
 variable "region" {
-  default = "us-west1"
+  default = "Your_Project_Region"
 }
 
 variable "zone" {
-  default = "us-west1-a"
+  default = "Your_Project_Zone"
 }
 
 variable "public_key" {
   default = "Your_Public_Key_in_RSA_Format"
+}
+
+//  Bootstrap folder variables
+variable "bootstrap_folders" {
+  default = [
+    "config/",
+    "software",
+    "license/",
+    "contents"
+  ]
+}
+
+//  Bootstrap file variables
+variable "bootstrap_files" {
+  default = [
+    "../../common/bootstrap/config/init-cfg.xml",
+    "../../common/bootstrap/config/bootstrap.xml"
+  ]
 }
 
 // FIREWALL Variables
@@ -21,14 +53,7 @@ variable "firewall_name" {
 }
 
 variable "image_fw" {
- # default = "Your_VM_Series_Image"
-  
-  # /Cloud Launcher API Calls to images/
-  # default = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/vmseries-byol-810"
-  # default = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/vmseries-bundle2-810"
-  # default = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/vmseries-bundle1-810"
-
-}
+  default = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/vmseries-bundle2-901"
 
 variable "machine_type_fw" {
   default = "n1-standard-4"
@@ -51,7 +76,8 @@ variable "interface_1_name" {
 }
 
 variable "scopes_fw" {
-  default = ["https://www.googleapis.com/auth/cloud.useraccounts.readonly",
+  default = [
+    "https://www.googleapis.com/auth/cloud.useraccounts.readonly",
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
     "https://www.googleapis.com/auth/monitoring.write",
@@ -82,7 +108,8 @@ variable "db_startup_script_bucket" {
 }
 
 variable "scopes_db" {
-  default = ["https://www.googleapis.com/auth/cloud.useraccounts.readonly",
+  default = [
+    "https://www.googleapis.com/auth/cloud.useraccounts.readonly",
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
     "https://www.googleapis.com/auth/monitoring.write",
@@ -118,7 +145,8 @@ variable "web_startup_script_bucket" {
 }
 
 variable "scopes_web" {
-  default = ["https://www.googleapis.com/auth/cloud.useraccounts.readonly",
+  default = [
+    "https://www.googleapis.com/auth/cloud.useraccounts.readonly",
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
     "https://www.googleapis.com/auth/monitoring.write",
