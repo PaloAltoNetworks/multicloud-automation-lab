@@ -206,10 +206,9 @@ resource "google_compute_instance" "firewall" {
 
   // Adding METADATA Key Value pairs to VM-Series GCE instance
   metadata {
-    vmseries-bootstrap-gce-storagebucket = "${var.bootstrap_bucket_fw}"
+    vmseries-bootstrap-gce-storagebucket = "${google_storage_bucket.bootstrap_bucket_fw.url}"
     serial-port-enable                   = true
-
-    # ssh-keys                              = "${var.public_key}"
+    #ssh-keys                             = "admin:${file("${var.public_key}")}"
   }
 
   service_account {
@@ -223,18 +222,18 @@ resource "google_compute_instance" "firewall" {
 
   network_interface {
     subnetwork    = "${google_compute_subnetwork.untrust-sub.self_link}"
-    address       = "10.5.1.4"
+    network_ip       = "10.5.1.4"
     access_config = {}
   }
 
   network_interface {
     subnetwork = "${google_compute_subnetwork.web-trust-sub.self_link}"
-    address    = "10.5.2.4"
+    network_ip    = "10.5.2.4"
   }
 
   network_interface {
     subnetwork = "${google_compute_subnetwork.db-trust-sub.self_link}"
-    address    = "10.5.3.4"
+    network_ip    = "10.5.3.4"
   }
 
   boot_disk {
@@ -255,11 +254,11 @@ resource "google_compute_instance" "dbserver" {
 
   // Adding METADATA Key Value pairs to DB-SERVER 
   metadata {
-    startup-script-url = "${var.db_startup_script_bucket}"
     serial-port-enable = true
-
-    # sshKeys                              = "${var.public_key}"
+    #sshKeys                              = "admin:${file("${var.public_key}")}"
   }
+
+  metadata_startup_script    = "${file(var.db_startup_script)}"
 
   service_account {
     scopes = "${var.scopes_db}"
@@ -267,7 +266,7 @@ resource "google_compute_instance" "dbserver" {
 
   network_interface {
     subnetwork = "${google_compute_subnetwork.db-trust-sub.self_link}"
-    address    = "${var.ip_db}"
+    network_ip    = "${var.ip_db}"
   }
 
   boot_disk {
@@ -295,11 +294,11 @@ resource "google_compute_instance" "webserver" {
 
   // Adding METADATA Key Value pairs to WEB SERVER 
   metadata {
-    startup-script-url = "${var.web_startup_script_bucket}"
     serial-port-enable = true
-
-    # sshKeys                              = "${var.public_key}"
+    #sshKeys                              = "admin:${file("${var.public_key}")}"
   }
+
+  metadata_startup_script    = "${file(var.web_startup_script)}"
 
   service_account {
     scopes = "${var.scopes_web}"
@@ -307,7 +306,7 @@ resource "google_compute_instance" "webserver" {
 
   network_interface {
     subnetwork = "${google_compute_subnetwork.web-trust-sub.self_link}"
-    address    = "${var.ip_web}"
+    network_ip    = "${var.ip_web}"
   }
 
   boot_disk {
@@ -322,17 +321,4 @@ resource "google_compute_instance" "webserver" {
     "google_compute_network.untrust",
     "google_compute_network.management",
   ]
-}
-
-// Output
-output "firewall-web-trust-ip" {
-  value = "${google_compute_instance.firewall.network_interface.2.address}"
-}
-
-output "firewall-db-trust-ip" {
-  value = "${google_compute_instance.firewall.network_interface.3.address}"
-}
-
-output "firewall-name" {
-  value = "${google_compute_instance.firewall.*.name}"
 }

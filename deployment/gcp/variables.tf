@@ -33,9 +33,9 @@ variable "public_key" {
 variable "bootstrap_folders" {
   default = [
     "config/",
-    "software",
+    "software/",
     "license/",
-    "contents"
+    "contents/"
   ]
 }
 
@@ -54,7 +54,7 @@ variable "firewall_name" {
 
 variable "image_fw" {
   default = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/vmseries-bundle2-901"
-
+}
 variable "machine_type_fw" {
   default = "n1-standard-4"
 }
@@ -101,8 +101,8 @@ variable "image_db" {
   default = "debian-9"
 }
 
-variable "db_startup_script_bucket" {
-  default = "Your_Startup_Bucket "
+variable "db_startup_script" {
+  default = "../../common/startup-scripts/dbserver-startup.sh"
 
   // Example of string for startup bucket "gs://startup-2-tier/dbserver-startup.sh"
 }
@@ -138,8 +138,8 @@ variable "image_web" {
   default = "debian-9"
 }
 
-variable "web_startup_script_bucket" {
-  default = "Your_Startup_Bucket"
+variable "web_startup_script" {
+  default = "../../common/startup-scripts/webserver-startup.sh"
 
   //  Example of string for startup bucket  "gs://startup-2-tier/webserver-startup.sh"
 }
