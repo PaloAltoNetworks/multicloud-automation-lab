@@ -13,7 +13,7 @@
 # limitations under the License.
 
 // PROJECT Variables
-variable "my_gcp_project" {
+variable "project" {
   default = "Your_Project_ID"
 }
 
