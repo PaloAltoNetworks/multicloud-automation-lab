@@ -35,7 +35,7 @@ variable "bootstrap_folders" {
     "config/",
     "software/",
     "license/",
-    "contents/"
+    "content/"
   ]
 }
 
