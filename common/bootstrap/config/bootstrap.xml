@@ -8,8 +8,7 @@
             <superuser>yes</superuser>
           </role-based>
         </permissions>
-        <phash>$1$noewhtbb$Pamy5VKqMsP5MDDiXzpYM0</phash>
-        <public-key>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFEZHVZZENtY0xDamRSeTV2Wkk5bSs2UkRKOEoxLzJvYUtFSWM5NlFndTdudksxVHZDVUNNRXZ0ZWZLYW44S0pOeFdnb0FwRUs0WHpCVWptVVNEUkluTDVOTjFkdXJSWE42WEIrS1ZXS0pWMk13ci9lQ1VxK1h3ZE04azFaZW8vNXY4M0p1TUwvZmo4MWU1VXBkK29uS2piZmliRDZpTk95SWFMSW1pb1NYZVl0RmlMbXpxYUdETTZUc3Z2NXhHa2hBSjNvUE1Ga2pIWWN3MFRpWDc0WXlVVFRDMkhpeEUvRHhxb3E2NGdwWnQ1cU1sZGVPaHdmVVpCU2RXZVBKejd2eW93RDVmNnEvMWlZNTBkYS9uYWorVG5YcXFGV2t1NG00THk4cUFrVitlWVBIQnZ3eVdoZzRMRVppTlZBWnZULzdkSmw0TGQvUVpoVnFwVExBUnFlQmQgcm9iZXJ0aGFnZW5AU0pDTUFDOTI2WkczUVI=</public-key>
+        <phash>$1$dpsxqapf$m.ueK5KzvIMC2bVUNOU4x</phash>
       </entry>
     </users>
   </mgt-config>
@@ -429,8 +428,8 @@
           <hostname>gcp-fw</hostname>
           <dns-setting>
             <servers>
-              <primary>208.67.222.222</primary>
-              <secondary>208.67.220.220</secondary>
+              <primary>8.8.8.8</primary>
+              <secondary>8.8.4.4</secondary>
             </servers>
           </dns-setting>
           <type>
@@ -442,6 +441,9 @@
             </dhcp-client>
           </type>
           <server-verification>yes</server-verification>
+          <login-banner admin="admin" dirtyId="1" time="2019/05/01 20:57:18">
+            This is a lab firewall. There are many like it but this one is yours.
+        </login-banner>
         </system>
         <setting>
           <config>

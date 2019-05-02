@@ -1,6 +1,6 @@
 #!/bin/bash
-FW_INSTANCE_PREFIX="panw-fw"
-sudo exec > >(sudo tee /var/log/user-data.log|logger -t user-data -s 2> sudo /dev/console) 2>&1
+FW_INSTANCE_PREFIX="vm-series"
+#sudo exec > >(sudo tee /var/log/user-data.log|logger -t user-data -s 2> sudo /dev/console) 2>&1
 TEMP=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/zone" -H "Metadata-Flavor: Google")
 ZONE=$(basename $TEMP)
 INSTANCE_NAME=$(curl "http://metadata.google.internal/computeMetadata/v1/instance/name" -H "Metadata-Flavor: Google")
@@ -10,7 +10,7 @@ FW_INSTANCE="$FW_INSTANCE_PREFIX$RAND_NUM"
 FW_IP=$(gcloud compute instances describe $FW_INSTANCE --zone=$ZONE --format="value(networkInterfaces[3].networkIP)")
 while true
     do 
-        resp=$(curl -s -S -g --insecure "https://$FW_IP/api/?type=op&cmd=<show><chassis-ready></chassis-ready></show>&key=LUFRPT1CU0dMRHIrOWFET0JUNzNaTmRoYmkwdjBkWWM9alUvUjBFTTNEQm93Vmx0OVhFRlNkOXdJNmVwYWk5Zmw4bEs3NjgwMkh5QT0=")
+        resp=$(curl -s -S -g --insecure "https://$FW_IP/api/?type=op&cmd=<show><chassis-ready></chassis-ready></show>&key=LUFRPT1zWW1BN3NFYnBtaEdmNFovc21HTEN4L21KQU09T2lmZjU0cFhUK1UzYUFyTGJac29tNFFvTFdGSmxIT3pVL3Ezb2JoTE1Tc2E1anc2OEhvR2xDY0gvTGJoeVBYRw==")
 	echo $resp
         if [[ $resp == *"[CDATA[yes"* ]] ; then
             break
