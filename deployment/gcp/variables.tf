@@ -40,11 +40,13 @@ variable "bootstrap_folders" {
 }
 
 //  Bootstrap file variables
-variable "bootstrap_files" {
-  default = [
-    "../../common/bootstrap/config/init-cfg.xml",
-    "../../common/bootstrap/config/bootstrap.xml"
-  ]
+variable "bootstrap_file" {
+  default = "../../common/bootstrap/config/bootstrap.xml"
+}
+
+variable "init_file" {
+  default = "../../common/bootstrap/config/init-cfg.xml"
+
 }
 
 // FIREWALL Variables
@@ -123,7 +125,7 @@ variable "ip_db" {
 
 // WEB-SERVER Vaiables
 variable "web_server_name" {
-  default = "webserver"
+  default = "web-vm"
 }
 
 variable "machine_type_web" {

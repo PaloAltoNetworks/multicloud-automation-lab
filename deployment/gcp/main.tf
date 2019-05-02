@@ -39,7 +39,7 @@ resource "google_storage_bucket" "bootstrap_bucket_fw" {
 }
 
 // Adding folders to bootstrap bucket
-resource "google_storage_bucket_object" "bootstrap_folders_fw" {
+resource "google_storage_bucket_object" "bootstrap_folders" {
   count         = "${length(var.bootstrap_folders)}"
   name          = "${element(var.bootstrap_folders, count.index)}"
   content       = "${element(var.bootstrap_folders, count.index)}"
@@ -47,10 +47,15 @@ resource "google_storage_bucket_object" "bootstrap_folders_fw" {
 }
 
 // Added files to bootstrap bucket
-resource "google_storage_bucket_object" "bootstrap_files_fw" {
-  count         = "${length(var.bootstrap_files)}"
-  name          = "config/${element(var.bootstrap_files, count.index)}"
-  source        = "${element(var.bootstrap_files, count.index)}"
+resource "google_storage_bucket_object" "bootstrap_file" {
+  name          = "config/bootstrap.xml"
+  source        = "${var.bootstrap_file}"
+  bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+}
+
+resource "google_storage_bucket_object" "init_file" {
+  name          = "config/init-cfg.xml"
+  source        = "${var.init_file}"
   bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
 }
 
