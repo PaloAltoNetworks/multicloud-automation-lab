@@ -15,7 +15,7 @@
 
 // Configure the Google Cloud provider
 provider "google" {
-  # credentials = "${file("Your_Credential_File.json")}"
+  credentials = "${file(var.credentials_file)}"
   project     = "${var.project}"
   region      = "${var.region}"
 }
@@ -23,7 +23,7 @@ provider "google" {
 // Adding SSH Public Key in Project Meta Data
 resource "google_compute_project_metadata_item" "ssh-keys" {
   key   = "ssh-keys"
-  value = "${var.public_key}"
+  value = "${var.public_key_file}"
 }
 
 // Adding bootstrap bucket to Project
@@ -222,7 +222,7 @@ resource "google_compute_instance" "firewall" {
     vmseries-bootstrap-gce-storagebucket = "${google_storage_bucket.bootstrap_bucket_fw.url}"
     serial-port-enable                   = true
     block-project-ssh-keys               = true
-    ssh-keys                             = "admin:${file("${var.public_key}")}"
+    ssh-keys                             = "admin:${file("${var.public_key_file}")}"
   }
 
   service_account {
@@ -277,8 +277,9 @@ resource "google_compute_instance" "dbserver" {
 
   // Adding METADATA Key Value pairs to DB-SERVER 
   metadata {
-    serial-port-enable = true
-    ssh-keys                             = "admin:${file("${var.public_key}")}"
+    serial-port-enable      = true
+    block-project-ssh-keys  = true
+    ssh-keys                = "admin:${file("${var.public_key_file}")}"
   }
 
   metadata_startup_script    = "${file(var.db_startup_script)}"
@@ -317,9 +318,9 @@ resource "google_compute_instance" "webserver" {
 
   // Adding METADATA Key Value pairs to WEB SERVER 
   metadata {
-    serial-port-enable                  = true
-    block-project-ssh-keys              = true
-    ssh-keys                            = "admin:${file("${var.public_key}")}"
+    serial-port-enable      = true
+    block-project-ssh-keys  = true
+    ssh-keys                = "admin:${file("${var.public_key_file}")}"
   }
 
   metadata_startup_script    = "${file(var.web_startup_script)}"

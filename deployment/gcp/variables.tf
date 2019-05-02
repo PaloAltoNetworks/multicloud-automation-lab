@@ -14,19 +14,30 @@
 
 // PROJECT Variables
 variable "project" {
-  default = "Your_Project_ID"
+  description = "Your project ID"
+  default = ""
 }
-
+variable "credentials_file" {
+  description = "Full path to the JSON credentials file"
+  type = "string"
+  default = ""
+}
 variable "region" {
-  default = "Your_Project_Region"
+  description = "The GCP region in which to deploy"
+  type = "string"
+  default = ""
 }
 
 variable "zone" {
-  default = "Your_Project_Zone"
+  description = "The GCP zone in which to deploy"
+  type = "string"
+  default = ""
 }
 
-variable "public_key" {
-  default = "Your_Public_Key_in_RSA_Format"
+variable "public_key_file" {
+  description = "Full path to the SSH public key file"
+  type = "string"
+  default = ""
 }
 
 //  Bootstrap folder variables
