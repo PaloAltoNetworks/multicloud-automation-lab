@@ -14,14 +14,26 @@
 
 
 // Output
-output "firewall-web-trust-ip" {
+output "Firewall Management IP" {
+    value = "${google_compute_instance.firewall.network_interface.0.access_config.0.nat_ip}"
+}
+
+output "Firewall External Subnet IP" {
+    value = "${google_compute_instance.firewall.network_interface.1.access_config.0.nat_ip}"
+}
+
+output "Firewall Web Subnet IP" {
   value = "${google_compute_instance.firewall.network_interface.2.network_ip}"
 }
 
-output "firewall-db-trust-ip" {
+output "Firewall Database Subnet IP" {
   value = "${google_compute_instance.firewall.network_interface.3.network_ip}"
 }
 
-output "firewall-name" {
-  value = "${google_compute_instance.firewall.*.name}"
+output "Web Server Private IP" {
+  value = "${google_compute_instance.webserver.network_interface.0.network_ip}"
+}
+
+output "Database Server Private IP" {
+  value = "${google_compute_instance.dbserver.network_interface.0.network_ip}"
 }
