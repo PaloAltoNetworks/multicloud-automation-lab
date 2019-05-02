@@ -221,6 +221,7 @@ resource "google_compute_instance" "firewall" {
   metadata {
     vmseries-bootstrap-gce-storagebucket = "${google_storage_bucket.bootstrap_bucket_fw.url}"
     serial-port-enable                   = true
+    block-project-ssh-keys               = true
     ssh-keys                             = "admin:${file("${var.public_key}")}"
   }
 
@@ -254,6 +255,15 @@ resource "google_compute_instance" "firewall" {
       image = "${var.image_fw}"
     }
   }
+
+  depends_on = [
+    "google_storage_bucket.bootstrap_bucket_fw",
+    "google_storage_bucket_acl.bootstrap_bucket_acl",
+    "google_storage_default_object_access_control.public_rule",
+    "google_storage_bucket_object.bootstrap_folders",
+    "google_storage_bucket_object.bootstrap_file",
+    "google_storage_bucket_object.init_file"
+  ]
 }
 
 // Create a new DBSERVER instance
@@ -307,8 +317,9 @@ resource "google_compute_instance" "webserver" {
 
   // Adding METADATA Key Value pairs to WEB SERVER 
   metadata {
-    serial-port-enable = true
-    ssh-keys                             = "admin:${file("${var.public_key}")}"
+    serial-port-enable                  = true
+    block-project-ssh-keys              = true
+    ssh-keys                            = "admin:${file("${var.public_key}")}"
   }
 
   metadata_startup_script    = "${file(var.web_startup_script)}"

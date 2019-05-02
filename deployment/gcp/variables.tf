@@ -65,10 +65,6 @@ variable "machine_cpu_fw" {
   default = "Intel Skylake"
 }
 
-variable "bootstrap_bucket_fw" {
-  default = "Your_Bootstrap_Bucket"
-}
-
 variable "interface_0_name" {
   default = "management"
 }
@@ -104,7 +100,7 @@ variable "image_db" {
 }
 
 variable "db_startup_script" {
-  default = "../../common/startup-scripts/dbserver-startup.sh"
+  default = "startup-scripts/dbserver-startup.sh"
 
   // Example of string for startup bucket "gs://startup-2-tier/dbserver-startup.sh"
 }
@@ -141,7 +137,7 @@ variable "image_web" {
 }
 
 variable "web_startup_script" {
-  default = "../../common/startup-scripts/webserver-startup.sh"
+  default = "startup-scripts/webserver-startup.sh"
 
   //  Example of string for startup bucket  "gs://startup-2-tier/webserver-startup.sh"
 }
