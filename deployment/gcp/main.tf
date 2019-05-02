@@ -59,6 +59,14 @@ resource "google_storage_bucket_object" "init_file" {
   bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
 }
 
+resource "google_storage_bucket_acl" "bootstrap_bucket_acl" {
+  bucket = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+
+  role_entity = [
+    "READER:allUsers",
+  ]
+}
+
 // Adding VPC Networks to Project -- MANAGEMENT
 resource "google_compute_subnetwork" "management-sub" {
   name          = "management-subnet"
@@ -213,7 +221,7 @@ resource "google_compute_instance" "firewall" {
   metadata {
     vmseries-bootstrap-gce-storagebucket = "${google_storage_bucket.bootstrap_bucket_fw.url}"
     serial-port-enable                   = true
-    #ssh-keys                             = "admin:${file("${var.public_key}")}"
+    ssh-keys                             = "admin:${file("${var.public_key}")}"
   }
 
   service_account {
@@ -260,7 +268,7 @@ resource "google_compute_instance" "dbserver" {
   // Adding METADATA Key Value pairs to DB-SERVER 
   metadata {
     serial-port-enable = true
-    #sshKeys                              = "admin:${file("${var.public_key}")}"
+    ssh-keys                             = "admin:${file("${var.public_key}")}"
   }
 
   metadata_startup_script    = "${file(var.db_startup_script)}"
@@ -300,7 +308,7 @@ resource "google_compute_instance" "webserver" {
   // Adding METADATA Key Value pairs to WEB SERVER 
   metadata {
     serial-port-enable = true
-    #sshKeys                              = "admin:${file("${var.public_key}")}"
+    ssh-keys                             = "admin:${file("${var.public_key}")}"
   }
 
   metadata_startup_script    = "${file(var.web_startup_script)}"
