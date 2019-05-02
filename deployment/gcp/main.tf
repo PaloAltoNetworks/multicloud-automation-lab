@@ -15,7 +15,7 @@
 
 // Configure the Google Cloud provider
 provider "google" {
-  credentials = "${file(var.credentials_file)}"
+  #credentials = "${file(var.credentials_file)}"
   project     = "${var.project}"
   region      = "${var.region}"
 }
@@ -219,7 +219,7 @@ resource "google_compute_instance" "firewall" {
 
   // Adding METADATA Key Value pairs to VM-Series GCE instance
   metadata {
-    vmseries-bootstrap-gce-storagebucket = "${google_storage_bucket.bootstrap_bucket_fw.url}"
+    vmseries-bootstrap-gce-storagebucket = "${google_storage_bucket.bootstrap_bucket_fw.name}"
     serial-port-enable                   = true
     block-project-ssh-keys               = true
     ssh-keys                             = "admin:${file("${var.public_key_file}")}"
