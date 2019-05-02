@@ -1,9 +1,0 @@
-type=dhcp-client
-ip-address=
-default-gateway=
-netmask=
-ipv6-address=
-ipv6-default-gateway=
-hostname=gcp-fw
-dns-primary=
-dns-secondary=

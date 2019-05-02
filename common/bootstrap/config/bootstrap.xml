@@ -441,7 +441,7 @@
             </dhcp-client>
           </type>
           <server-verification>yes</server-verification>
-          <login-banner admin="admin" dirtyId="1" time="2019/05/01 20:57:18">
+          <login-banner>
             This is a lab firewall. There are many like it but this one is yours.
         </login-banner>
         </system>
