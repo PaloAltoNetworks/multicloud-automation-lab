@@ -26,45 +26,45 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
   value = "${var.public_key}"
 }
 
-# locals {
-#   bucket1 = "bootstrap_bucket_${var.project}"
-#   bucket2 = "script_bucket_${var.project}"
-# }
-
 // Adding bootstrap bucket to Project
 resource "google_storage_bucket" "bootstrap_bucket_fw" {
   name          = "bootstrap_bucket_${var.project}"
   location      = "${var.region}"
   storage_class = "REGIONAL"
 }
-
+// Make the bootstrap bucket public
+resource "google_storage_bucket_acl" "bootstrap_bucket_acl" {
+  bucket = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+  predefined_acl = "publicread"
+  depends_on    = ["google_storage_bucket.bootstrap_bucket_fw"]
+}
+// Make all new objects public
+resource "google_storage_default_object_access_control" "public_rule" {
+  bucket = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+  role   = "READER"
+  entity = "allUsers"
+  depends_on    = ["google_storage_bucket_acl.bootstrap_bucket_acl"]
+}
 // Adding folders to bootstrap bucket
 resource "google_storage_bucket_object" "bootstrap_folders" {
   count         = "${length(var.bootstrap_folders)}"
   name          = "${element(var.bootstrap_folders, count.index)}"
   content       = "${element(var.bootstrap_folders, count.index)}"
   bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+  depends_on = ["google_storage_default_object_access_control.public_rule"]
 }
-
-// Added files to bootstrap bucket
+// Added config files to bootstrap bucket
 resource "google_storage_bucket_object" "bootstrap_file" {
   name          = "config/bootstrap.xml"
   source        = "${var.bootstrap_file}"
   bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
+  depends_on = ["google_storage_default_object_access_control.public_rule"]
 }
-
 resource "google_storage_bucket_object" "init_file" {
   name          = "config/init-cfg.xml"
   source        = "${var.init_file}"
   bucket        = "${google_storage_bucket.bootstrap_bucket_fw.name}"
-}
-
-resource "google_storage_bucket_acl" "bootstrap_bucket_acl" {
-  bucket = "${google_storage_bucket.bootstrap_bucket_fw.name}"
-
-  role_entity = [
-    "READER:allUsers",
-  ]
+  depends_on = ["google_storage_default_object_access_control.public_rule"]
 }
 
 // Adding VPC Networks to Project -- MANAGEMENT
