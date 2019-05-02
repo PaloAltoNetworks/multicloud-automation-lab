@@ -8,5 +8,8 @@
 # .tfvars files
 *.tfvars
 
+# VSCode files
+.vscode
+
 # macOS files
 .DS_Store
