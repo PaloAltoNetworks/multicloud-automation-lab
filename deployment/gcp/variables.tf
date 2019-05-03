@@ -17,6 +17,11 @@ variable "project" {
   description = "Your project ID"
   default = ""
 }
+
+variable service_account_email {
+  description = "The email of the service account for the instance template."
+  default     = "default"
+}
 variable "credentials_file" {
   description = "Full path to the JSON credentials file"
   type = "string"

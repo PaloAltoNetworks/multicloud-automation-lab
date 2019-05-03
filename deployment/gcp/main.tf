@@ -226,7 +226,8 @@ resource "google_compute_instance" "firewall" {
   }
 
   service_account {
-    scopes = "${var.scopes_fw}"
+    email = "${var.service_account_email}"
+    scopes = ["${var.scopes_fw}"]
   }
 
   network_interface {
@@ -285,7 +286,8 @@ resource "google_compute_instance" "dbserver" {
   metadata_startup_script    = "${file(var.db_startup_script)}"
 
   service_account {
-    scopes = "${var.scopes_db}"
+    email = "${var.service_account_email}"
+    scopes = ["${var.scopes_db}"]
   }
 
   network_interface {
@@ -326,7 +328,8 @@ resource "google_compute_instance" "webserver" {
   metadata_startup_script    = "${file(var.web_startup_script)}"
 
   service_account {
-    scopes = "${var.scopes_web}"
+    email = "${var.service_account_email}"
+    scopes = ["${var.scopes_web}"]
   }
 
   network_interface {
@@ -340,7 +343,8 @@ resource "google_compute_instance" "webserver" {
     }
   }
 
-  depends_on = ["google_compute_instance.firewall",
+  depends_on = [
+    "google_compute_instance.firewall",
     "google_compute_network.web",
     "google_compute_network.db",
     "google_compute_network.untrust",
