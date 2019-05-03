@@ -57,7 +57,6 @@ variable "bootstrap_file" {
 
 variable "init_file" {
   default = "../../common/bootstrap/config/init-cfg.xml"
-
 }
 
 // FIREWALL Variables
@@ -89,7 +88,7 @@ variable "scopes_fw" {
     "https://www.googleapis.com/auth/cloud.useraccounts.readonly",
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
-    "https://www.googleapis.com/auth/monitoring.write",
+    "https://www.googleapis.com/auth/monitoring.write"
   ]
 }
 
@@ -112,7 +111,6 @@ variable "image_db" {
 
 variable "db_startup_script" {
   default = "startup-scripts/dbserver-startup.sh"
-
   // Example of string for startup bucket "gs://startup-2-tier/dbserver-startup.sh"
 }
 
@@ -122,7 +120,7 @@ variable "scopes_db" {
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
     "https://www.googleapis.com/auth/monitoring.write",
-    "https://www.googleapis.com/auth/compute.readonly",
+    "https://www.googleapis.com/auth/compute.readonly"
   ]
 }
 
@@ -149,8 +147,6 @@ variable "image_web" {
 
 variable "web_startup_script" {
   default = "startup-scripts/webserver-startup.sh"
-
-  //  Example of string for startup bucket  "gs://startup-2-tier/webserver-startup.sh"
 }
 
 variable "scopes_web" {
@@ -159,7 +155,7 @@ variable "scopes_web" {
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
     "https://www.googleapis.com/auth/monitoring.write",
-    "https://www.googleapis.com/auth/compute.readonly",
+    "https://www.googleapis.com/auth/compute.readonly"
   ]
 }
 
