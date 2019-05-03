@@ -35,6 +35,11 @@ resource "aws_instance" "fw" {
 
   ebs_optimized = true
 
+  root_block_device {
+    volume_type           = "gp2"
+    delete_on_termination = true
+  }
+
   network_interface {
     device_index         = 0
     network_interface_id = "${aws_network_interface.fw_mgmt.id}"
