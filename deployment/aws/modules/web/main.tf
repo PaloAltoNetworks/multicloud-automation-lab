@@ -19,8 +19,6 @@ resource "aws_instance" "web" {
     network_interface_id = "${aws_network_interface.web.id}"
   }
 
-  user_data = "${var.user_data}"
-
   tags = "${merge(map("Name", format("%s", var.name)), var.tags)}"
 }
 

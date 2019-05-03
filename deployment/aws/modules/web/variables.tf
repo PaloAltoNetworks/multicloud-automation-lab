@@ -4,10 +4,6 @@ variable "subnet_id" {}
 
 variable "private_ip" {}
 
-variable "user_data" {
-  default = ""
-}
-
 variable "name" {
   default = "Web01"
 }

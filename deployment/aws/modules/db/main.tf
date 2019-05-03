@@ -19,8 +19,6 @@ resource "aws_instance" "db" {
     network_interface_id = "${aws_network_interface.db.id}"
   }
 
-  user_data = "${var.user_data}"
-
   tags = "${merge(map("Name", format("%s", var.name)), var.tags)}"
 }
 

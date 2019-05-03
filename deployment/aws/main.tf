@@ -147,8 +147,6 @@ module "web" {
   subnet_id  = "${module.vpc.web_subnet_id}"
   private_ip = "10.5.2.5"
 
-  user_data = "${file("./webserver-startup.sh")}"
-
   tags {
     Environment = "Multicloud-AWS"
   }
@@ -162,8 +160,6 @@ module "db" {
 
   subnet_id  = "${module.vpc.db_subnet_id}"
   private_ip = "10.5.3.5"
-
-  user_data = "${file("./dbserver-startup.sh")}"
 
   tags {
     Environment = "Multicloud-AWS"
