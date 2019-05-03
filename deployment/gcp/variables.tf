@@ -1,3 +1,4 @@
+############################################################################################
 # Copyright 2019 Palo Alto Networks.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,8 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+############################################################################################
 
-// PROJECT Variables
+
+############################################################################################
+# PROJECT VARIABLES
+############################################################################################
 variable "project" {
   description = "Your project ID"
   default = ""
@@ -20,7 +25,7 @@ variable "project" {
 
 variable service_account_email {
   description = "The email of the service account for the instance template."
-  default     = "default"
+  default     = ""
 }
 variable "credentials_file" {
   description = "Full path to the JSON credentials file"

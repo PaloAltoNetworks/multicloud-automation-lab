@@ -8,7 +8,7 @@
             <superuser>yes</superuser>
           </role-based>
         </permissions>
-        <phash>$1$dpsxqapf$m.ueK5KzvIMC2bVUNOU4x</phash>
+        <phash>$1$gjufqekm$bQoBbudY3syefMOZ21hpY0</phash>
       </entry>
     </users>
   </mgt-config>
@@ -442,7 +442,7 @@
           </type>
           <server-verification>yes</server-verification>
           <login-banner>
-            This is a lab firewall. There are many like it but this one is yours.
+            Welcome to the Multi-Cloud Automation Lab!
         </login-banner>
         </system>
         <setting>
