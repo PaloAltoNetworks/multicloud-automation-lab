@@ -13,3 +13,6 @@
 
 # macOS files
 .DS_Store
+
+# Vagrant
+.vagrant/
