@@ -40,6 +40,21 @@ resource "aws_instance" "fw" {
     network_interface_id = "${aws_network_interface.fw_mgmt.id}"
   }
 
+  network_interface {
+    device_index         = 1
+    network_interface_id = "${aws_network_interface.fw_eth1.id}"
+  }
+
+  network_interface {
+    device_index         = 2
+    network_interface_id = "${aws_network_interface.fw_eth2.id}"
+  }
+
+  network_interface {
+    device_index         = 3
+    network_interface_id = "${aws_network_interface.fw_eth3.id}"
+  }
+
   iam_instance_profile = "${aws_iam_instance_profile.fw_bootstrap_instance_profile.name}"
   user_data            = "${base64encode(join("", list("vmseries-bootstrap-aws-s3bucket=", var.fw_bootstrap_bucket)))}"
 
@@ -54,23 +69,29 @@ resource "aws_network_interface" "fw_mgmt" {
   tags = "${merge(map("Name", format("%s-Mgmt", var.name)), var.tags)}"
 }
 
-resource "aws_network_interface" "fw_dataplane" {
-  count = "${length(var.fw_dataplane_ips) > 0 ? length(var.fw_dataplane_ips) : 0}"
-
-  subnet_id         = "${var.fw_dataplane_subnet_ids[count.index]}"
-  private_ips       = ["${var.fw_dataplane_ips[count.index]}"]
+resource "aws_network_interface" "fw_eth1" {
+  subnet_id         = "${var.fw_eth1_subnet_id}"
+  private_ips       = ["${var.fw_eth1_ip}"]
   security_groups   = ["${var.fw_dataplane_sg_id}"]
   source_dest_check = false
 
-  tags = "${merge(map("Name", format("%s-Eth1/%d", var.name, count.index + 1)), var.tags)}"
+  tags = "${merge(map("Name", format("%s-Eth1/1", var.name)), var.tags)}"
 }
 
-resource "aws_network_interface_attachment" "fw_dataplane" {
-  count = "${length(var.fw_dataplane_ips) > 0 ? length(var.fw_dataplane_ips) : 0}"
+resource "aws_network_interface" "fw_eth2" {
+  subnet_id         = "${var.fw_eth2_subnet_id}"
+  private_ips       = ["${var.fw_eth2_ip}"]
+  source_dest_check = false
 
-  device_index         = "${count.index + 1}"
-  instance_id          = "${aws_instance.fw.id}"
-  network_interface_id = "${element(aws_network_interface.fw_dataplane.*.id, count.index)}"
+  tags = "${merge(map("Name", format("%s-Eth1/2", var.name)), var.tags)}"
+}
+
+resource "aws_network_interface" "fw_eth3" {
+  subnet_id         = "${var.fw_eth3_subnet_id}"
+  private_ips       = ["${var.fw_eth3_ip}"]
+  source_dest_check = false
+
+  tags = "${merge(map("Name", format("%s-Eth1/3", var.name)), var.tags)}"
 }
 
 resource "aws_eip" "fw_mgmt_eip" {
@@ -88,7 +109,7 @@ resource "aws_eip" "fw_eth1_eip" {
 
 resource "aws_eip_association" "fw_eth1_eip_assoc" {
   allocation_id        = "${aws_eip.fw_eth1_eip.id}"
-  network_interface_id = "${element(aws_network_interface.fw_dataplane.*.id, count.index)}"
+  network_interface_id = "${aws_network_interface.fw_eth1.id}"
 }
 
 resource "aws_iam_role" "fw_bootstrap_role" {

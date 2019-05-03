@@ -3,10 +3,10 @@ data "aws_ami" "web_ami" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["debian-stretch-hvm-x86_64-gp2-*"]
   }
 
-  owners = ["099720109477"]
+  owners = ["379101102735"]
 }
 
 resource "aws_instance" "web" {
@@ -18,6 +18,8 @@ resource "aws_instance" "web" {
     device_index         = 0
     network_interface_id = "${aws_network_interface.web.id}"
   }
+
+  user_data = "${var.user_data}"
 
   tags = "${merge(map("Name", format("%s", var.name)), var.tags)}"
 }

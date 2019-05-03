@@ -10,29 +10,20 @@ variable "cidr" {
   description = "CIDR range for created VPC."
 }
 
-variable "azs" {
-  description = "Availability zones for created subnets."
-  type        = "list"
+variable "mgmt_subnet" {
+  description = "Management subnet address range."
 }
 
-variable "mgmt_subnets" {
-  description = "Management subnets.  Will be created across the specified availability zones."
-  type        = "list"
+variable "public_subnet" {
+  description = "Public subnet address range."
 }
 
-variable "public_subnets" {
-  description = "Public subnets.  Will be created across the specified availability zones."
-  type        = "list"
+variable "web_subnet" {
+  description = "Web subnet address range."
 }
 
-variable "web_subnets" {
-  description = "Web subnets.  Will be created across the specified availability zones."
-  type        = "list"
-}
-
-variable "db_subnets" {
-  description = "DB subnets.  Will be created across the specified availability zones."
-  type        = "list"
+variable "db_subnet" {
+  description = "DB subnet address range."
 }
 
 #######################################################################

@@ -14,14 +14,14 @@ output "fw_mgmt_if_id" {
   value = "${aws_network_interface.fw_mgmt.id}"
 }
 
-output "fw_dataplane_ips" {
-  value = "${var.fw_dataplane_ips}"
-}
-
 output "fw_eth1_eip" {
   value = "${aws_eip.fw_eth1_eip.public_ip}"
 }
 
-output "fw_dataplane_if_ids" {
-  value = ["${aws_network_interface.fw_dataplane.*.id}"]
+output "fw_eth2_id" {
+  value = "${aws_network_interface.fw_eth2.id}"
+}
+
+output "fw_eth3_id" {
+  value = "${aws_network_interface.fw_eth3.id}"
 }

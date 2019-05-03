@@ -26,14 +26,16 @@ variable "fw_dataplane_sg_id" {
   description = "Security group for firewall dataplane interfaces."
 }
 
-variable "fw_dataplane_subnet_ids" {
-  description = "Subnet IDs for firewall dataplane interfaces."
-  type        = "list"
+variable "fw_eth1_subnet_id" {
+  description = "Subnet ID for firewall ethernet1/1."
 }
 
-variable "fw_dataplane_ips" {
-  description = "Internal IP addresses for firewall dataplane interfaces."
-  type        = "list"
+variable "fw_eth2_subnet_id" {
+  description = "Subnet ID for firewall ethernet1/2."
+}
+
+variable "fw_eth3_subnet_id" {
+  description = "Subnet ID for firewall ethernet1/3."
 }
 
 #######################################################################
@@ -73,4 +75,19 @@ variable "fw_product_code" {
 variable "fw_bootstrap_bucket" {
   description = "S3 bucket holding bootstrap configuration."
   default     = ""
+}
+
+variable "fw_eth1_ip" {
+  description = " IP address for firewall ethernet1/1."
+  default     = "10.5.1.4"
+}
+
+variable "fw_eth2_ip" {
+  description = " IP address for firewall ethernet1/2."
+  default     = "10.5.2.4"
+}
+
+variable "fw_eth3_ip" {
+  description = " IP address for firewall ethernet1/3."
+  default     = "10.5.3.4"
 }

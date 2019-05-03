@@ -2,17 +2,24 @@ provider "aws" {
   region = "${var.aws_region_name}"
 }
 
+module "bootstrap_bucket" {
+  source = "./modules/bootstrap"
+
+  bootstrap_bucket_name   = "${var.bootstrap_bucket_name}"
+  bootstrap_xml_path      = "./bootstrap/config/bootstrap.xml"
+  bootstrap_init_cfg_path = "./bootstrap/config/init-cfg.txt"
+}
+
 module "vpc" {
   source = "./modules/vpc"
 
   name = "Multicloud-AWS"
   cidr = "10.5.0.0/16"
 
-  azs            = ["us-east-1a"]
-  mgmt_subnets   = ["10.5.0.0/24"]
-  public_subnets = ["10.5.1.0/24"]
-  web_subnets    = ["10.5.2.0/24"]
-  db_subnets     = ["10.5.3.0/24"]
+  mgmt_subnet   = "10.5.0.0/24"
+  public_subnet = "10.5.1.0/24"
+  web_subnet    = "10.5.2.0/24"
+  db_subnet     = "10.5.3.0/24"
 
   tags {
     Environment = "Multicloud-AWS"
@@ -27,27 +34,19 @@ module "firewall" {
   ssh_key_name = "${var.ssh_key_name}"
   vpc_id       = "${module.vpc.vpc_id}"
 
-  fw_mgmt_subnet_id = "${module.vpc.mgmt_subnet_ids[0]}"
+  fw_mgmt_subnet_id = "${module.vpc.mgmt_subnet_id}"
   fw_mgmt_ip        = "10.5.0.4"
   fw_mgmt_sg_id     = "${aws_security_group.firewall_mgmt_sg.id}"
 
-  fw_dataplane_subnet_ids = [
-    "${module.vpc.public_subnet_ids[0]}",
-    "${module.vpc.web_subnet_ids[0]}",
-    "${module.vpc.db_subnet_ids[0]}",
-  ]
-
-  fw_dataplane_ips = [
-    "10.5.1.4",
-    "10.5.2.4",
-    "10.5.3.4",
-  ]
+  fw_eth1_subnet_id = "${module.vpc.public_subnet_id}"
+  fw_eth2_subnet_id = "${module.vpc.web_subnet_id}"
+  fw_eth3_subnet_id = "${module.vpc.db_subnet_id}"
 
   fw_dataplane_sg_id = "${aws_security_group.public_sg.id}"
 
   fw_version          = "9.0"
   fw_product_code     = "806j2of0qy5osgjjixq9gqc6g"
-  fw_bootstrap_bucket = "ignite2019-automation-aws"
+  fw_bootstrap_bucket = "${var.bootstrap_bucket_name}"
 
   tags {
     Environment = "Multicloud-AWS"
@@ -65,11 +64,11 @@ resource "aws_route_table" "web" {
 resource "aws_route" "web_default" {
   route_table_id         = "${aws_route_table.web.id}"
   destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = "${module.firewall.fw_dataplane_if_ids[1]}"
+  network_interface_id   = "${module.firewall.fw_eth2_id}"
 }
 
 resource "aws_route_table_association" "web_assoc" {
-  subnet_id      = "${module.vpc.web_subnet_ids[0]}"
+  subnet_id      = "${module.vpc.web_subnet_id}"
   route_table_id = "${aws_route_table.web.id}"
 }
 
@@ -84,11 +83,11 @@ resource "aws_route_table" "db" {
 resource "aws_route" "db_default" {
   route_table_id         = "${aws_route_table.db.id}"
   destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = "${module.firewall.fw_dataplane_if_ids[2]}"
+  network_interface_id   = "${module.firewall.fw_eth3_id}"
 }
 
 resource "aws_route_table_association" "db_assoc" {
-  subnet_id      = "${module.vpc.db_subnet_ids[0]}"
+  subnet_id      = "${module.vpc.db_subnet_id}"
   route_table_id = "${aws_route_table.db.id}"
 }
 
@@ -128,7 +127,7 @@ resource "aws_security_group" "firewall_mgmt_sg" {
     to_port     = "443"
     from_port   = "443"
     protocol    = "tcp"
-    cidr_blocks = ["${var.allowed_mgmt_cidr}"]
+    cidr_blocks = ["${var.allowed_mgmt_cidr}", "10.5.2.5/32", "10.5.3.5/32"]
   }
 
   egress {
@@ -145,8 +144,10 @@ module "web" {
   name         = "Multicloud-AWS-Web01"
   ssh_key_name = "${var.ssh_key_name}"
 
-  subnet_id  = "${module.vpc.web_subnet_ids[0]}"
+  subnet_id  = "${module.vpc.web_subnet_id}"
   private_ip = "10.5.2.5"
+
+  user_data = "${file("./webserver-startup.sh")}"
 
   tags {
     Environment = "Multicloud-AWS"
@@ -159,8 +160,10 @@ module "db" {
   name         = "Multicloud-AWS-Db01"
   ssh_key_name = "${var.ssh_key_name}"
 
-  subnet_id  = "${module.vpc.db_subnet_ids[0]}"
+  subnet_id  = "${module.vpc.db_subnet_id}"
   private_ip = "10.5.3.5"
+
+  user_data = "${file("./dbserver-startup.sh")}"
 
   tags {
     Environment = "Multicloud-AWS"
