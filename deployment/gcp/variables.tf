@@ -19,13 +19,15 @@
 # PROJECT VARIABLES
 ############################################################################################
 variable "project" {
-  description = "Your project ID"
+  description = "Your GCP project ID"
+  type = "string"
   default = ""
 }
 
 variable service_account_email {
   description = "The email of the service account for the instance template."
-  default     = ""
+  type = "string"
+  default = ""
 }
 
 variable "credentials_file" {
