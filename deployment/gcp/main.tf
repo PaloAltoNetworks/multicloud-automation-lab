@@ -230,7 +230,6 @@ resource "google_compute_instance" "firewall" {
   }
 
   service_account {
-    email = "${var.service_account_email}"
     scopes = ["${var.scopes_fw}"]
   }
 
@@ -293,7 +292,6 @@ resource "google_compute_instance" "dbserver" {
   metadata_startup_script    = "${file(var.db_startup_script)}"
 
   service_account {
-    email = "${var.service_account_email}"
     scopes = ["${var.scopes_db}"]
   }
 
@@ -340,7 +338,6 @@ resource "google_compute_instance" "webserver" {
   metadata_startup_script    = "${file(var.web_startup_script)}"
 
   service_account {
-    email = "${var.service_account_email}"
     scopes = ["${var.scopes_web}"]
   }
 

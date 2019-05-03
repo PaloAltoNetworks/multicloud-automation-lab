@@ -24,17 +24,6 @@ variable "project" {
   default = ""
 }
 
-variable service_account_email {
-  description = "The email of the service account for the instance template."
-  type = "string"
-  default = ""
-}
-
-variable "credentials_file" {
-  description = "Full path to the JSON credentials file"
-  type = "string"
-  default = ""
-}
 variable "region" {
   description = "The GCP region in which to deploy"
   type = "string"
@@ -43,6 +32,12 @@ variable "region" {
 
 variable "zone" {
   description = "The GCP zone in which to deploy"
+  type = "string"
+  default = ""
+}
+
+variable "credentials_file" {
+  description = "Full path to the JSON credentials file"
   type = "string"
   default = ""
 }
