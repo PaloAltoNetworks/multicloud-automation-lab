@@ -127,7 +127,7 @@ resource "aws_security_group" "firewall_mgmt_sg" {
     to_port     = "443"
     from_port   = "443"
     protocol    = "tcp"
-    cidr_blocks = ["${var.allowed_mgmt_cidr}", "10.5.2.5/32", "10.5.3.5/32"]
+    cidr_blocks = ["${var.allowed_mgmt_cidr}"]
   }
 
   egress {
