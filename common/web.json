@@ -20,7 +20,8 @@
         "instance_type": "t2.medium",
         "ssh_username": "admin",
         "ami_name": "multicloud-aws-web-{{isotime \"2006.01.02-15.04.05\" }}",
-        "ami_groups": ["all"]
+        "ami_groups": ["all"],
+        "ami_regions": ["us-east-2", "us-west-1", "us-west-2"]
     }],
     "provisioners": [
         {
