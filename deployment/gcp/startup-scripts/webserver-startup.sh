@@ -61,7 +61,8 @@ done
 sudo bash /usr/share/doc/wordpress/examples/setup-mysql -n Demo -t $DB_IP $DB_IP
 sudo sed -i "s/define('DB_USER'.*/define('DB_USER', 'demouser');/g" /etc/wordpress/config-$DB_IP.php
 sudo sed -i "s/define('DB_PASSWORD'.*/define('DB_PASSWORD', 'paloalto@123');/g" /etc/wordpress/config-$DB_IP.php
-sudo mv /etc/wordpress/config-$DB_IP.php /etc/wordpress/config-$FW_PublicIP.php
+#sudo mv /etc/wordpress/config-$DB_IP.php /etc/wordpress/config-$FW_PublicIP.php
+sudo mv /etc/wordpress/config-$DB_IP.php /etc/wordpress/config-default.php
 sudo wget -O /usr/lib/cgi-bin/guess-sql-root-password.cgi https://raw.githubusercontent.com/PaloAltoNetworks/googlecloud/master/two-tier-template/guess-sql-root-password.cgi
 sudo chmod +x /usr/lib/cgi-bin/guess-sql-root-password.cgi
 sudo sed -i "s/DB-IP-ADDRESS/$DB_IP/g" /usr/lib/cgi-bin/guess-sql-root-password.cgi
