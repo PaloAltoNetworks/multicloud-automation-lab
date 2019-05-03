@@ -27,6 +27,7 @@ variable service_account_email {
   description = "The email of the service account for the instance template."
   default     = ""
 }
+
 variable "credentials_file" {
   description = "Full path to the JSON credentials file"
   type = "string"
@@ -50,17 +51,12 @@ variable "public_key_file" {
   default = ""
 }
 
-//  Bootstrap folder variables
-variable "bootstrap_folders" {
-  default = [
-    "config/",
-    "software/",
-    "license/",
-    "content/"
-  ]
-}
+############################################################################################
+# DO NOT CHANGE ANY VARIABLES BELOW 
+############################################################################################
 
-//  Bootstrap file variables
+// BOOTSTRAP Variables
+
 variable "bootstrap_file" {
   default = "../../common/bootstrap/config/bootstrap.xml"
 }

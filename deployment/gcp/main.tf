@@ -67,7 +67,6 @@ resource "google_storage_bucket_object" "license" {
 # CREATE VPCS AND SUBNETS
 ############################################################################################
 
-// MANAGEMENT
 resource "google_compute_subnetwork" "management-sub" {
   name          = "management-subnet"
   ip_cidr_range = "10.5.0.0/24"
