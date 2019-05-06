@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "bootstrap_bucket" {
-  bucket = "${var.bootstrap_bucket_name}"
-  acl    = "private"
+  bucket_prefix = "multicloud-automation-lab-"
+  acl           = "private"
 }
 
 resource "aws_s3_bucket_object" "bootstrap_init_cfg" {

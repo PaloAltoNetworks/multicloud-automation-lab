@@ -5,9 +5,8 @@ provider "aws" {
 module "bootstrap_bucket" {
   source = "./modules/bootstrap"
 
-  bootstrap_bucket_name   = "${var.bootstrap_bucket_name}"
-  bootstrap_xml_path      = "./bootstrap/config/bootstrap.xml"
-  bootstrap_init_cfg_path = "./bootstrap/config/init-cfg.txt"
+  bootstrap_xml_path      = "../../common/bootstrap/config/bootstrap.xml"
+  bootstrap_init_cfg_path = "../../common/bootstrap/config/init-cfg.txt"
 }
 
 module "vpc" {
@@ -46,7 +45,7 @@ module "firewall" {
 
   fw_version          = "9.0"
   fw_product_code     = "806j2of0qy5osgjjixq9gqc6g"
-  fw_bootstrap_bucket = "${var.bootstrap_bucket_name}"
+  fw_bootstrap_bucket = "${module.bootstrap_bucket.bootstrap_bucket_name}"
 
   tags {
     Environment = "Multicloud-AWS"
