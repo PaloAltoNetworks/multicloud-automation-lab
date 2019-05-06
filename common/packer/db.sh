@@ -1,6 +1,6 @@
 #!/bin/sh
 sudo apt-get update
-sudo apt-get -y install debconf-utils
+sudo apt-get install -y debconf-utils
 sudo apt-get install -y mariadb-server
 sudo mysql -e "UPDATE mysql.user SET Password = PASSWORD('paloalto@123') WHERE User = 'root';"
 sudo mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"

@@ -1,0 +1,50 @@
+{
+    "description": "Packer templates for the lab web and database server images in AWS and GCP",
+    "variables": 
+        {
+            "aws_access_key": "",
+            "aws_secret_key": "",
+            "gcp_project_id": "",
+            "gcp_json_file": ""
+        },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "us-east-1",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "debian-stretch-hvm-x86_64-gp2-*",
+                    "root-device-type": "ebs"
+                },
+                "owners": ["379101102735"],
+                "most_recent": true
+            },
+            "instance_type": "t2.medium",
+            "ssh_username": "admin",
+            "ami_name": "multicloud-aws-web-{{isotime \"2006.01.02-15.04.05\" }}",
+            "ami_groups": ["all"],
+            "ami_regions": ["us-east-2", "us-west-1", "us-west-2"]
+        },
+        {
+            "type": "googlecompute",
+            "project_id": "{{user `gcp_project_id`}}",
+            "source_image_family": "debian-9",
+            "ssh_username": "packer",
+            "zone": "us-central1-b"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "config-default.php",
+            "destination": "/tmp/config-default.php"
+        },
+        {
+            "type": "shell",
+            "script": "web.sh"
+        }
+    ]
+}
