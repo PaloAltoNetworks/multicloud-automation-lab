@@ -10,6 +10,8 @@ Welcome to multicloud-automation-lab's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   terraform
+
 
 
 Indices and tables

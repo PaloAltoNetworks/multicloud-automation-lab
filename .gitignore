@@ -8,8 +8,11 @@
 # .tfvars files
 *.tfvars
 
+# Sphinx documentation
+docs/_build/
+
 # VSCode files
-.vscode
+**/.vscode/*
 
 # macOS files
 .DS_Store

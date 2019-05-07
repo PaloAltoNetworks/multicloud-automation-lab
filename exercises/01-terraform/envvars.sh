@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export PANOS_HOSTNAME="<YOUR FIREWALL IP ADDRESS GOES HERE>"
+export PANOS_USERNAME="admin"
+export PANOS_PASSWORD="Ignite2019!"
