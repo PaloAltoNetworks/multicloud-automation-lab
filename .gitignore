@@ -19,3 +19,7 @@ docs/_build/
 
 # Vagrant
 .vagrant/
+
+# Ansible
+*.retry
+venv/
