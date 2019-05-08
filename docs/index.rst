@@ -11,6 +11,7 @@ Welcome to multicloud-automation-lab's documentation!
    :caption: Contents:
 
    terraform
+   ansible/ansible
 
 
 
