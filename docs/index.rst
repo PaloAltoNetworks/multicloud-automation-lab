@@ -10,8 +10,10 @@ Welcome to multicloud-automation-lab's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   terraform
-   ansible/ansible
+   background/terraform
+   background/ansible
+   activities/terraform/terraform
+   activities/ansible/ansible
 
 
 
