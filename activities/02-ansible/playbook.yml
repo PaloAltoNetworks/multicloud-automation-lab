@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  roles:
+    - PaloAltoNetworks.paloaltonetworks
+
+  tasks:
+    - name: Create web server object
+      panos_address_object:
+        provider: "{{ provider }}"
+        name: "web-srv"
+        value: "10.5.2.5"
+        commit: False
+        state: present
+
+    - name: Create DB server object
+      panos_address_object:
+        provider: "{{ provider }}"
+        name: "db-srv"
+        value: "10.5.3.5"
+        commit: False
+        state: present

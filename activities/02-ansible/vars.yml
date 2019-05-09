@@ -1,0 +1,4 @@
+provider:
+  ip_address: "{{ lookup('env', 'PANOS_HOSTNAME') }}"
+  username: "{{ lookup('env', 'PANOS_USERNAME') }}"
+  password: "{{ lookup('env', 'PANOS_PASSWORD') }}"
