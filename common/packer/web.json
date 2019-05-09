@@ -5,7 +5,7 @@
             "aws_access_key": "",
             "aws_secret_key": "",
             "gcp_project_id": "",
-            "gcp_json_file": ""
+            "gcp_account_file": ""
         },
     "builders": [
         {
@@ -31,9 +31,12 @@
         {
             "type": "googlecompute",
             "project_id": "{{user `gcp_project_id`}}",
+            "account_file": "{{user `gcp_account_file`}}",
             "source_image_family": "debian-9",
             "ssh_username": "packer",
-            "zone": "us-central1-b"
+            "zone": "us-central1-b",
+            "image_name": "web-{{timestamp}}",
+            "image_description": "Multicloud automation lab web server image"
         }
     ],
     "provisioners": [

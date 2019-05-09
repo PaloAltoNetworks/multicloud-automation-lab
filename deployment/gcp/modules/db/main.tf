@@ -1,0 +1,55 @@
+############################################################################################
+# Copyright 2019 Palo Alto Networks.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+############################################################################################
+
+
+############################################################################################
+# CREATE DATABASE SERVER INSTANCE
+############################################################################################
+
+resource "google_compute_instance" "dbserver" {
+  name                      = "${var.db_name}"
+  machine_type              = "${var.db_machine_type}"
+  zone                      = "${var.db_zone}"
+  can_ip_forward            = true
+  allow_stopping_for_update = true
+  count                     = 1
+
+  metadata {
+    serial-port-enable      = true
+    block-project-ssh-keys  = true
+    ssh-keys                = "${var.db_ssh_key}"
+  }
+
+  service_account {
+    scopes                  = [
+			"https://www.googleapis.com/auth/cloud.useraccounts.readonly",
+			"https://www.googleapis.com/auth/logging.write",
+			"https://www.googleapis.com/auth/monitoring.write",
+			"https://www.googleapis.com/auth/compute.readonly"
+		]
+  }
+
+  network_interface {
+    subnetwork              = "${var.db_subnet_id}"
+    network_ip              = "${var.db_ip}"
+  }
+
+  boot_disk {
+    initialize_params {
+      image                 = "${var.db_image}"
+    }
+  }
+}

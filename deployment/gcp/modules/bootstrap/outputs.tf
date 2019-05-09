@@ -15,10 +15,12 @@
 ############################################################################################
 
 
-variable "aws_region_name" {}
+// BOOTSTRAP Outputs
 
-variable "ssh_key_name" {}
+output "bootstrap_url" {
+  value = "${google_storage_bucket.bootstrap.url}"
+}
 
-variable "allowed_mgmt_cidr" {
-  default = "0.0.0.0/0"
+output "bootstrap_name" {
+  value = "${google_storage_bucket.bootstrap.name}"
 }

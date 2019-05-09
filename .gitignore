@@ -16,3 +16,9 @@
 
 # Vagrant
 .vagrant/
+
+# SSH files
+*.pub
+
+# JSON files
+*.json

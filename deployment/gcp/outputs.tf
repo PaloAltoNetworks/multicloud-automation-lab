@@ -19,26 +19,10 @@
 # PLANS OUTPUTS
 ############################################################################################
 
-output "Firewall Management IP" {
-    value = "${google_compute_instance.firewall.network_interface.0.access_config.0.nat_ip}"
+output "Firewall Management Public IP" {
+    value = "${module.firewall.firewall-public-ip}"
 }
 
-output "Firewall External Subnet IP" {
-    value = "${google_compute_instance.firewall.network_interface.1.access_config.0.nat_ip}"
-}
-
-output "Firewall Web Subnet IP" {
-  value = "${google_compute_instance.firewall.network_interface.2.network_ip}"
-}
-
-output "Firewall Database Subnet IP" {
-  value = "${google_compute_instance.firewall.network_interface.3.network_ip}"
-}
-
-output "Web Server Private IP" {
-  value = "${google_compute_instance.webserver.network_interface.0.network_ip}"
-}
-
-output "Database Server Private IP" {
-  value = "${google_compute_instance.dbserver.network_interface.0.network_ip}"
+output "Web Server Public IP" {
+    value = "${module.firewall.web-public-ip}"
 }

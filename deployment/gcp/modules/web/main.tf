@@ -16,36 +16,41 @@
 
 
 ############################################################################################
-# PROJECT VARIABLES
+# CREATE WEB SERVER INSTANCE
 ############################################################################################
-variable "project" {
-  description = "Your GCP project ID"
-  type = "string"
-  default = ""
+
+resource "google_compute_instance" "webserver" {
+	name						= "${var.web_name}"
+	zone						= "${var.web_zone}"
+	machine_type				= "${var.web_machine_type}"
+	can_ip_forward				= true
+	allow_stopping_for_update	= true
+	count						= 1
+
+	// Adding METADATA Key Value pairs to WEB SERVER 
+	metadata {
+		serial-port-enable      = true
+		block-project-ssh-keys  = true
+		ssh-keys                = "${var.web_ssh_key}"
+	}
+
+	service_account {
+		scopes                  = [
+			"https://www.googleapis.com/auth/cloud.useraccounts.readonly",
+			"https://www.googleapis.com/auth/logging.write",
+			"https://www.googleapis.com/auth/monitoring.write",
+			"https://www.googleapis.com/auth/compute.readonly"
+		]
+	}
+
+	network_interface {
+		subnetwork              = "${var.web_subnet_id}"
+		network_ip              = "${var.web_ip}"
+	}
+
+	boot_disk {
+		initialize_params {
+			image				= "${var.web_image}"
+		}
+	}
 }
-
-variable "region" {
-  description = "The GCP region in which to deploy"
-  type = "string"
-  default = ""
-}
-
-variable "zone" {
-  description = "The GCP zone in which to deploy"
-  type = "string"
-  default = ""
-}
-
-variable "credentials_file" {
-  description = "Full path to the JSON credentials file"
-  type = "string"
-  default = ""
-}
-
-variable "public_key_file" {
-  description = "Full path to the SSH public key file"
-  type = "string"
-  default = ""
-}
-
-

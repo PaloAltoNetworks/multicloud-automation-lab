@@ -15,10 +15,24 @@
 ############################################################################################
 
 
-variable "aws_region_name" {}
+// BOOTSTRAP Variables
 
-variable "ssh_key_name" {}
+variable "bootstrap_project" {
+	description					= "The GCP project in which to deploy the bootstrap bucket"
+	type						= "string"
+}
 
-variable "allowed_mgmt_cidr" {
-  default = "0.0.0.0/0"
+variable "bootstrap_region" {
+	description					= "The GCP region in which to deploy the bootstrap bucket"
+	type						= "string"
+}
+
+variable "bootstrap_xml_path" {
+	description					= "Directory path to the bootstrap.xml file"
+	type 						= "string"
+}
+
+variable "bootstrap_init_cfg_path" {
+	description 				= "Directory path to the init-cfg.xml file"
+	type 						= "string"
 }
