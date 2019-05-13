@@ -5,7 +5,7 @@ Activity 2 - Ansible
 For this portion of the lab, you're going to be using the Palo Alto Networks
 `Ansible modules <https://ansible-pan.readthedocs.io/en/latest/>`_.
 
-First, change to the ``activities/02-ansible`` directory.
+First, change to the ``configuration/ansible`` directory.
 
 
 Task 2.1 - Module Communication
