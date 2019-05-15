@@ -19,7 +19,15 @@ Following the deployment, we will automate the configuration of the firewall to 
 
 Lastly, we will ensure that the firewall is able to respond effectively to changes made to the application infrastructure.  You will have your choice of deploying your application in Google Cloud Platform (GCP), Amazon Web Services (AWS) or both if time permits.  
 
-Objectives
+
+Objective
+---------
+The objective of this workshop is to deploy and secure a `WordPress <https://wordpress.org>`_ content management system in GCP and AWS.  This web application will be supported by an `Apache <https://httpd.apache.org>`_ web server and a `MariaDB <https://mariadb.org/>`_ database server residing in two separate subnets.  
+
+As part of our infrastructure deployment, a VM-Series NGFW will be inserted between the untrusted public subnet, the web subnet, and the database subnet.  However, we will need to configure this virtual firewall to support its network environment and the applications it will be protecting.
+
+
+Learning Outcomes
 ----------
 - Understand the various methods for automating the deployment of Palo Alto Networks NGFW instances in cloud environments
 - Learn to use industry-leading configuration management automation tools to implement changes to PAN-OS devices

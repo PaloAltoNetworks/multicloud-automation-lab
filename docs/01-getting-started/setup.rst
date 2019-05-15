@@ -15,6 +15,7 @@ In this activity you will:
 
     Chrome Incognito mode
 
+
 Log into the Qwiklabs portal
 ----------------------------
 
@@ -25,6 +26,7 @@ Navigate to the `Qwiklabs URL <https://paloaltonetworks.qwiklabs.com>`_ in your 
 Log in with your Qwiklabs credentials (sign up if you are new to Qwiklabs). You must use your corporate email address for the username. 
 
 .. figure:: _images/qwiklabs-login.png
+
 
 Launch the lab environment
 --------------------------
@@ -50,13 +52,14 @@ Once you've selected the lab evironment, you will need to click the **Start Lab*
 
 Each lab environment will take a few minutes to provision and deploy the Launchpad VM.  Once it is completed, a **Launchpad IP** field will be added to the bottom left panel.  
 
+
 SSH into the Launchpad VM
 -------------------------
-
 Once the lab environment has completed the provisioning process and the **Launchpad IP** field is displayed, you may SSH into that IP address using the following credentials.  
 
 - **Username:** ``student``
 - **Password:** ``Ignite2019!``
+
 
 Clone the lab software repository
 ---------------------------------
