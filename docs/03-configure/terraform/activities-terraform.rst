@@ -347,6 +347,6 @@ can use the following Go code, which has been provided for you in
 This code reads the hostname, username, and password from the environment
 variables we set earlier.  You can run it with ``go run commit.go``.
 Additionally, you can add a commit comment with
-``go run commit.go -c <your commit comment>``.
+``go run commit.go <your commit comment>``.
 
 You're done with the Terraform portion of the lab!
