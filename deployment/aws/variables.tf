@@ -14,21 +14,18 @@
 # limitations under the License.
 ############################################################################################
 
-
 variable "aws_region_name" {
   description = "The AWS region in which to deploy"
-  type = "string"
+  type        = "string"
 }
-
-variable "ssh_key_name" {}
-// Removr this once the aws_key_pair resource is created
 
 variable "public_key_file" {
   description = "Full path to the SSH public key file"
-  type = "string"
+  type        = "string"
 }
+
 variable "allowed_mgmt_cidr" {
   description = "The source address that will be allowed to access the lab environment"
-  type = "string"
-  default = "0.0.0.0/0"
+  type        = "string"
+  default     = "0.0.0.0/0"
 }
