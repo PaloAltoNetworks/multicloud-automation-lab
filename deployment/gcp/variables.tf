@@ -21,31 +21,31 @@
 variable "project" {
   description = "Your GCP project ID"
   type = "string"
-  default = ""
 }
 
 variable "region" {
   description = "The GCP region in which to deploy"
   type = "string"
-  default = ""
 }
 
 variable "zone" {
   description = "The GCP zone in which to deploy"
   type = "string"
-  default = ""
 }
 
 variable "credentials_file" {
   description = "Full path to the JSON credentials file"
   type = "string"
-  default = ""
 }
 
 variable "public_key_file" {
   description = "Full path to the SSH public key file"
   type = "string"
-  default = ""
 }
 
+variable "allowed_mgmt_cidr" {
+  description = "The source address that will be allowed to access the lab environment"
+  type = "string"
+  default = "0.0.0.0/0"
+}
 
