@@ -14,9 +14,13 @@
 # limitations under the License.
 ############################################################################################
 
-
 provider "aws" {
   region = "${var.aws_region_name}"
+}
+
+resource "aws_key_pair" "ssh_key" {
+  key_name   = "Multicloud-AWS"
+  public_key = "${file(var.public_key_file)}"
 }
 
 module "bootstrap_bucket" {
@@ -47,7 +51,7 @@ module "firewall" {
 
   name = "Multicloud-AWS-Firewall"
 
-  ssh_key_name = "${var.ssh_key_name}"
+  ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
   vpc_id       = "${module.vpc.vpc_id}"
 
   fw_mgmt_subnet_id = "${module.vpc.mgmt_subnet_id}"
@@ -158,7 +162,7 @@ module "web" {
   source = "./modules/web"
 
   name         = "Multicloud-AWS-Web01"
-  ssh_key_name = "${var.ssh_key_name}"
+  ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
 
   subnet_id  = "${module.vpc.web_subnet_id}"
   private_ip = "10.5.2.5"
@@ -172,7 +176,7 @@ module "db" {
   source = "./modules/db"
 
   name         = "Multicloud-AWS-Db01"
-  ssh_key_name = "${var.ssh_key_name}"
+  ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
 
   subnet_id  = "${module.vpc.db_subnet_id}"
   private_ip = "10.5.3.5"
