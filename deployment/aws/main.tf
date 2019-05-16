@@ -15,7 +15,8 @@
 ############################################################################################
 
 provider "aws" {
-  region = "${var.aws_region_name}"
+  region  = "${var.aws_region_name}"
+  version = "1.53.0"
 }
 
 resource "aws_key_pair" "ssh_key" {
@@ -140,14 +141,14 @@ resource "aws_security_group" "firewall_mgmt_sg" {
     to_port     = "22"
     from_port   = "22"
     protocol    = "tcp"
-    cidr_blocks = ["${var.allowed_mgmt_cidr}"]
+    cidr_blocks = "${var.allowed_mgmt_cidr}"
   }
 
   ingress {
     to_port     = "443"
     from_port   = "443"
     protocol    = "tcp"
-    cidr_blocks = ["${var.allowed_mgmt_cidr}"]
+    cidr_blocks = "${var.allowed_mgmt_cidr}"
   }
 
   egress {
