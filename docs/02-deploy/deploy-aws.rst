@@ -12,9 +12,15 @@ In this activity you will:
 
 Create AWS environment variables
 --------------------------------
-We will be deploying the lab infrastucture in AWS using Terraform.  A predefined Terraform plan is provided that will initialize the AWS provider and call modules responsible for instantiating the network, compute, and storage resources needed.
+We will be deploying the lab infrastucture in AWS using Terraform.  A
+predefined Terraform plan is provided that will initialize the AWS provider and
+call modules responsible for instantiating the network, compute, and storage
+resources needed.
 
-In order for Terraform to do this it will need to authenticate to AWS using the AWS Access Key and Secret Key values that were presented in the Qwiklabs panel when the lab was started.  Rather than write these as Terraform variables, we will use Linux environment variables.
+In order for Terraform to do this it will need to authenticate to AWS using the
+AWS Access Key and Secret Key values that were presented in the Qwiklabs panel
+when the lab was started.  Rather than write these as Terraform variables, we
+will use Linux environment variables.
 
 Create the environment variables.
 
@@ -26,9 +32,12 @@ Create the environment variables.
 
 Create an SSH key-pair
 ----------------------
-All AWS EC2 instances are required to have an SSH key-pair defined when the instance is created.  This is done to ensure secure access to the instance will be available once it is created.
+All AWS EC2 instances are required to have an SSH key-pair defined when the
+instance is created.  This is done to ensure secure access to the instance will
+be available once it is created.
 
-Create an SSH key-pair with an empty passphrase and save them in the ``~/.ssh`` directory.
+Create an SSH key-pair with an empty passphrase and save them in the ``~/.ssh``
+directory.
 
 .. code-block:: bash
 
@@ -43,7 +52,9 @@ Change into the AWS deployment directory.
 
     $ cd ~/multicloud-automation-lab/deployment/aws
 
-In this directory you will find the three main files associated with a Terraform plan: ``main.tf``, ``variables.tf``, and ``outputs.tf``.  View the contents of these files to see what they contain and how they're structured.
+In this directory you will find the three main files associated with a
+Terraform plan: ``main.tf``, ``variables.tf``, and ``outputs.tf``.  View the
+contents of these files to see what they contain and how they're structured.
 
 .. code-block:: bash
 
@@ -51,9 +62,17 @@ In this directory you will find the three main files associated with a Terraform
     $ more variables.tf
     $ more outputs.tf
 
-The file ``main.tf`` defines the providers that will be used and the resources that will be created (more on that shortly).  Since it is poor practice to hard code values into the plan, the file ``variables.tf`` will be used to declare the variables that will be used in the plan (but not necessarily their values).  The ``outputs.tf`` file will define the values to display that result from applying the plan.
+The file ``main.tf`` defines the providers that will be used and the resources
+that will be created (more on that shortly).  Since it is poor practice to hard
+code values into the plan, the file ``variables.tf`` will be used to declare
+the variables that will be used in the plan (but not necessarily their values).
+The ``outputs.tf`` file will define the values to display that result from
+applying the plan.
 
-Create a file called ``terraform.tfvars`` in the current directory that contains the following variables and their values.  Fill in the quotes with the AWS region name, the path to your SSH public key file, and the netblock of your public IP address.
+Create a file called ``terraform.tfvars`` in the current directory that
+contains the following variables and their values.  Fill in the quotes with the
+AWS region name, the path to your SSH public key file, and the netblock of your
+public IP address.
 
 .. code-block:: bash
 
@@ -61,7 +80,8 @@ Create a file called ``terraform.tfvars`` in the current directory that contains
     public_key_file     = ""
     allowed_mgmt_cidr   = ""
 
-Use the following command to determine your public IP address.  Simply take the resulting value and append ``/32`` to it for the ``allowed_mgmt_cidr`` value.
+Use the following command to determine your public IP address.  Simply take the
+resulting value and append ``/32`` to it for the ``allowed_mgmt_cidr`` value.
 
 .. code-block:: bash
 
@@ -70,7 +90,12 @@ Use the following command to determine your public IP address.  Simply take the 
 
 Initialize the AWS Terraform provider
 -------------------------------------
-Once you've created the ``terraform.tfvars`` file and populated it with the variables and values you are now ready to initialize the Terraform providers.  For this initial deployment we will only be using the `AWS Provider <https://www.terraform.io/docs/providers/aws/index.html>`_.  This initialization process will download all the software, modules, and plugins needed for working in a particular environment.
+Once you've created the ``terraform.tfvars`` file and populated it with the
+variables and values you are now ready to initialize the Terraform providers.
+For this initial deployment we will only be using the
+`AWS Provider <https://www.terraform.io/docs/providers/aws/index.html>`_.
+This initialization process will download all the software, modules, and
+plugins needed for working in a particular environment.
 
 .. code-block:: bash
 
@@ -79,13 +104,16 @@ Once you've created the ``terraform.tfvars`` file and populated it with the vari
 
 Deploy the lab infrastucture plan
 ---------------------------------
-We are now ready to deploy our lab infrastructure plan.  We should first perform a dry-run of the deployment process and validate the contents of the plan files and module dependencies.
+We are now ready to deploy our lab infrastructure plan.  We should first
+perform a dry-run of the deployment process and validate the contents of the
+plan files and module dependencies.
 
 .. code-block:: bash
 
     $ terraform plan
 
-If there are no errors and the plan output looks good, let's go ahead and perform the deployment.
+If there are no errors and the plan output looks good, let's go ahead and
+perform the deployment.
 
 .. code-block:: bash
 
@@ -95,12 +123,16 @@ At a high level these are each of the steps this plan will perform:
 
 #. Run the ``bootstrap`` module
     #. Create an S3 bucket for the firewall bootstrap package
-    #. Assign an IAM policy to the bucket allowing read access from the firewall instance
-    #. Create the ``/config/init-cfg.txt``, ``/config/bootstrap.xml``, ``/software``, ``/content``, and ``/license`` objects in the bootstrap bucket
+    #. Assign an IAM policy to the bucket allowing read access from the
+       firewall instance
+    #. Create the ``/config/init-cfg.txt``, ``/config/bootstrap.xml``,
+       ``/software``, ``/content``, and ``/license`` objects in the bootstrap
+       bucket
 #. Run the ``vpc`` module
     #. Create the VPC
     #. Create the Internet gateway
-    #. Create the ``management``, ``untrust``, ``web``, and ``database`` subnets
+    #. Create the ``management``, ``untrust``, ``web``, and ``database``
+       subnets
     #. Create the security groups for each subnet
     #. Create the default route for the ``web`` and ``database`` subnets
 #. Run the ``firewall`` module
@@ -115,21 +147,35 @@ At a high level these are each of the steps this plan will perform:
     #. Create the database server instance
     #. Create the database server interface
 
-The deployment process should finish in a few minutes and you will be presented with the public IP addresses of the VM-Series firewall and the web server.  However, the VM-Series firewall can take up to *ten minutes* to complete the initial bootstrap process.  It is recommended that you read ahead while you wait.
+The deployment process should finish in a few minutes and you will be presented
+with the public IP addresses of the VM-Series firewall and the web server.
+However, the VM-Series firewall can take up to *ten minutes* to complete the
+initial bootstrap process.  It is recommended that you read ahead while you
+wait.
 
-Try to SSH into the firewall with the username ``admin`` and the password ``Ignite2019!``.  If you are unsuccessful the firewall instance is likely still bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again after waiting a few minutes.
+Try to SSH into the firewall with the username ``admin`` and the password
+``Ignite2019!``.  If you are unsuccessful the firewall instance is likely still
+bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again after
+waiting a few minutes.
 
 .. code-block:: bash
 
     $ ssh admin@<firewall-ip>
 
-Once you have logged into the firewall you can check to ensure the management plane has completed its initialization.
+Once you have logged into the firewall you can check to ensure the management
+plane has completed its initialization.
 
 .. code-block:: bash
 
     admin> show chassis-ready
 
-If the response is ``yes``, you are ready to proceed with the configuration activities.
+If the response is ``yes``, you are ready to proceed with the configuration
+activities.
 
-.. note:: While it is a security best practice to use SSH keys to authenticate to VM instances in the cloud, we have defined a static password for the firewall's admin account in this lab (specifically, in the bootstap package).  This is because the firewall API used by Terraform and Ansible cannot utilize SSH keys and must have a username/password or API key for authentication.
+.. note:: While it is a security best practice to use SSH keys to authenticate
+          to VM instances in the cloud, we have defined a static password for
+          the firewall's admin account in this lab (specifically, in the 
+          bootstrap package).  This is because the firewall API used by
+          Terraform and Ansible cannot utilize SSH keys and must have a
+          username/password or API key for authentication.
 
