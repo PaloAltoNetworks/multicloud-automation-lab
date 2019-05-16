@@ -1,26 +1,22 @@
 ====================
-Lab Deployment (GPC)
+Lab Deployment (GCP)
 ====================
+
+.. warning:: If you are working in the AWS lab, skip this page and proceed to the lab deployment for AWS.
 
 In this activity you will:
 
 - Create a service account credential file
 - Create an SSH key-pair
 - Create the Terraform variables
-- Initialize the GPC Terraform provider
+- Initialize the GCP Terraform provider
 - Deploy the lab infrastucture plan
 
 Create a service account credential file
 ----------------------------------------
-We will be deploying the lab infrastucture in GPC using Terraform.  A
-predefined Terraform plan is provided that will initialize the GPC provider
-and call modules responsible for instantiating the network, compute, and
-storage resources needed.
+We will be deploying the lab infrastucture in GCP using Terraform.  A predefined Terraform plan is provided that will initialize the GCP provider and call modules responsible for instantiating the network, compute, and storage resources needed.
 
-In order for Terraform to do this it will need to authenticate to GPC.  We
-*could* authenticate to GPC using the username presented in the Qwiklabs panel
-when the lab was started.  However, the Compute Engine default service account
-is typically used because it is certain to have all the neccesary permissions.
+In order for Terraform to do this it will need to authenticate to GCP.  We *could* authenticate to GCP using the username presented in the Qwiklabs panel when the lab was started.  However, the Compute Engine default service account is typically used because it is certain to have all the neccesary permissions.
 
 List the email address of the Compute Engine default service account.
 
@@ -65,11 +61,11 @@ directory.
 
 Create the Terraform variables
 ------------------------------
-Change into the GPC deployment directory.
+Change into the GCP deployment directory.
 
 .. code-block:: bash
 
-    $ cd ~/multicloud-automation-lab/deployment/gpc
+    $ cd ~/multicloud-automation-lab/deployment/gcp
 
 In this directory you will find the three main files associated with a
 Terraform plan: ``main.tf``, ``variables.tf``, and ``outputs.tf``.  View the
@@ -88,11 +84,7 @@ the variables that will be used in the plan (but not necessarily their values).
 The ``outputs.tf`` file will define the values to display that result from
 applying the plan.
 
-Create a file called ``terraform.tfvars`` in the current directory that
-contains the following variables and their values.  Fill in the quotes with the
-GPC project ID, the GPC region, and GPC region, the path to the JSON
-credentials file, the path to your SSH public key file, and the netblock of
-your public IP address.
+Create a file called ``terraform.tfvars`` in the current directory that contains the following variables and their values.  Fill in the quotes with the GCP project ID, the GCP region, and GCP region, the path to the JSON credentials file, the path to your SSH public key file, and the netblock of your public IP address.
 
 .. code-block:: bash
 
@@ -111,14 +103,9 @@ resulting value and append ``/32`` to it for the ``allowed_mgmt_cidr`` value.
     $ curl -4 http://icanhazip.com
 
 
-Initialize the GPC Terraform provider
+Initialize the GCP Terraform provider
 -------------------------------------
-Once you've created the ``terraform.tfvars`` file and populated it with the
-variables and values you are now ready to initialize the Terraform providers.
-For this initial deployment we will only be using the
-`GPC Provider <https://www.terraform.io/docs/providers/google/index.html>`_.
-This initialization process will download all the software, modules, and
-plugins needed for working in a particular environment.
+Once you've created the ``terraform.tfvars`` file and populated it with the variables and values you are now ready to initialize the Terraform providers.  For this initial deployment we will only be using the `GCP Provider <https://www.terraform.io/docs/providers/google/index.html>`_.  This initialization process will download all the software, modules, and plugins needed for working in a particular environment.
 
 .. code-block:: bash
 
