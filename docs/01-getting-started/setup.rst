@@ -11,7 +11,7 @@ In this activity you will:
 
 .. note:: Before you start it is recommended that you launch a private instance of your web browser.  This will prevent the use of cached Google or Amazon credentials if you log into the GCP or AWS consoles.  This will help ensure you do not incur any personal charges within these cloud providers.
 
-.. figure:: _images/incognito.png
+.. figure:: incognito.png
 
     Chrome Incognito mode
 
