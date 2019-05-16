@@ -4,9 +4,9 @@ Activity 1 - Terraform
 
 
 For this portion of the lab, you will be using the Palo Alto Networks
-`Terraform provider <https://www.terraform.io/docs/providers/panos/index.html>`_.
+`Terraform for PAN-OS provider <https://www.terraform.io/docs/providers/panos/index.html>`_.
 
-First, change to the ``activities/01-terraform`` directory.
+First, change to the ``configuration/terraform`` directory.
 
 
 Task 1.1 - Provider Communication

@@ -18,7 +18,7 @@
 
 echo "Setting up student account ..."
 useradd -m -s /bin/bash student
-echo 'student:Ignite2019' | chpasswd
+echo 'student:Ignite2019!' | chpasswd
 usermod -aG sudo student
 
 echo "Configuring SSH server for password authentication ..."
