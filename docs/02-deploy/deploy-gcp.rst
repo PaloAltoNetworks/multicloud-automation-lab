@@ -2,7 +2,7 @@
 Lab Deployment (GCP)
 ====================
 
-.. warning:: If you are working on the AWS lab, skip this page and proceed to the `AWS lab deployment page <deploy-gcp>`_.
+.. warning:: If you are working on the AWS lab, skip this page and proceed to the `AWS lab deployment page <deploy-gcp.html>`_.
 
 In this activity you will:
 
