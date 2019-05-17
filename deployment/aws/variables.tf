@@ -25,7 +25,7 @@ variable "public_key_file" {
 }
 
 variable "allowed_mgmt_cidr" {
-  description = "The source address that will be allowed to access the lab environment"
-  type        = "string"
-  default     = "0.0.0.0/0"
+  description = "The source addresses that will be allowed to access the lab environment"
+  type        = "list"
+  default     = ["0.0.0.0/0"]
 }
