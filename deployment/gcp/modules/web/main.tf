@@ -30,9 +30,15 @@ resource "google_compute_instance" "webserver" {
 	// Adding METADATA Key Value pairs to WEB SERVER 
 	metadata {
 		serial-port-enable      = true
-		block-project-ssh-keys  = true
+		block-project-ssh-keys  = false
 		ssh-keys                = "${var.web_ssh_key}"
 	}
+
+	labels						= {
+		environment = "web"
+	}
+
+	tags 						= ["web"]
 
 	metadata_startup_script 	= "${file("../scripts/webserver-startup.sh")}"
 
