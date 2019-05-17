@@ -61,6 +61,30 @@ module "vpc" {
 	vpc_db_subnet_name      	= "database-subnet"
 }
 
+module "web" {
+	source 					= "./modules/web"
+
+	web_name         		= "web-vm"
+	web_zone				= "${var.zone}"
+	web_machine_type		= "f1-micro"
+	web_ssh_key 			= "admin:${file("${var.public_key_file}")}"
+	web_subnet_id  			= "${module.vpc.web_subnet}"
+	web_ip 					= "10.5.2.5"
+	web_image				= "debian-9"
+}
+
+module "db" {
+	source 					= "./modules/db"
+
+	db_name         		= "db-vm"
+	db_zone					= "${var.zone}"
+	db_machine_type			= "f1-micro"
+	db_ssh_key 				= "admin:${file("${var.public_key_file}")}"
+	db_subnet_id  			= "${module.vpc.db_subnet}"
+	db_ip 					= "10.5.3.5"
+	db_image				= "debian-9"
+}
+
 module "firewall" {
 	source					= "./modules/firewall"
 
@@ -88,30 +112,6 @@ module "firewall" {
 	fw_db_subnet			= "${module.vpc.db_subnet}"
 	fw_db_ip				= "10.5.3.4"
 	fw_db_rule				= "${module.vpc.db-allow-outbound-rule}"
-}
-
-module "web" {
-	source 					= "./modules/web"
-
-	web_name         		= "web-vm"
-	web_zone				= "${var.zone}"
-	web_machine_type		= "f1-micro"
-	web_ssh_key 			= "admin:${file("${var.public_key_file}")}"
-	web_subnet_id  			= "${module.vpc.web_subnet}"
-	web_ip 					= "10.5.2.5"
-	web_image				= "debian-9"
-}
-
-module "db" {
-	source 					= "./modules/db"
-
-	db_name         		= "db-vm"
-	db_zone					= "${var.zone}"
-	db_machine_type			= "f1-micro"
-	db_ssh_key 				= "admin:${file("${var.public_key_file}")}"
-	db_subnet_id  			= "${module.vpc.db_subnet}"
-	db_ip 					= "10.5.3.5"
-	db_image				= "debian-9"
 }
 
 

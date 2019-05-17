@@ -29,9 +29,15 @@ resource "google_compute_instance" "dbserver" {
 
 	metadata {
 		serial-port-enable		= true
-		block-project-ssh-keys	= true
+		block-project-ssh-keys	= false
 		ssh-keys				= "${var.db_ssh_key}"
 	}
+
+	labels						= {
+		environment = "database"
+	}
+
+	tags 						= ["database"]
 
 	metadata_startup_script 	= "${file("../scripts/dbserver-startup.sh")}"
 

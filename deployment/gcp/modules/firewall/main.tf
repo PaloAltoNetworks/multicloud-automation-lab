@@ -42,12 +42,7 @@ resource "google_compute_instance" "firewall" {
 	}
 
 	service_account {
-		scopes = [
-			"https://www.googleapis.com/auth/cloud.useraccounts.readonly",
-			"https://www.googleapis.com/auth/devstorage.read_only",
-			"https://www.googleapis.com/auth/logging.write",
-			"https://www.googleapis.com/auth/monitoring.write"
-		]
+		scopes = ["cloud-platform"]
 	}
 
 	network_interface {

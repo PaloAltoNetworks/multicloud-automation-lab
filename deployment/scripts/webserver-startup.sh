@@ -19,7 +19,7 @@
 # Check for Internet connectivity
 while true
     do 
-        resp=$(curl -s -S -g -k "http://captive.apple.com")
+        resp=$(curl -s -S "http://captive.apple.com")
 	echo $resp
         if [[ $resp == *"Success"* ]] ; then
             break
