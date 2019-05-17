@@ -34,13 +34,10 @@ resource "google_compute_instance" "webserver" {
 		ssh-keys                = "${var.web_ssh_key}"
 	}
 
+	metadata_startup_script 	= "${file("../scripts/webserver-startup.sh")}"
+
 	service_account {
-		scopes                  = [
-			"https://www.googleapis.com/auth/cloud.useraccounts.readonly",
-			"https://www.googleapis.com/auth/logging.write",
-			"https://www.googleapis.com/auth/monitoring.write",
-			"https://www.googleapis.com/auth/compute.readonly"
-		]
+		scopes                  = ["userinfo-email", "compute-ro", "storage-ro"]
 	}
 
 	network_interface {

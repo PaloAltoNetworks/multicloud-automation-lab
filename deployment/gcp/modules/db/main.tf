@@ -20,36 +20,33 @@
 ############################################################################################
 
 resource "google_compute_instance" "dbserver" {
-  name                      = "${var.db_name}"
-  machine_type              = "${var.db_machine_type}"
-  zone                      = "${var.db_zone}"
-  can_ip_forward            = true
-  allow_stopping_for_update = true
-  count                     = 1
+	name						= "${var.db_name}"
+	machine_type				= "${var.db_machine_type}"
+	zone						= "${var.db_zone}"
+	can_ip_forward				= true
+	allow_stopping_for_update	= true
+	count						= 1
 
-  metadata {
-    serial-port-enable      = true
-    block-project-ssh-keys  = true
-    ssh-keys                = "${var.db_ssh_key}"
-  }
+	metadata {
+		serial-port-enable		= true
+		block-project-ssh-keys	= true
+		ssh-keys				= "${var.db_ssh_key}"
+	}
 
-  service_account {
-    scopes                  = [
-			"https://www.googleapis.com/auth/cloud.useraccounts.readonly",
-			"https://www.googleapis.com/auth/logging.write",
-			"https://www.googleapis.com/auth/monitoring.write",
-			"https://www.googleapis.com/auth/compute.readonly"
-		]
-  }
+	metadata_startup_script 	= "${file("../scripts/dbserver-startup.sh")}"
 
-  network_interface {
-    subnetwork              = "${var.db_subnet_id}"
-    network_ip              = "${var.db_ip}"
-  }
+	service_account {
+		scopes					= ["userinfo-email", "compute-ro", "storage-ro"]
+	}
 
-  boot_disk {
-    initialize_params {
-      image                 = "${var.db_image}"
-    }
-  }
+	network_interface {
+		subnetwork				= "${var.db_subnet_id}"
+		network_ip				= "${var.db_ip}"
+	}
+
+	boot_disk {
+		initialize_params {
+			image				= "${var.db_image}"
+		}
+	}
 }
