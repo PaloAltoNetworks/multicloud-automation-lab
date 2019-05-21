@@ -14,14 +14,14 @@
 # limitations under the License.
 ############################################################################################
 
-output "vpc" {
+output "VPC" {
   value = "${module.vpc.vpc_id}"
 }
 
-output "firewall_mgmt_ip" {
+output "Firewall Management IP" {
   value = "${module.firewall.fw_mgmt_eip}"
 }
 
-output "firewall_eth1_ip" {
+output "Firewall Untrust IP" {
   value = "${module.firewall.fw_eth1_eip}"
 }
