@@ -43,7 +43,7 @@ module "vpc" {
   db_subnet     = "10.5.3.0/24"
 
   tags {
-    Environment = "Multicloud-AWS"
+	Environment = "Multicloud-AWS"
   }
 }
 
@@ -70,7 +70,7 @@ module "firewall" {
   fw_bootstrap_bucket = "${module.bootstrap_bucket.bootstrap_bucket_name}"
 
   tags {
-    Environment = "Multicloud-AWS"
+	Environment = "Multicloud-AWS"
   }
 }
 
@@ -78,7 +78,7 @@ resource "aws_route_table" "web" {
   vpc_id = "${module.vpc.vpc_id}"
 
   tags {
-    Name = "${module.vpc.name}-WebRouteTable"
+	Name = "${module.vpc.name}-WebRouteTable"
   }
 }
 
@@ -97,7 +97,7 @@ resource "aws_route_table" "db" {
   vpc_id = "${module.vpc.vpc_id}"
 
   tags {
-    Name = "${module.vpc.name}-DbRouteTable"
+	Name = "${module.vpc.name}-DbRouteTable"
   }
 }
 
@@ -118,17 +118,17 @@ resource "aws_security_group" "public_sg" {
   vpc_id      = "${module.vpc.vpc_id}"
 
   ingress {
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+	from_port   = "0"
+	to_port     = "0"
+	protocol    = "-1"
+	cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+	from_port   = "0"
+	to_port     = "0"
+	protocol    = "-1"
+	cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -138,24 +138,24 @@ resource "aws_security_group" "firewall_mgmt_sg" {
   vpc_id      = "${module.vpc.vpc_id}"
 
   ingress {
-    to_port     = "22"
-    from_port   = "22"
-    protocol    = "tcp"
-    cidr_blocks = "${var.allowed_mgmt_cidr}"
+	to_port     = "22"
+	from_port   = "22"
+	protocol    = "tcp"
+	cidr_blocks = ["${var.allowed_mgmt_cidr}"]
   }
 
   ingress {
-    to_port     = "443"
-    from_port   = "443"
-    protocol    = "tcp"
-    cidr_blocks = "${var.allowed_mgmt_cidr}"
+	to_port     = "443"
+	from_port   = "443"
+	protocol    = "tcp"
+	cidr_blocks = ["${var.allowed_mgmt_cidr}"]
   }
 
   egress {
-    to_port     = 0
-    from_port   = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+	to_port     = 0
+	from_port   = 0
+	protocol    = "-1"
+	cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -169,7 +169,8 @@ module "web" {
   private_ip = "10.5.2.5"
 
   tags {
-    Environment = "Multicloud-AWS"
+	Environment = "Multicloud-AWS"
+	ServerType = "web"
   }
 }
 
@@ -183,6 +184,7 @@ module "db" {
   private_ip = "10.5.3.5"
 
   tags {
-    Environment = "Multicloud-AWS"
+	Environment = "Multicloud-AWS"
+	ServerType = "database"
   }
 }

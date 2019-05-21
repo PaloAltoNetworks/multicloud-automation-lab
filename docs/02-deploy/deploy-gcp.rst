@@ -93,14 +93,6 @@ Create a file called ``terraform.tfvars`` in the current directory that contains
     zone                = ""
     credentials_file    = ""
     public_key_file     = ""
-    allowed_mgmt_cidr   = ""
-
-Use the following command to determine your public IP address.  Simply take the
-resulting value and append ``/32`` to it for the ``allowed_mgmt_cidr`` value.
-
-.. code-block:: bash
-
-    $ curl -4 http://icanhazip.com
 
 
 Initialize the GCP Terraform provider

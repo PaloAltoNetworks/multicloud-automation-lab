@@ -78,17 +78,8 @@ public IP address.
 
 .. code-block:: bash
 
-    aws_region_name     = "us-west-2"
-    public_key_file     = "~/.ssh/lab_ssh_key.pub"
-    allowed_mgmt_cidr   = ["<YOUR LAUNCHPAD IP>", "<YOUR PUBLIC IP>"]
-
-Use the following command to determine your public IP address.  Both the
-launchpad IP address and your public IP address will need ``/32`` appended to
-them for the ``allowed_mgmt_cidr`` value.
-
-.. code-block:: bash
-
-    $ curl -4 http://icanhazip.com
+    aws_region_name     = ""
+    public_key_file     = ""
 
 
 Initialize the AWS Terraform provider

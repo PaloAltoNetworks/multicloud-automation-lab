@@ -34,7 +34,7 @@ resource "google_compute_instance" "dbserver" {
 	}
 
 	labels						= {
-		environment = "database"
+		ServerType = "database"
 	}
 
 	tags 						= ["database"]
