@@ -172,7 +172,7 @@ module "web" {
 
   tags {
 	Environment = "Multicloud-AWS"
-	ServerType = "web"
+	server-type = "web"
   }
 }
 
@@ -187,6 +187,6 @@ module "db" {
 
   tags {
 	Environment = "Multicloud-AWS"
-	ServerType = "database"
+	server-type = "database"
   }
 }

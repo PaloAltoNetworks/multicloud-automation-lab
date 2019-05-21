@@ -1,6 +1,6 @@
-====================
-Activity 2 - Ansible
-====================
+=====================
+Ansible Configuration
+=====================
 
 For this portion of the lab, you're going to be using the Palo Alto Networks
 `Ansible modules <https://ansible-pan.readthedocs.io/en/latest/>`_.
@@ -8,8 +8,8 @@ For this portion of the lab, you're going to be using the Palo Alto Networks
 First, change to the ``configuration/ansible`` directory.
 
 
-Task 2.1 - Module Communication
-===============================
+Module Communication
+====================
 
 Just like with Terraform, your first task is setting up the communication with
 the firewall.  The IP address, username, and password (or API key) can be set
@@ -38,8 +38,8 @@ playbook.
    that you can accomplish the same tasks with either.
 
 
-Task 2.2 - Address Objects
-==========================
+Address Objects
+===============
 
 Your ``playbook.yml`` file contains the following:
 
@@ -79,8 +79,8 @@ Also notice the fact that ``commit`` is set to **False**, so that we don't have
 to wait on a commit each time a module runs.
 
 
-Task 2.3 - Service Objects
-==========================
+Service Objects
+===============
 
 Next, create some service objects.  We want to allow SSH on some non-standard
 ports so we can easily communicate with web and DB servers behind our firewall.
@@ -111,8 +111,8 @@ following definitions:
    **service-tcp-222** service object.
 
 
-Task 2.4 - Security Rules
-=========================
+Security Rules
+==============
 
 Now we need to create security rules to allow traffic.  You'll need to refer to
 the `panos_security_rule module <https://ansible-pan.readthedocs.io/en/latest/modules/panos_security_rule_module.html>`_
@@ -141,8 +141,8 @@ Use the ``panos_security_rule`` module to create the following security rules:
    Security rules to be created.
 
 
-Task 2.5 - NAT Rules
-====================
+NAT Rules
+=========
 
 Now we need to create the required NAT rules.  You'll need to refer to the
 `panos_nat_rule module <https://ansible-pan.readthedocs.io/en/latest/modules/panos_nat_rule_module.html>`_
@@ -173,8 +173,8 @@ Use the ``panos_nat_rule`` module to create the following NAT rules:
    NAT rules to be created.
 
 
-Task 2.6 - Committing Your Configuration
-========================================
+Committing Your Configuration
+=============================
 
 If you have been writing your playbook with ``commit`` set to **False** each
 time, you have an uncommitted candidate configuration.  There's a panos_commit
@@ -189,8 +189,8 @@ The example code for the module should do what you need:
       provider: '{{ provider }}'
 
 
-Task 2.7 - Run Your Playbook
-============================
+Run Your Playbook
+=================
 
 Save and exit your ``playbook.yml`` file.  Then run your playbook with the
 following command:
@@ -204,4 +204,4 @@ what you want.  If you get errors, indentation is most likely the problem.
 Ansible is very particular about lines being indented with spaces and not with
 tabs.
 
-You're done with the Ansible portion of the lab!
+You're now done with the Ansible portion of the lab!

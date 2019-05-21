@@ -1,6 +1,6 @@
-======================
-Activity 1 - Terraform
-======================
+=======================
+Terraform Configuration
+=======================
 
 
 For this portion of the lab, you will be using the Palo Alto Networks
@@ -9,8 +9,8 @@ For this portion of the lab, you will be using the Palo Alto Networks
 First, change to the ``configuration/terraform`` directory.
 
 
-Task 1.1 - Provider Communication
-=================================
+Provider Communication
+======================
 
 Your first task is to set up the communication between the provider and your
 lab firewall.  There's several ways this can be done.  The IP address,
@@ -20,25 +20,16 @@ the command line using the ``-var`` command line option to ``terraform plan``
 and ``terraform apply``.  You can also reference a JSON file in the provider
 configuration which can contain the configuration.
 
-Another way you can accomplish this is by using environment variables.  Edit
-the file ``envvars.sh`` with your text editor:
+Another way you can accomplish this is by using environment variables.  Use the
+following commands to add the appropriate environment variables:
 
 .. code-block:: bash
 
-    #!/bin/sh
+    $ export PANOS_HOSTNAME="<YOUR FIREWALL IP ADDRESS GOES HERE>"
+    $ export PANOS_USERNAME="admin"
+    $ export PANOS_PASSWORD="Ignite2019!"
 
-    export PANOS_HOSTNAME="<YOUR FIREWALL IP ADDRESS GOES HERE>"
-    export PANOS_USERNAME="admin"
-    export PANOS_PASSWORD="Ignite2019!"
-
-Replace the text ``<YOUR FIREWALL IP ADDRESS GOES HERE>`` with your firewall's
-management IP address.  The username and password should still be valid if you
-haven't changed the bootstrap configuration.  Save the file, and export the
-variables by running the following command:
-
-.. code-block:: bash
-
-    source envvars.sh
+.. note:: Replace the text ``<YOUR FIREWALL IP ADDRESS GOES HERE>`` with your firewall's management IP address.  
 
 Now, you should see the variables exported in your shell, which you can verify
 using the ``env`` command:
@@ -56,8 +47,8 @@ environment variables as well, so you may have to hunt a little bit.
 
 The provider is now ready to communicate with our firewall.
 
-Task 1.2 - Network Interface Configuration
-==========================================
+Network Interface Configuration
+===============================
 
 Your firewall has been bootstrapped with an initial password and nothing else.
 We're going to be performing the initial networking configuration with
@@ -99,8 +90,8 @@ Now, you can run ``terraform apply``, and the interfaces will be created on the
 firewall.
 
 
-Task 1.3 - Virtual Router Configuration
-=======================================
+Virtual Router Configuration
+============================
 
 Now, you'll have to assign those interfaces to the default virtual router.
 You will need the
@@ -164,8 +155,8 @@ You will need to create three resources for the static routes depicted below:
 Define those resources in ``main.tf``, and run ``terraform apply``.
 
 
-Task 1.4 - Zone Configuration
-=============================
+Zone Configuration
+==================
 
 Next is creating the zones for the firewall.  You will need the
 `panos_zone <https://www.terraform.io/docs/providers/panos/r/zone.html>`_ resource.
@@ -210,8 +201,8 @@ but they need to have the following definition:
 Define those resources in ``main.tf``, and run ``terraform apply``.
 
 
-Task 1.5 - Committing Your Configuration
-========================================
+Committing Your Configuration
+=============================
 
 One thing you have to remember when working with Terraform is it does not have
 support for committing your configuration.  To commit your configuration, you
