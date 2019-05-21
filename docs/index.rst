@@ -73,7 +73,10 @@ Learning Outcomes
     :hidden:
     :caption: respond
 
-    04-respond/respond
+    04-respond/monitor
+    04-respond/dag
+    04-respond/scale-out
+    
 
 .. toctree::
     :maxdepth: 2

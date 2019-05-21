@@ -35,7 +35,7 @@ resource "google_compute_instance" "webserver" {
 	}
 
 	labels						= {
-		ServerType = "web"
+		server-type			 	= "web"
 	}
 
 	tags 						= ["web"]
