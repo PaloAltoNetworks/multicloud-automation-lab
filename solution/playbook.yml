@@ -63,7 +63,7 @@
         rule_name: 'Allow SSH inbound'
         source_zone: ['untrust-zone']
         source_ip: 'any'
-        destination_zone: ['web-zone','database-zone']
+        destination_zone: ['web-zone','db-zone']
         destination_ip: 'any'
         application: ['ssh']
         service: ['ssh-tcp-221','ssh-tcp-222']
@@ -89,7 +89,7 @@
         rule_name: 'Allow web to db'
         source_zone: ['web-zone']
         source_ip: 'any'
-        destination_zone: ['database-zone']
+        destination_zone: ['db-zone']
         destination_ip: 'any'
         application: ['mysql']
         action: 'allow'
@@ -100,7 +100,7 @@
       panos_security_rule:
         provider: '{{ provider }}'
         rule_name: 'Allow all outbound'
-        source_zone: ['web-zone','database-zone']
+        source_zone: ['web-zone','db-zone']
         source_ip: 'any'
         destination_zone: ['untrust-zone']
         destination_ip: 'any'
@@ -149,11 +149,11 @@
         source_ip: ['any']
         destination_zone: 'untrust-zone'
         destination_ip: ['10.5.1.4']
-        service: 'ssh-tcp-222'
+        service: 'service-http'
         snat_type: 'dynamic-ip-and-port'
         snat_interface: 'ethernet1/2'
-        dnat_address: 'db-srv'
-        dnat_port: '22'
+        dnat_address: 'web-srv'
+        dnat_port: '80'
         commit: false
         state: present
 
@@ -161,7 +161,7 @@
       panos_nat_rule:
         provider: '{{ provider }}'
         rule_name: 'Outbound NAT'
-        source_zone: ['web-zone','database-zone']
+        source_zone: ['web-zone','db-zone']
         source_ip: ['any']
         destination_zone: 'untrust-zone'
         destination_ip: ['any']
@@ -170,3 +170,8 @@
         snat_interface: 'ethernet1/1'
         commit: false
         state: present
+
+    - name: Commit the candidate configuration
+      panos_commit:
+        provider: '{{ provider }}'
+        

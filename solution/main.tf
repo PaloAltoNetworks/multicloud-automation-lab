@@ -37,13 +37,13 @@ resource "panos_zone" "untrust" {
 }
 
 resource "panos_zone" "web" {
-    name 					          = "web-zone"
-    mode 					          = "layer3"
-    interfaces 				      = ["${panos_ethernet_interface.eth2.name}"]
+  name 					            = "web-zone"
+  mode 					            = "layer3"
+  interfaces 				        = ["${panos_ethernet_interface.eth2.name}"]
 }
 
 resource "panos_zone" "database" {
-    name 					          = "db-zone"
-    mode 					          = "layer3"
-    interfaces 				      = ["${panos_ethernet_interface.eth3.name}"]
+  name 					            = "db-zone"
+  mode 					            = "layer3"
+  interfaces 				        = ["${panos_ethernet_interface.eth3.name}"]
 }
