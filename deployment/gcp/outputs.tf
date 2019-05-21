@@ -19,10 +19,10 @@
 # PLANS OUTPUTS
 ############################################################################################
 
-output "Firewall Management Public IP" {
+output "Firewall Management IP" {
     value = "${module.firewall.firewall-public-ip}"
 }
 
-output "Web Server Public IP" {
+output "Firewall Untrust IP" {
     value = "${module.firewall.web-public-ip}"
 }
