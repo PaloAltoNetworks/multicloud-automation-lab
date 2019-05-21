@@ -1,0 +1,172 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  roles:
+    - PaloAltoNetworks.paloaltonetworks
+
+  tasks:
+    - name: Create web server object
+      panos_address_object:
+        provider: "{{ provider }}"
+        name: "web-srv"
+        value: "10.5.2.5"
+        commit: false
+        state: present
+
+    - name: Create database server object
+      panos_address_object:
+        provider: "{{ provider }}"
+        name: "db-srv"
+        value: "10.5.3.5"
+        commit: false
+        state: present
+
+    - name: Create service object 'ssh-tcp-221'
+      panos_service_object:
+        provider: '{{ provider }}'
+        name: 'ssh-tcp-221'
+        destination_port: '221'
+        description: 'SSH on tcp/221'
+        commit: false
+        state: present
+
+    - name: Create service object 'ssh-tcp-222'
+      panos_service_object:
+        provider: '{{ provider }}'
+        name: 'ssh-tcp-222'
+        destination_port: '222'
+        description: 'SSH on tcp/222'
+        commit: false
+        state: present
+
+    - name: Add ping rule
+      panos_security_rule:
+        provider: '{{ provider }}'
+        rule_name: 'Allow ping'
+        source_zone: ['any']
+        source_ip: 'any'
+        destination_zone: ['any']
+        destination_ip: 'any'
+        application: ['ping']
+        action: 'allow'
+        commit: false
+        state: present
+
+    - name: Add SSH inbound rule
+      panos_security_rule:
+        provider: '{{ provider }}'
+        rule_name: 'Allow SSH inbound'
+        source_zone: ['untrust-zone']
+        source_ip: 'any'
+        destination_zone: ['web-zone','database-zone']
+        destination_ip: 'any'
+        application: ['ssh']
+        service: ['ssh-tcp-221','ssh-tcp-222']
+        action: 'allow'
+        commit: false
+
+    - name: Add web inbound rule
+      panos_security_rule:
+        provider: '{{ provider }}'
+        rule_name: 'Allow web inbound'
+        source_zone: ['untrust-zone']
+        source_ip: 'any'
+        destination_zone: ['web-zone']
+        destination_ip: 'any'
+        application: ['web-browsing']
+        action: 'allow'
+        commit: false
+        state: present
+
+    - name: Add wordpress rule
+      panos_security_rule:
+        provider: '{{ provider }}'
+        rule_name: 'Allow web to db'
+        source_zone: ['web-zone']
+        source_ip: 'any'
+        destination_zone: ['database-zone']
+        destination_ip: 'any'
+        application: ['mysql']
+        action: 'allow'
+        commit: false
+        state: present
+
+    - name: Add outbound rule
+      panos_security_rule:
+        provider: '{{ provider }}'
+        rule_name: 'Allow all outbound'
+        source_zone: ['web-zone','database-zone']
+        source_ip: 'any'
+        destination_zone: ['untrust-zone']
+        destination_ip: 'any'
+        application: ['any']
+        action: 'allow'
+        commit: false
+        state: present
+
+    - name: Add web SSH NAT rule
+      panos_nat_rule:
+        provider: '{{ provider }}'
+        rule_name: 'Web SSH'
+        source_zone: ['untrust-zone']
+        source_ip: ['any']
+        destination_zone: 'untrust-zone'
+        destination_ip: ['10.5.1.4']
+        service: 'ssh-tcp-221'
+        snat_type: 'dynamic-ip-and-port'
+        snat_interface: 'ethernet1/2'
+        dnat_address: 'web-srv'
+        dnat_port: '22'
+        commit: false
+        state: present
+
+    - name: Add database SSH NAT rule
+      panos_nat_rule:
+        provider: '{{ provider }}'
+        rule_name: 'DB SSH'
+        source_zone: ['untrust-zone']
+        source_ip: ['any']
+        destination_zone: 'untrust-zone'
+        destination_ip: ['10.5.1.4']
+        service: 'ssh-tcp-222'
+        snat_type: 'dynamic-ip-and-port'
+        snat_interface: 'ethernet1/2'
+        dnat_address: 'db-srv'
+        dnat_port: '22'
+        commit: false
+        state: present
+
+    - name: Add WordPress NAT rule
+      panos_nat_rule:
+        provider: '{{ provider }}'
+        rule_name: 'WordPress NAT'
+        source_zone: ['untrust-zone']
+        source_ip: ['any']
+        destination_zone: 'untrust-zone'
+        destination_ip: ['10.5.1.4']
+        service: 'ssh-tcp-222'
+        snat_type: 'dynamic-ip-and-port'
+        snat_interface: 'ethernet1/2'
+        dnat_address: 'db-srv'
+        dnat_port: '22'
+        commit: false
+        state: present
+
+    - name: Add Outbound NAT rule
+      panos_nat_rule:
+        provider: '{{ provider }}'
+        rule_name: 'Outbound NAT'
+        source_zone: ['web-zone','database-zone']
+        source_ip: ['any']
+        destination_zone: 'untrust-zone'
+        destination_ip: ['any']
+        service: 'any'
+        snat_type: 'dynamic-ip-and-port'
+        snat_interface: 'ethernet1/1'
+        commit: false
+        state: present

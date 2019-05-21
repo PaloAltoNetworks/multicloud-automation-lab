@@ -6,7 +6,7 @@ Terraform Configuration
 For this portion of the lab, you will be using the Palo Alto Networks
 `Terraform for PAN-OS provider <https://www.terraform.io/docs/providers/panos/index.html>`_.
 
-First, change to the ``configuration/terraform`` directory.
+First, change to the ``~/multicloud-automation-lab/configuration/terraform`` directory.
 
 
 Provider Communication
@@ -25,25 +25,26 @@ following commands to add the appropriate environment variables:
 
 .. code-block:: bash
 
-    $ export PANOS_HOSTNAME="<YOUR FIREWALL IP ADDRESS GOES HERE>"
+    $ export PANOS_HOSTNAME="<YOUR FIREWALL MGMT IP GOES HERE>"
     $ export PANOS_USERNAME="admin"
     $ export PANOS_PASSWORD="Ignite2019!"
 
-.. note:: Replace the text ``<YOUR FIREWALL IP ADDRESS GOES HERE>`` with your firewall's management IP address.  
+.. note:: Replace the text ``<YOUR FIREWALL MGMT IP GOES HERE>`` with your firewall's management IP address.  
 
 Now, you should see the variables exported in your shell, which you can verify
-using the ``env`` command:
+using the ``env | grep PANOS`` command:
 
 .. code-block:: bash
 
-    ...
     PANOS_HOSTNAME=3.216.53.203
     PANOS_USERNAME=admin
     PANOS_PASSWORD=Ignite2019!
-    ...
 
-They may not necessarily be in order, and you will see a lot of other
-environment variables as well, so you may have to hunt a little bit.
+With these values defined, we can now initialize the Terraform panos provider with the following command.
+
+.. code-block:: bash
+
+    $ terraform init
 
 The provider is now ready to communicate with our firewall.
 
@@ -122,7 +123,7 @@ Define the virtual router resource in ``main.tf``, and run ``terraform apply``.
    be configured.  **If you chose GCP as your cloud, you have an additional
    step!**
 
-   If you chose AWS, please continue on to **Task 1.4** and skip the following.
+   If you chose AWS, please continue to `Zone Configuration <#zone-configuration>`_ section and skip the following.
 
 GCP requires static routes for each subnet to be defined on the virtual router.
 You will need the `panos_static_route_ipv4 <https://www.terraform.io/docs/providers/panos/r/static_route_ipv4.html>`_

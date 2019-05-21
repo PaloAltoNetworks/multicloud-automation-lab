@@ -5,7 +5,7 @@ Ansible Configuration
 For this portion of the lab, you're going to be using the Palo Alto Networks
 `Ansible modules <https://ansible-pan.readthedocs.io/en/latest/>`_.
 
-First, change to the ``configuration/ansible`` directory.
+First, change to the ``~/multicloud-automation-lab/configuration/ansible`` directory.
 
 
 Module Communication

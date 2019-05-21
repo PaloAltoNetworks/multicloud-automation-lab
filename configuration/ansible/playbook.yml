@@ -15,13 +15,13 @@
         provider: "{{ provider }}"
         name: "web-srv"
         value: "10.5.2.5"
-        commit: False
+        commit: false
         state: present
 
-    - name: Create DB server object
+    - name: Create database server object
       panos_address_object:
         provider: "{{ provider }}"
         name: "db-srv"
         value: "10.5.3.5"
-        commit: False
+        commit: false
         state: present

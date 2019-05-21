@@ -50,6 +50,7 @@ resources:
 
           echo "Creating .vimrc ..."
           cat > /home/student/.vimrc << EOF
+          set paste
           set ruler
           set showmode
           set showmatch
@@ -57,7 +58,6 @@ resources:
           set shiftwidth=4
           set et
           set laststatus=2
-          set paste
           EOF
 
           echo "Installing required packages ..."

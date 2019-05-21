@@ -140,24 +140,31 @@ resource "aws_security_group" "firewall_mgmt_sg" {
   vpc_id      = "${module.vpc.vpc_id}"
 
   ingress {
-	to_port     = "22"
-	from_port   = "22"
-	protocol    = "tcp"
-	cidr_blocks = ["${var.allowed_mgmt_cidr}"]
+    to_port     = "22"
+    from_port   = "22"
+    protocol    = "tcp"
+    cidr_blocks = ["${var.allowed_mgmt_cidr}"]
   }
 
   ingress {
-	to_port     = "443"
-	from_port   = "443"
-	protocol    = "tcp"
-	cidr_blocks = ["${var.allowed_mgmt_cidr}"]
+    to_port     = "443"
+    from_port   = "443"
+    protocol    = "tcp"
+    cidr_blocks = ["${var.allowed_mgmt_cidr}"]
+  }
+
+  ingress {
+    to_port     = "0"
+    from_port   = "8"
+    protocol    = "icmp"
+    cidr_blocks = ["${var.allowed_mgmt_cidr}"]
   }
 
   egress {
-	to_port     = 0
-	from_port   = 0
-	protocol    = "-1"
-	cidr_blocks = ["0.0.0.0/0"]
+    to_port     = 0
+    from_port   = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
