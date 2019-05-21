@@ -29,3 +29,8 @@ variable "allowed_mgmt_cidr" {
   type        = "list"
   default     = ["0.0.0.0/0"]
 }
+
+variable "specify_az" {
+  description = "Optionally specify availability zone for subnets and instances."
+  default     = false
+}

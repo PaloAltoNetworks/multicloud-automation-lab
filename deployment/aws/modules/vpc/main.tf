@@ -16,7 +16,7 @@ resource "aws_vpc" "vpc" {
 resource "aws_subnet" "mgmt" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${var.mgmt_subnet}"
-  availability_zone = "${random_shuffle.az.result[0]}"
+  availability_zone = "${var.specify_az != "0" ? var.specify_az: random_shuffle.az.result[0]}"
 
   tags = "${merge(map("Name", format("%s-MgmtSubnet", var.name)), var.tags)}"
 }
@@ -24,7 +24,7 @@ resource "aws_subnet" "mgmt" {
 resource "aws_subnet" "public" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${var.public_subnet}"
-  availability_zone = "${random_shuffle.az.result[0]}"
+  availability_zone = "${var.specify_az != "0" ? var.specify_az : random_shuffle.az.result[0]}"
 
   tags = "${merge(map("Name", format("%s-PublicSubnet", var.name)), var.tags)}"
 }
@@ -32,7 +32,7 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "web" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${var.web_subnet}"
-  availability_zone = "${random_shuffle.az.result[0]}"
+  availability_zone = "${var.specify_az != "0" ? var.specify_az : random_shuffle.az.result[0]}"
 
   tags = "${merge(map("Name", format("%s-WebSubnet", var.name)), var.tags)}"
 }
@@ -40,7 +40,7 @@ resource "aws_subnet" "web" {
 resource "aws_subnet" "db" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${var.db_subnet}"
-  availability_zone = "${random_shuffle.az.result[0]}"
+  availability_zone = "${var.specify_az != "0" ? var.specify_az : random_shuffle.az.result[0]}"
 
   tags = "${merge(map("Name", format("%s-DbSubnet", var.name)), var.tags)}"
 }

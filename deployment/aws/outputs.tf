@@ -14,6 +14,9 @@
 # limitations under the License.
 ############################################################################################
 
+output "vpc" {
+  value = "${module.vpc.vpc_id}"
+}
 
 output "firewall_mgmt_ip" {
   value = "${module.firewall.fw_mgmt_eip}"
