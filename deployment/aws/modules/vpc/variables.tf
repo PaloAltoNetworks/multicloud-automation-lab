@@ -30,6 +30,11 @@ variable "db_subnet" {
 ## Optional Variables                                                ##
 #######################################################################
 
+variable "specify_az" {
+  description = "Optionally specify availability zone for subnets and instances."
+  default     = false
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   default     = {}
