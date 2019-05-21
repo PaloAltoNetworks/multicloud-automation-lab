@@ -172,6 +172,10 @@ Use the ``panos_nat_rule`` module to create the following NAT rules:
 
    NAT rules to be created.
 
+.. note:: Pay attention to the module arguments for ``panos_nat_rule``.  **destination_zone**
+          and **service** are strings here, not lists.  This is because you can't
+          write a NAT rule on PAN-OS with multiple destination zones or services.
+
 
 Committing Your Configuration
 =============================
