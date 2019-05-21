@@ -15,7 +15,8 @@
 ############################################################################################
 
 provider "aws" {
-  region = "${var.aws_region_name}"
+  region  = "${var.aws_region_name}"
+  version = "1.53.0"
 }
 
 resource "aws_key_pair" "ssh_key" {
