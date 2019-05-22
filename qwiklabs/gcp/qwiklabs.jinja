@@ -70,7 +70,8 @@ resources:
           mv /root/.ansible /home/student
 
           echo "Installing Terraform ..."
-          terraform_url=$(curl https://releases.hashicorp.com/index.json | jq '{terraform}' | egrep "linux.*amd64" | sort --version-sort -r | grep -Ev 'alpha|beta|rc' | head -1 | awk -F[\"] '{print $4}')
+          terraform_url="https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip"
+          #terraform_url=$(curl https://releases.hashicorp.com/index.json | jq '{terraform}' | egrep "linux.*amd64" | sort --version-sort -r | grep -Ev 'alpha|beta|rc' | head -1 | awk -F[\"] '{print $4}')
           cd /tmp
           curl -o terraform.zip $terraform_url
           unzip terraform.zip
