@@ -16,13 +16,13 @@
 
 
 output "VPC" {
-  value = "${module.vpc.vpc_id}"
+  value                   = "${module.vpc.vpc_id}"
 }
 
 output "Firewall Management IP" {
-  value = "${module.firewall.fw_mgmt_eip}"
+  value                   = "${module.firewall.fw_mgmt_eip}"
 }
 
 output "Firewall Untrust IP" {
-  value = "${module.firewall.fw_eth1_eip}"
+  value                   = "${module.firewall.fw_eth1_eip}"
 }
