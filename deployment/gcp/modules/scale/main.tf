@@ -21,7 +21,7 @@
 
 
 resource "google_compute_instance" "dbserver" {
-	name						= "${var.db_name}-${count.index}"
+	name						= "${var.db_name}-${count.index + 1}"
 	machine_type				= "${var.db_machine_type}"
 	zone						= "${var.db_zone}"
 	can_ip_forward				= true

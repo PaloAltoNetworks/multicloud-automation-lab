@@ -71,7 +71,7 @@ resource "aws_network_interface" "fw_mgmt" {
   private_ips     = ["${var.fw_mgmt_ip}"]
   security_groups = ["${var.fw_mgmt_sg_id}"]
 
-  tags = "${merge(map("Name", format("%s-Mgmt", var.name)), var.tags)}"
+  tags = "${merge(map("Name", format("%s-management", var.name)), var.tags)}"
 }
 
 resource "aws_network_interface" "fw_eth1" {
@@ -80,7 +80,7 @@ resource "aws_network_interface" "fw_eth1" {
   security_groups   = ["${var.fw_dataplane_sg_id}"]
   source_dest_check = false
 
-  tags = "${merge(map("Name", format("%s-Eth1/1", var.name)), var.tags)}"
+  tags = "${merge(map("Name", format("%s-ethernet1/1", var.name)), var.tags)}"
 }
 
 resource "aws_network_interface" "fw_eth2" {
@@ -88,7 +88,7 @@ resource "aws_network_interface" "fw_eth2" {
   private_ips       = ["${var.fw_eth2_ip}"]
   source_dest_check = false
 
-  tags = "${merge(map("Name", format("%s-Eth1/2", var.name)), var.tags)}"
+  tags = "${merge(map("Name", format("%s-ethernet1/2", var.name)), var.tags)}"
 }
 
 resource "aws_network_interface" "fw_eth3" {
@@ -96,7 +96,7 @@ resource "aws_network_interface" "fw_eth3" {
   private_ips       = ["${var.fw_eth3_ip}"]
   source_dest_check = false
 
-  tags = "${merge(map("Name", format("%s-Eth1/3", var.name)), var.tags)}"
+  tags = "${merge(map("Name", format("%s-ethernet1/3", var.name)), var.tags)}"
 }
 
 resource "aws_eip" "fw_mgmt_eip" {

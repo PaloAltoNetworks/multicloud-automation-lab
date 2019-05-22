@@ -198,3 +198,17 @@ module "db" {
     server-type = "database"
   }
 }
+
+# module "scale" {
+#   source = "./modules/scale"
+
+#   name         = "db-vm"
+#   ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
+
+#   subnet_id  = "${module.vpc.db_subnet_id}"
+
+#   tags {
+#     Environment = "Multicloud-AWS"
+#     server-type = "database"
+#   }
+# }
