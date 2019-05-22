@@ -14,6 +14,7 @@
 # limitations under the License.
 ############################################################################################
 
+
 output "VPC" {
   value = "${module.vpc.vpc_id}"
 }

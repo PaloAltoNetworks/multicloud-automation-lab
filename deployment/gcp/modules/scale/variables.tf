@@ -15,14 +15,32 @@
 ############################################################################################
 
 
-// BOOTSTRAP Variables
-
-variable "bootstrap_xml_path" {
-  description = "Directory path to the bootstrap.xml file"
-  type = "string"
+// DB-SERVER Variables
+variable "db_name" {
+	description 			= "The name of the database server instance"
+	type 					= "string"
 }
 
-variable "bootstrap_init_cfg_path" {
-  description = "Directory path to the bootstrap.xml file"
-  type = "string"
+variable "db_zone" {
+	description 			= "The GCP zone in which the database server instance will be deployed"
+	type 					= "string"
+}
+variable "db_machine_type" {
+	description 			= "The GCP machine type for the database server instance"
+	type 					= "string"
+}
+
+variable "db_ssh_key" {
+	description 			= "The SSH key of the database server instance admin user"
+	type 					= "string"
+}
+
+variable "db_subnet_id" {
+	description 			= "The subnet in which the database server instance will be deployed"
+	type 					= "string"
+}
+
+variable "db_image" {
+	description 			= "The GCP image used to deploy the database server instance"
+	type 					= "string"
 }

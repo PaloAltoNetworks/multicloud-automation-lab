@@ -37,8 +37,6 @@ resource "google_compute_instance" "dbserver" {
 		server-type 			= "database"
 	}
 
-	tags 						= ["database"]
-
 	metadata_startup_script 	= "${file("../scripts/dbserver-startup.sh")}"
 
 	service_account {

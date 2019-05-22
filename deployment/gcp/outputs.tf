@@ -20,9 +20,9 @@
 ############################################################################################
 
 output "Firewall Management IP" {
-    value = "${module.firewall.firewall-public-ip}"
+  value = "${module.firewall.firewall-public-ip}"
 }
 
 output "Firewall Untrust IP" {
-    value = "${module.firewall.web-public-ip}"
+  value = "${module.firewall.web-public-ip}"
 }

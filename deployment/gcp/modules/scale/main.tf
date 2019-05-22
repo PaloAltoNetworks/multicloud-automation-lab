@@ -16,42 +16,41 @@
 
 
 ############################################################################################
-# CREATE WEB SERVER INSTANCE
+# CREATE DATABASE SERVER INSTANCE
 ############################################################################################
 
-resource "google_compute_instance" "webserver" {
-	name						= "${var.web_name}"
-	zone						= "${var.web_zone}"
-	machine_type				= "${var.web_machine_type}"
+
+resource "google_compute_instance" "dbserver" {
+	name						= "${var.db_name}-${count.index}"
+	machine_type				= "${var.db_machine_type}"
+	zone						= "${var.db_zone}"
 	can_ip_forward				= true
 	allow_stopping_for_update	= true
-	count						= 1
+	count						= 4
 
-	// Adding METADATA Key Value pairs to WEB SERVER 
 	metadata {
-		serial-port-enable      = true
-		block-project-ssh-keys  = false
-		ssh-keys                = "${var.web_ssh_key}"
+		serial-port-enable		= true
+		block-project-ssh-keys	= false
+		ssh-keys				= "${var.db_ssh_key}"
 	}
 
 	labels						= {
-		server-type			 	= "web"
+		server-type 			= "database"
 	}
 
-	metadata_startup_script 	= "${file("../scripts/webserver-startup.sh")}"
+	metadata_startup_script 	= "${file("../scripts/dbserver-startup.sh")}"
 
 	service_account {
-		scopes                  = ["userinfo-email", "compute-ro", "storage-ro"]
+		scopes					= ["userinfo-email", "compute-ro", "storage-ro"]
 	}
 
 	network_interface {
-		subnetwork              = "${var.web_subnet_id}"
-		network_ip              = "${var.web_ip}"
+		subnetwork				= "${var.db_subnet_id}"
 	}
 
 	boot_disk {
 		initialize_params {
-			image				= "${var.web_image}"
+			image				= "${var.db_image}"
 		}
 	}
 }

@@ -114,6 +114,17 @@ module "firewall" {
 	fw_db_rule				= "${module.vpc.db-allow-outbound-rule}"
 }
 
+# module "scale" {
+# 	source 					= "./modules/scale"
+
+# 	db_name         		= "db-vm"
+# 	db_zone					= "${var.zone}"
+# 	db_machine_type			= "f1-micro"
+# 	db_ssh_key 				= "admin:${file("${var.public_key_file}")}"
+# 	db_subnet_id  			= "${module.vpc.db_subnet}"
+# 	db_image				= "debian-9"
+# }
+
 
 ############################################################################################
 # CREATE ROUTES FOR WEB AND DB NETWORKS
@@ -126,14 +137,6 @@ resource "google_compute_route" "web-route" {
 	next_hop_instance		= "${module.firewall.firewall-instance}"
 	next_hop_instance_zone	= "${var.zone}"
 	priority				= 100
-
-	# depends_on 				= [
-	# 	"google_compute_instance.firewall",
-	# 	"google_compute_network.web",
-	# 	"google_compute_network.db",
-	# 	"google_compute_network.untrust",
-	# 	"google_compute_network.management",
-	# ]
 }
 
 resource "google_compute_route" "db-route" {
@@ -143,13 +146,5 @@ resource "google_compute_route" "db-route" {
 	next_hop_instance		= "${module.firewall.firewall-instance}"
 	next_hop_instance_zone	= "${var.zone}"
 	priority				= 100
-
-	# depends_on				= [
-	# 	"google_compute_instance.firewall",
-	# 	"google_compute_network.web",
-	# 	"google_compute_network.db",
-	# 	"google_compute_network.untrust",
-	# 	"google_compute_network.management",
-	# ]
 }
 

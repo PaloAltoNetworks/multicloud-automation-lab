@@ -14,6 +14,7 @@
 # limitations under the License.
 ############################################################################################
 
+
 provider "aws" {
   region  = "${var.aws_region_name}"
   version = "1.53.0"
@@ -52,7 +53,7 @@ module "vpc" {
 module "firewall" {
   source = "./modules/firewall"
 
-  name = "Multicloud-AWS-Firewall"
+  name = "vm-series"
 
   ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
   vpc_id       = "${module.vpc.vpc_id}"
@@ -72,7 +73,7 @@ module "firewall" {
   fw_bootstrap_bucket = "${module.bootstrap_bucket.bootstrap_bucket_name}"
 
   tags {
-	Environment = "Multicloud-AWS"
+	  Environment = "Multicloud-AWS"
   }
 }
 
@@ -99,7 +100,7 @@ resource "aws_route_table" "db" {
   vpc_id = "${module.vpc.vpc_id}"
 
   tags {
-	Name = "${module.vpc.name}-DbRouteTable"
+	  Name = "${module.vpc.name}-DbRouteTable"
   }
 }
 
@@ -171,29 +172,29 @@ resource "aws_security_group" "firewall_mgmt_sg" {
 module "web" {
   source = "./modules/web"
 
-  name         = "Multicloud-AWS-Web01"
+  name         = "web-vm"
   ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
 
   subnet_id  = "${module.vpc.web_subnet_id}"
   private_ip = "10.5.2.5"
 
   tags {
-	Environment = "Multicloud-AWS"
-	server-type = "web"
+    Environment = "Multicloud-AWS"
+    server-type = "web"
   }
 }
 
 module "db" {
   source = "./modules/db"
 
-  name         = "Multicloud-AWS-Db01"
+  name         = "db-vm"
   ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
 
   subnet_id  = "${module.vpc.db_subnet_id}"
   private_ip = "10.5.3.5"
 
   tags {
-	Environment = "Multicloud-AWS"
-	server-type = "database"
+    Environment = "Multicloud-AWS"
+    server-type = "database"
   }
 }

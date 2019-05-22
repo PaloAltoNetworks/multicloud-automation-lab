@@ -159,7 +159,7 @@ ahead while you wait.
 
 Confirm firewall bootstrap completion
 -------------------------------------
-SSH into the firewall with the folloring credentials.
+SSH into the firewall with the following credentials.
 
 - **Username:** ``admin``
 - **Password:** ``Ignite2019!``

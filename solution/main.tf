@@ -26,14 +26,14 @@ resource "panos_ethernet_interface" "eth3" {
 }
 
 resource "panos_virtual_router" "lab_vr" {
-    name 					          = "lab_vr"
-    interfaces 				      = ["ethernet1/1", "ethernet1/2", "ethernet1/3"]
+  name 					            = "lab_vr"
+  interfaces 				        = ["ethernet1/1", "ethernet1/2", "ethernet1/3"]
 }
 
 resource "panos_zone" "untrust" {
-    name 					          = "untrust-zone"
-    mode 					          = "layer3"
-    interfaces 				      = ["${panos_ethernet_interface.eth1.name}"]
+  name 					            = "untrust-zone"
+  mode 					            = "layer3"
+  interfaces 				        = ["${panos_ethernet_interface.eth1.name}"]
 }
 
 resource "panos_zone" "web" {
