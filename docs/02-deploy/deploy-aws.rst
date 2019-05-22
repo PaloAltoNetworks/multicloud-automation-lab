@@ -2,7 +2,7 @@
 Lab Deployment (AWS)
 ====================
 
-.. warning:: If you are working on the GCP lab, skip this page and proceed to the `GCP lab deployment page <deploy-gcp.html>`_.
+.. warning:: If you are working on the GCP lab, skip this page and proceed to the `Configure <../03-configure/terraform/background-terraform.html>`_ section.
 
 In this activity you will:
 
@@ -11,6 +11,7 @@ In this activity you will:
 - Create the Terraform variables
 - Initialize the AWS Terraform provider
 - Deploy the lab infrastucture plan
+- Confirm firewall bootstrap completion
 
 Create AWS environment variables
 --------------------------------
@@ -142,19 +143,28 @@ At a high level these are each of the steps this plan will perform:
     #. Create the database server interface
 
 The deployment process should finish in a few minutes and you will be presented
-with the public IP addresses of the VM-Series firewall and the web server.
-However, the VM-Series firewall can take up to *ten minutes* to complete the
-initial bootstrap process.  It is recommended that you read ahead while you
-wait.
+with the public IP addresses of the VM-Series firewall management and untrust 
+interfaces.  However, the VM-Series firewall can take up to *ten minutes* to 
+complete the initial bootstrap process.
 
-Try to SSH into the firewall with the username ``admin`` and the password
-``Ignite2019!``.  If you are unsuccessful the firewall instance is likely still
-bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again after
-waiting a few minutes.
+It is recommended that you read the `Configure <../03-configure/terraform/background-terraform.html>`_ section 
+ahead while you wait.
+
+
+Confirm firewall bootstrap completion
+-----------------------------------------
+SSH into the firewall with the folloring credentials.
+
+- **Username:** ``admin``
+- **Password:** ``Ignite2019!``
 
 .. code-block:: bash
 
     $ ssh admin@<firewall-ip>
+
+.. warning:: If you are unsuccessful the firewall instance is likely still 
+   bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again 
+   after waiting a few minutes.
 
 Once you have logged into the firewall you can check to ensure the management
 plane has completed its initialization.
@@ -169,7 +179,6 @@ activities.
 .. note:: While it is a security best practice to use SSH keys to authenticate
           to VM instances in the cloud, we have defined a static password for
           the firewall's admin account in this lab (specifically, in the 
-          bootstrap package).  This is because the firewall API used by
-          Terraform and Ansible cannot utilize SSH keys and must have a
+          bootstrap package).  This is because the PAN-OS XML API cannot utilize SSH keys and requires a
           username/password or API key for authentication.
 

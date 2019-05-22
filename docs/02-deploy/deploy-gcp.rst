@@ -11,6 +11,7 @@ In this activity you will:
 - Create the Terraform variables
 - Initialize the GCP Terraform provider
 - Deploy the lab infrastucture plan
+- Confirm firewall bootstrap completion
 
 Create a service account credential file
 ----------------------------------------
@@ -148,15 +149,21 @@ At a high level these are each of the steps this plan will perform:
     #. Create the database server interface
 
 The deployment process should finish in a few minutes and you will be presented
-with the public IP addresses of the VM-Series firewall and the web server.
-However, the VM-Series firewall can take up to *ten minutes* to complete the
-initial bootstrap process.  It is recommended that you read ahead while you
-wait.
+with the public IP addresses of the VM-Series firewall management and untrust 
+interfaces.  However, the VM-Series firewall can take up to *ten minutes* to 
+complete the initial bootstrap process.
 
-Try to SSH into the firewall with the username ``admin`` and the password
-``Ignite2019!``.  If you are unsuccessful the firewall instance is likely still
-bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again after
-waiting a few minutes.
+It is recommended that you read the `Configure <../03-configure/terraform/background-terraform.html>`_ section 
+ahead while you wait.
+
+
+Confirm firewall bootstrap completion
+-------------------------------------
+SSH into the firewall with the folloring credentials.
+
+- **Username:** ``admin``
+- **Password:** ``Ignite2019!``
+
 
 .. code-block:: bash
 
