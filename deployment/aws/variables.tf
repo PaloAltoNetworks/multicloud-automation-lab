@@ -14,25 +14,23 @@
 # limitations under the License.
 ############################################################################################
 
-
 variable "aws_region_name" {
-  description             = "The AWS region in which to deploy"
-  type                    = "string"
+  description = "The AWS region in which to deploy"
+  type        = "string"
 }
 
 variable "aws_az_name" {
-  description             = "The AWS availability zone in which to deploy"
-  type                    = "string"
+  description = "The AWS availability zone in which to deploy"
+  type        = "string"
 }
 
 variable "public_key_file" {
-  description             = "Full path to the SSH public key file"
-  type                    = "string"
+  description = "Full path to the SSH public key file"
+  type        = "string"
 }
 
 variable "allowed_mgmt_cidr" {
-  description             = "The source addresses that will be allowed to access the lab environment"
-  type                    = "list"
-  default                 = ["0.0.0.0/0"]
+  description = "The source addresses that will be allowed to access the lab environment"
+  type        = "list"
+  default     = ["0.0.0.0/0"]
 }
-

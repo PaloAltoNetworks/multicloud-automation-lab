@@ -135,7 +135,7 @@
         destination_ip: ['10.5.1.4']
         service: 'ssh-tcp-222'
         snat_type: 'dynamic-ip-and-port'
-        snat_interface: 'ethernet1/2'
+        snat_interface: 'ethernet1/3'
         dnat_address: 'db-srv'
         dnat_port: '22'
         commit: false
