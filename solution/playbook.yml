@@ -78,7 +78,7 @@
         source_ip: 'any'
         destination_zone: ['web-zone']
         destination_ip: 'any'
-        application: ['web-browsing']
+        application: ['web-browsing','ssl','blog-posting']
         action: 'allow'
         commit: false
         state: present
@@ -88,9 +88,9 @@
         provider: '{{ provider }}'
         rule_name: 'Allow web to db'
         source_zone: ['web-zone']
-        source_ip: 'any'
+        source_ip: ['web-srv']
         destination_zone: ['db-zone']
-        destination_ip: 'any'
+        destination_ip: ['db-srv']
         application: ['mysql']
         action: 'allow'
         commit: false

@@ -114,16 +114,16 @@ module "firewall" {
 	fw_db_rule				= "${module.vpc.db-allow-outbound-rule}"
 }
 
-# module "scale" {
-# 	source 					= "./modules/scale"
+#module "scale" {
+#  source 					= "./modules/scale"
 
-# 	db_name         		= "db-vm"
-# 	db_zone					= "${var.zone}"
-# 	db_machine_type			= "f1-micro"
-# 	db_ssh_key 				= "admin:${file("${var.public_key_file}")}"
-# 	db_subnet_id  			= "${module.vpc.db_subnet}"
-# 	db_image				= "debian-9"
-# }
+#  db_name         			= "db-vm"
+#  db_zone					= "${var.zone}"
+#  db_machine_type			= "f1-micro"
+#  db_ssh_key 				= "admin:${file("${var.public_key_file}")}"
+#  db_subnet_id  			= "${module.vpc.db_subnet}"
+#  db_image					= "debian-9"
+#}
 
 
 ############################################################################################
