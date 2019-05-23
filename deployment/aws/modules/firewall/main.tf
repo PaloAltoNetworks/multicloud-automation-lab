@@ -86,6 +86,7 @@ resource "aws_network_interface" "fw_eth1" {
 resource "aws_network_interface" "fw_eth2" {
   subnet_id         = "${var.fw_eth2_subnet_id}"
   private_ips       = ["${var.fw_eth2_ip}"]
+  security_groups   = ["${var.fw_dataplane_sg_id}"]
   source_dest_check = false
 
   tags = "${merge(map("Name", format("%s-ethernet1/2", var.name)), var.tags)}"
@@ -94,6 +95,7 @@ resource "aws_network_interface" "fw_eth2" {
 resource "aws_network_interface" "fw_eth3" {
   subnet_id         = "${var.fw_eth3_subnet_id}"
   private_ips       = ["${var.fw_eth3_ip}"]
+  security_groups   = ["${var.fw_dataplane_sg_id}"]
   source_dest_check = false
 
   tags = "${merge(map("Name", format("%s-ethernet1/3", var.name)), var.tags)}"

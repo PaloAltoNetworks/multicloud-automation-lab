@@ -31,18 +31,8 @@ resource "aws_instance" "db" {
   instance_type           = "t2.micro"
   count                   = 4
   key_name                = "${var.ssh_key_name}"
-
-  network_interface {
-    device_index          = 0
-    network_interface_id  = "${aws_network_interface.db.id}"
-  }
+  subnet_id               = "${var.subnet_id}"
 
   tags                    = "${merge(map("Name", formatlist("%s-%s", var.name, count.index + 1)), var.tags)}"
 }
 
-resource "aws_network_interface" "db" {
-  subnet_id               = "${var.subnet_id}"
-  #private_ips = ["${var.private_ip}"]
-
-  tags                    = "${merge(map("Name", format("%s-eth0", var.name)), var.tags)}"
-}

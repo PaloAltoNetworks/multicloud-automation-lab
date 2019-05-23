@@ -1,43 +1,50 @@
 ====================
-Lab Deployment (AWS)
+Lab Deployment (GCP)
 ====================
 
-.. warning:: If you are working on the GCP lab, skip this page and proceed to the `Configure <../03-configure/terraform/background-terraform.html>`_ section.
+.. warning:: If you are working on the AWS lab, skip this page and proceed to the `AWS lab deployment page <deploy-aws.html>`_.
 
 In this activity you will:
 
-- Create AWS environment variables
+- Create a service account credential file
 - Create an SSH key-pair
 - Create the Terraform variables
-- Initialize the AWS Terraform provider
+- Initialize the GCP Terraform provider
 - Deploy the lab infrastucture plan
 - Confirm firewall bootstrap completion
 
-Create AWS environment variables
---------------------------------
-We will be deploying the lab infrastucture in AWS using Terraform.  A
-predefined Terraform plan is provided that will initialize the AWS provider and
-call modules responsible for instantiating the network, compute, and storage
-resources needed.
+Create a service account credential file
+----------------------------------------
+We will be deploying the lab infrastucture in GCP using Terraform.  A predefined Terraform plan is provided that will initialize the GCP provider and call modules responsible for instantiating the network, compute, and storage resources needed.
 
-In order for Terraform to do this it will need to authenticate to AWS using the
-AWS Access Key and Secret Key values that were presented in the Qwiklabs panel
-when the lab was started.  Rather than write these as Terraform variables, we
-will use Linux environment variables.
+In order for Terraform to do this it will need to authenticate to GCP.  We *could* authenticate to GCP using the username presented in the Qwiklabs panel when the lab was started.  However, the Compute Engine default service account is typically used because it is certain to have all the neccesary permissions.
 
-Create the environment variables.
+List the email address of the Compute Engine default service account.
 
 .. code-block:: bash
 
-    $ export AWS_ACCESS_KEY_ID="your-access-key-here"
-    $ export AWS_SECRET_ACCESS_KEY="your-secret-key-here"
+    $ gcloud iam service-accounts list
+
+Use the following ``gcloud`` command to download the credentials for the
+**Compute Engine default service account** using its associated email address
+(displayed in the output of the previous command).
+
+.. code-block:: bash
+
+    $ gcloud iam service-accounts keys create ~/gcp_compute_key.json --iam-account <EMAIL_ADDRESS>
+
+Verify the JSON credentials file was successfully created.
+
+.. code-block:: bash
+
+    $ cat ~/gcp_compute_key.json
 
 
 Create an SSH key-pair
 ----------------------
-All AWS EC2 instances are required to have an SSH key-pair defined when the
-instance is created.  This is done to ensure secure access to the instance will
-be available once it is created.
+All Compute Engine instances are required to have an SSH key-pair defined when
+the instance is created.  This is done to ensure secure access to the instance
+will be available once it is created.
 
 Create an SSH key-pair with an empty passphrase and save them in the ``~/.ssh``
 directory.
@@ -46,14 +53,20 @@ directory.
 
     $ ssh-keygen -t rsa -b 1024 -N '' -f ~/.ssh/lab_ssh_key
 
+.. note:: GCP has the ability to manage all of its own SSH keys and propagate
+          them automatically to projects and instances. However, the VM-Series
+          is only able to make use of a single SSH key. Rather than leverage
+          GCP's SSH key management process, we've created our own SSH key and
+          configured Compute Engine to use our key exclusively.
+
 
 Create the Terraform variables
 ------------------------------
-Change into the AWS deployment directory.
+Change into the GCP deployment directory.
 
 .. code-block:: bash
 
-    $ cd ~/multicloud-automation-lab/deployment/aws
+    $ cd ~/multicloud-automation-lab/deployment/gcp
 
 In this directory you will find the three main files associated with a
 Terraform plan: ``main.tf``, ``variables.tf``, and ``outputs.tf``.  View the
@@ -72,25 +85,20 @@ the variables that will be used in the plan (but not necessarily their values).
 The ``outputs.tf`` file will define the values to display that result from
 applying the plan.
 
-Create a file called ``terraform.tfvars`` in the current directory that
-contains the following variables and their values.  Fill in the quotes with the
-AWS region name, the path to your SSH public key file, and the netblock of your
-public IP address.
+Create a file called ``terraform.tfvars`` in the current directory that contains the following variables and their values.  Fill in the quotes with the GCP project ID, the GCP region, and GCP region, the path to the JSON credentials file, the path to your SSH public key file, and the netblock of your public IP address.
 
 .. code-block:: bash
 
-    aws_region_name     = ""
+    project             = ""
+    region              = ""
+    zone                = ""
+    credentials_file    = ""
     public_key_file     = ""
 
 
-Initialize the AWS Terraform provider
+Initialize the GCP Terraform provider
 -------------------------------------
-Once you've created the ``terraform.tfvars`` file and populated it with the
-variables and values you are now ready to initialize the Terraform providers.
-For this initial deployment we will only be using the
-`AWS Provider <https://www.terraform.io/docs/providers/aws/index.html>`_.
-This initialization process will download all the software, modules, and
-plugins needed for working in a particular environment.
+Once you've created the ``terraform.tfvars`` file and populated it with the variables and values you are now ready to initialize the Terraform providers.  For this initial deployment we will only be using the `GCP Provider <https://www.terraform.io/docs/providers/google/index.html>`_.  This initialization process will download all the software, modules, and plugins needed for working in a particular environment.
 
 .. code-block:: bash
 
@@ -117,9 +125,8 @@ perform the deployment.
 At a high level these are each of the steps this plan will perform:
 
 #. Run the ``bootstrap`` module
-    #. Create an S3 bucket for the firewall bootstrap package
-    #. Assign an IAM policy to the bucket allowing read access from the
-       firewall instance
+    #. Create a GCP storage bucket for the firewall bootstrap package
+    #. Apply a policy to the bucket allowing read access to ``allUsers``
     #. Create the ``/config/init-cfg.txt``, ``/config/bootstrap.xml``,
        ``/software``, ``/content``, and ``/license`` objects in the bootstrap
        bucket
@@ -133,8 +140,7 @@ At a high level these are each of the steps this plan will perform:
 #. Run the ``firewall`` module
     #. Create the VM-Series firewall instance
     #. Create the VM-Series firewall interfaces
-    #. Create the Elastic IPs for the ``management`` and ``untrust`` interfaces
-    #. Create an IAM instance profile for accessing the bootstrap bucket
+    #. Create the public IPs for the ``management`` and ``untrust`` interfaces
 #. Run the ``web`` module
     #. Create the web server instance
     #. Create the web server interface
@@ -152,33 +158,31 @@ ahead while you wait.
 
 
 Confirm firewall bootstrap completion
------------------------------------------
+-------------------------------------
 SSH into the firewall with the following credentials.
 
 - **Username:** ``admin``
 - **Password:** ``Ignite2019!``
 
+
 .. code-block:: bash
 
     $ ssh admin@<firewall-ip>
-
-.. warning:: If you are unsuccessful the firewall instance is likely still 
-   bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again 
-   after waiting a few minutes.
 
 Once you have logged into the firewall you can check to ensure the management
 plane has completed its initialization.
 
 .. code-block:: bash
 
-    admin> show chassis-ready
+    admin@lab-fw> show chassis-ready
 
 If the response is ``yes``, you are ready to proceed with the configuration
 activities.
 
 .. note:: While it is a security best practice to use SSH keys to authenticate
           to VM instances in the cloud, we have defined a static password for
-          the firewall's admin account in this lab (specifically, in the 
-          bootstrap package).  This is because the PAN-OS XML API cannot utilize SSH keys and requires a
+          the firewall's admin account in this lab (specifically, in the
+          bootstrap package).  This is because the firewall API used by
+          Terraform and Ansible cannot utilize SSH keys and must have a
           username/password or API key for authentication.
 

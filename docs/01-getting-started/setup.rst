@@ -91,12 +91,6 @@ working with.
 
     $ git clone https://github.com/PaloAltoNetworks/multicloud-automation-lab.git
 
-Lastly, change into the software repository directory.
-
-.. code-block:: bash
-
-    $ cd multicloud-automation-lab
-
-You are now ready to deploy the network and compute infrastrcture.
+You are now ready to deploy the lab infrastructure.
 
 

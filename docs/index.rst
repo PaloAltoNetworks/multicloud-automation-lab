@@ -53,20 +53,20 @@ Learning Outcomes
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: deploy
+    :caption: build
 
-    02-deploy/deploy-gcp
-    02-deploy/deploy-aws
+    02-build/deploy-gcp
+    02-build/deploy-aws
 
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: configure
+    :caption: run
 
-    03-configure/terraform/background-terraform
-    03-configure/terraform/activities-terraform
-    03-configure/ansible/background-ansible
-    03-configure/ansible/activities-ansible
+    03-run/terraform/background-terraform
+    03-run/terraform/activities-terraform
+    03-run/ansible/background-ansible
+    03-run/ansible/activities-ansible
 
 .. toctree::
     :maxdepth: 2

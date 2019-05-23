@@ -10,8 +10,7 @@ First, change to the ``~/multicloud-automation-lab/configuration/terraform`` dir
 
 
 Provider Communication
-======================
-
+----------------------
 Your first task is to set up the communication between the provider and your
 lab firewall.  There's several ways this can be done.  The IP address,
 username, and password (or API key) can be set as variables in Terraform, and
@@ -49,8 +48,7 @@ With these values defined, we can now initialize the Terraform panos provider wi
 The provider is now ready to communicate with our firewall.
 
 Network Interface Configuration
-===============================
-
+-------------------------------
 Your firewall has been bootstrapped with an initial password and nothing else.
 We're going to be performing the initial networking configuration with
 Terraform.
@@ -92,8 +90,7 @@ firewall.
 
 
 Virtual Router Configuration
-============================
-
+----------------------------
 Now, you'll have to assign those interfaces to the default virtual router.
 You will need the
 `panos_virtual_router <https://www.terraform.io/docs/providers/panos/r/virtual_router.html>`_
@@ -157,8 +154,7 @@ Define those resources in ``main.tf``, and run ``terraform apply``.
 
 
 Zone Configuration
-==================
-
+------------------
 Next is creating the zones for the firewall.  You will need the
 `panos_zone <https://www.terraform.io/docs/providers/panos/r/zone.html>`_ resource.
 
@@ -203,8 +199,7 @@ Define those resources in ``main.tf``, and run ``terraform apply``.
 
 
 Committing Your Configuration
-=============================
-
+-----------------------------
 One thing you have to remember when working with Terraform is it does not have
 support for committing your configuration.  To commit your configuration, you
 can use the following Go code, which has been provided for you in
