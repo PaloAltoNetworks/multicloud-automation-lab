@@ -33,6 +33,6 @@ resource "aws_instance" "db" {
   key_name                = "${var.ssh_key_name}"
   subnet_id               = "${var.subnet_id}"
 
-  tags                    = "${merge(map("Name", formatlist("%s-%s", var.name, count.index + 1)), var.tags)}"
+  tags                    = "${merge(map("Name", var.name), var.tags)}"
 }
 
