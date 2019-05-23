@@ -13,3 +13,4 @@ sudo mysql -e "CREATE DATABASE Demo;"
 sudo mysql -e "CREATE USER 'demouser'@'%' IDENTIFIED BY 'paloalto@123';"
 sudo mysql -e "GRANT ALL PRIVILEGES ON Demo.* TO 'demouser'@'%';"
 sudo mysql -e "FLUSH PRIVILEGES;"
+echo "export new_routers=10.5.3.4" | sudo tee -a /etc/dhcp/dhclient-enter-hooks.d/aws-default-route > /dev/null
