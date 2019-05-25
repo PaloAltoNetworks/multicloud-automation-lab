@@ -2,7 +2,7 @@
 Lab Deployment (GCP)
 ====================
 
-.. warning:: If you are working on the AWS lab, skip this page and proceed to the `AWS lab deployment page <deploy-aws.html>`_.
+.. warning:: If you are working on the AWS lab, skip this page and proceed to the :doc:`deploy-aws`.
 
 In this activity you will:
 
@@ -153,7 +153,7 @@ with the public IP addresses of the VM-Series firewall management and untrust
 interfaces.  However, the VM-Series firewall can take up to *ten minutes* to 
 complete the initial bootstrap process.
 
-It is recommended that you read the `Configure <../03-configure/terraform/background-terraform.html>`_ section 
+It is recommended that you read the :doc:`../03-run/terraform/background-terraform` section 
 ahead while you wait.
 
 

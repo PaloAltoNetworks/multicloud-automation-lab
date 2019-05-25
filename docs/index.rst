@@ -67,6 +67,7 @@ Learning Outcomes
     03-run/terraform/activities-terraform
     03-run/ansible/background-ansible
     03-run/ansible/activities-ansible
+    03-run/validation
 
 .. toctree::
     :maxdepth: 2

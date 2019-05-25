@@ -16,6 +16,7 @@
 
 while true
 do
+  echo "Waiting for the firewall... "
   resp=$(curl -s -S -g --insecure "https://$1/api/?type=op&cmd=<show><chassis-ready></chassis-ready></show>&key=LUFRPT1GSHhHU3FYRjY5K0k4dmZxV1BkNjhLcFJUUDA9T2lmZjU0cFhUK1UzYUFyTGJac29tNGZ5d3lybE9IMU04Q2dnNFVBSFFmK3JVSzdOV1dHMzZXREo1cGVKUU1sTA==")
   if [ $? -ne 0 ] ; then
     echo "Checking firewall... "
