@@ -2,7 +2,7 @@
 Lab Deployment (AWS)
 ====================
 
-.. warning:: If you are working on the GCP lab, skip this page and proceed to the `Run<../03-run/terraform/background-terraform.html>`_ section.
+.. warning:: If you are working on the GCP lab, skip this page and proceed to :doc:`../03-run/terraform/background-terraform`.
 
 In this activity you will:
 

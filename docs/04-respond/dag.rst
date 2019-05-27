@@ -41,7 +41,7 @@ Click **OK** when you are done.
 
 Apply the Dynamic Address Group to a rule
 ------------------------------------------------
-Now that we've defined a VM Information Source and a Dynamic Address Group, let's put them to use.  Navigate to **Policies > Security Rules** in the firewall web interface.
+Now that we've defined a VM Information Source and a Dynamic Address Group, let's put them to use.  Navigate to **Policies > Security** in the firewall web interface.
 
 .. figure:: new_rules.png
    :align: center
