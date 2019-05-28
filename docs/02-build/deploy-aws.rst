@@ -81,7 +81,7 @@ file.
 
     aws_region_name     = "<SEE INSTRUCTOR PRESENTATION>"
     aws_az_name         = "<SEE INSTRUCTOR PRESENTATION>"
-    public_key_file     = "<SEE INSTRUCTOR PRESENTATION>"
+    public_key_file     = "~/.ssh/lab_ssh_key.pub"
 
 
 Initialize the AWS Terraform provider

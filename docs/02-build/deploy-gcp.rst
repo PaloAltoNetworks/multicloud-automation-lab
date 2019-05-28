@@ -100,7 +100,7 @@ file, and the path to your SSH public key file.
 
     project             = "<YOUR GCP PROJECT ID>"
     region              = "<SEE INSTRUCTOR PRESENTATION>"
-    zone                = "<SEE INSTRUCTOR PRESENTATION"
+    zone                = "<SEE INSTRUCTOR PRESENTATION>"
     credentials_file    = "~/gcp_compute_key.json"
     public_key_file     = "~/.ssh/lab_ssh_key.pub"
 
