@@ -39,7 +39,7 @@ Modules Are Use Case Focused
 
 Also unlike the Terraform provider, Ansible modules tend to be more use case
 focused as opposed to trying to be a single, atomic component controller.  The
-`panos_interface <http://panwansible.readthedocs.io/en/latest/modules/panos_interface_module.html>`_
+`panos_interface <https://ansible-pan.readthedocs.io/en/latest/modules/panos_interface_module.html>`_
 module is probably the best example of this to date, as it not only creates
 interfaces, but can also create zones, place the interface into that zone,
 then finally put the interface into a virtual router.  That same workflow in
