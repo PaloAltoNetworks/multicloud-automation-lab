@@ -32,7 +32,7 @@ Learning Outcomes
 ----------
 - Understand the various methods for automating the deployment of Palo Alto Networks NGFW instances in cloud environments
 - Learn to use industry-leading configuration management automation tools to implement changes to PAN-OS devices
-- Learn how the Palo Alto Networks NGFW can automatically respond to \ changes in the network environment
+- Learn how the Palo Alto Networks NGFW can automatically respond to changes in the network environment
 
 
 .. toctree::

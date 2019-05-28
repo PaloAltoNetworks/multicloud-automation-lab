@@ -85,7 +85,7 @@ the variables that will be used in the plan (but not necessarily their values).
 The ``outputs.tf`` file will define the values to display that result from
 applying the plan.
 
-Create a file called ``terraform.tfvars`` in the current directory that contains the following variables and their values.  Fill in the quotes with the GCP project ID, the GCP region, and GCP region, the path to the JSON credentials file, the path to your SSH public key file, and the netblock of your public IP address.
+Create a file called ``terraform.tfvars`` in the current directory that contains the following variables and their values.  Fill in the quotes with the GCP project ID, the GCP region, the GCP zone, the path to the JSON credentials file, and the path to your SSH public key file.
 
 .. code-block:: bash
 

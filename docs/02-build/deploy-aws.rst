@@ -147,8 +147,7 @@ with the public IP addresses of the VM-Series firewall management and untrust
 interfaces.  However, the VM-Series firewall can take up to *ten minutes* to 
 complete the initial bootstrap process.
 
-It is recommended that you read the `Configure <../03-configure/terraform/background-terraform.html>`_ section 
-ahead while you wait.
+It is recommended that you skip ahead and read the :doc:`../03-run/terraform/background-terraform` section while you wait.
 
 
 Confirm firewall bootstrap completion
