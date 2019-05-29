@@ -79,6 +79,20 @@ resources:
           mv terraform /usr/local/bin/
           rm -f terraform.zip
 
+          echo "Installing Go ..."
+          golang_url="https://dl.google.com/go/go1.12.5.linux-amd64.tar.gz"
+          cd /tmp
+          curl -o golang.zip $golang_url
+          tar zxf golang.zip
+          mv go /usr/local/bin/
+          chown -R root:root /usr/local/bin/go
+          rm -f golang.zip
+          echo >> /home/student/.profile << EOF
+          export GOROOT=/usr/local/go
+          export GOPATH=$GOROOT/bin
+          export PATH=$PATH:$GOPATH
+          EOF
+
           echo "Fixing all permissions ..."
           chown -R student:student /home/student
 
