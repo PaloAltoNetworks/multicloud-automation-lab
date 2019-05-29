@@ -15,9 +15,15 @@ In this activity you will:
 
 Create a service account credential file
 ----------------------------------------
-We will be deploying the lab infrastucture in GCP using Terraform.  A predefined Terraform plan is provided that will initialize the GCP provider and call modules responsible for instantiating the network, compute, and storage resources needed.
+We will be deploying the lab infrastucture in GCP using Terraform.  A
+predefined Terraform plan is provided that will initialize the GCP provider and
+call modules responsible for instantiating the network, compute, and storage
+resources needed.
 
-In order for Terraform to do this it will need to authenticate to GCP.  We *could* authenticate to GCP using the username presented in the Qwiklabs panel when the lab was started.  However, the Compute Engine default service account is typically used because it is certain to have all the neccesary permissions.
+In order for Terraform to do this it will need to authenticate to GCP.  We
+*could* authenticate to GCP using the username presented in the Qwiklabs panel
+when the lab was started.  However, the Compute Engine default service account
+is typically used because it is certain to have all the neccesary permissions.
 
 List the email address of the Compute Engine default service account.
 
@@ -85,20 +91,28 @@ the variables that will be used in the plan (but not necessarily their values).
 The ``outputs.tf`` file will define the values to display that result from
 applying the plan.
 
-Create a file called ``terraform.tfvars`` in the current directory that contains the following variables and their values.  Fill in the quotes with the GCP project ID, the GCP region, the GCP zone, the path to the JSON credentials file, and the path to your SSH public key file.
+Create a file called ``terraform.tfvars`` in the current directory that
+contains the following variables and their values.  Fill in the quotes with the
+GCP project ID, the GCP region, the GCP zone, the path to the JSON credentials
+file, and the path to your SSH public key file.
 
-.. code-block:: bash
+.. code-block:: terraform
 
-    project             = ""
-    region              = ""
-    zone                = ""
-    credentials_file    = ""
-    public_key_file     = ""
+    project             = "<YOUR GCP PROJECT ID>"
+    region              = "<SEE INSTRUCTOR PRESENTATION>"
+    zone                = "<SEE INSTRUCTOR PRESENTATION>"
+    credentials_file    = "~/gcp_compute_key.json"
+    public_key_file     = "~/.ssh/lab_ssh_key.pub"
 
 
 Initialize the GCP Terraform provider
 -------------------------------------
-Once you've created the ``terraform.tfvars`` file and populated it with the variables and values you are now ready to initialize the Terraform providers.  For this initial deployment we will only be using the `GCP Provider <https://www.terraform.io/docs/providers/google/index.html>`_.  This initialization process will download all the software, modules, and plugins needed for working in a particular environment.
+Once you've created the ``terraform.tfvars`` file and populated it with the
+variables and values you are now ready to initialize the Terraform providers.
+For this initial deployment we will only be using the
+`GCP Provider <https://www.terraform.io/docs/providers/google/index.html>`_.
+This initialization process will download all the software, modules, and
+plugins needed for working in a particular environment.
 
 .. code-block:: bash
 
@@ -149,12 +163,12 @@ At a high level these are each of the steps this plan will perform:
     #. Create the database server interface
 
 The deployment process should finish in a few minutes and you will be presented
-with the public IP addresses of the VM-Series firewall management and untrust 
-interfaces.  However, the VM-Series firewall can take up to *ten minutes* to 
+with the public IP addresses of the VM-Series firewall management and untrust
+interfaces.  However, the VM-Series firewall can take up to *ten minutes* to
 complete the initial bootstrap process.
 
-It is recommended that you read the :doc:`../03-run/terraform/background-terraform` section 
-ahead while you wait.
+It is recommended that you read the
+:doc:`../03-run/terraform/background-terraform` section ahead while you wait.
 
 
 Confirm firewall bootstrap completion

@@ -74,13 +74,14 @@ applying the plan.
 
 Create a file called ``terraform.tfvars`` in the current directory that
 contains the following variables and their values.  Fill in the quotes with the
-AWS region name, the AWS availability zone, and the path to your SSH public key file.
+AWS region name, the AWS availability zone, and the path to your SSH public key
+file.
 
-.. code-block:: bash
+.. code-block:: terraform
 
-    aws_region_name     = ""
-    aws_az_name         = ""
-    public_key_file     = ""
+    aws_region_name     = "<SEE INSTRUCTOR PRESENTATION>"
+    aws_az_name         = "<SEE INSTRUCTOR PRESENTATION>"
+    public_key_file     = "~/.ssh/lab_ssh_key.pub"
 
 
 Initialize the AWS Terraform provider
