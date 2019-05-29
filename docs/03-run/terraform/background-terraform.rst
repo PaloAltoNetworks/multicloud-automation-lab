@@ -173,6 +173,53 @@ resource.  The second way, using attribute variables, is performed by
 referencing a resource or data source attribute as a variable:
 ``"${panos_management_profile.ssh.name}"``
 
+Modules
+-------
+
+Terraform can group resources together in reusable pieces called *modules*.
+Modules can have their own variables to allow for customization, and outputs so
+that the resources they create can be accessed.  Both versions of this lab use
+modules to group together elements for the base networking components, the
+firewall, and the created instances.
+
+For example, the AWS firewall configuration is located in
+``deployment/aws/modules/firewall``.  Calling this module creates the firewall
+instance, the network interfaces, and various other resources.
+
+It can be used in another Terraform plan like this:
+
+.. code-block:: terraform
+
+   module "firewall" {
+     source = "./modules/firewall"
+
+     name = "vm-series"
+
+     ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
+     vpc_id       = "${module.vpc.vpc_id}"
+
+     fw_mgmt_subnet_id = "${module.vpc.mgmt_subnet_id}"
+     fw_mgmt_ip        = "10.5.0.4"
+     fw_mgmt_sg_id     = "${aws_security_group.firewall_mgmt_sg.id}"
+
+     fw_eth1_subnet_id = "${module.vpc.public_subnet_id}"
+     fw_eth2_subnet_id = "${module.vpc.web_subnet_id}"
+     fw_eth3_subnet_id = "${module.vpc.db_subnet_id}"
+
+     fw_dataplane_sg_id = "${aws_security_group.public_sg.id}"
+
+     fw_version          = "9.0"
+     fw_product_code     = "806j2of0qy5osgjjixq9gqc6g"
+     fw_bootstrap_bucket = "${module.bootstrap_bucket.bootstrap_bucket_name}"
+
+     tags {
+       Environment = "Multicloud-AWS"
+     }
+   }
+
+This calls the firewall module, and passes in values for the variables it
+requires.
+
 
 Common Commands
 ===============
