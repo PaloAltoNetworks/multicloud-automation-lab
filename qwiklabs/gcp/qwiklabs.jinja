@@ -48,6 +48,11 @@ resources:
           cat /etc/ssh/sshd_config.orig | sed 's/^PasswordAuthentication no/PasswordAuthentication yes/g' > /etc/ssh/sshd_config
           service sshd restart
 
+          echo "Updating GO vars in .bashrc ..."
+          echo "" >> /home/student/.bashrc
+          echo "export PATH=$PATH:/usr/local/go/bin" >> /home/student/.bashrc
+          echo "export GOPATH=/home/student/go" >> /home/student/.bashrc
+
           echo "Creating .vimrc ..."
           cat > /home/student/.vimrc << EOF
           set paste
@@ -84,14 +89,9 @@ resources:
           cd /tmp
           curl -o golang.zip $golang_url
           tar zxf golang.zip
-          mv go /usr/local/bin/
-          chown -R root:root /usr/local/bin/go
+          mv go /usr/local/
+          chown -R root:root /usr/local/go
           rm -f golang.zip
-          echo >> /home/student/.profile << EOF
-          export GOROOT=/usr/local/go
-          export GOPATH=$GOROOT/bin
-          export PATH=$PATH:$GOPATH
-          EOF
 
           echo "Fixing all permissions ..."
           chown -R student:student /home/student

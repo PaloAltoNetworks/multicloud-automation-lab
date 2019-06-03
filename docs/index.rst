@@ -85,7 +85,13 @@ Learning Outcomes
     :caption: summary
 
     05-summary/summary
+    05-summary/comparison
     05-summary/cleanup
     05-summary/moreinfo
 
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: appendix
 
+    06-appendix/terraform-commit

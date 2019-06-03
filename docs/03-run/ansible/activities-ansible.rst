@@ -2,14 +2,28 @@
 Ansible Configuration
 =====================
 
+In this activity you will:
+
+- Define Module Communications
+- Define Address Objects
+- Define Service Objects
+- Define Security Rules
+- Define NAT Rules
+- Commit the Configuration
+- Run the Playbook
+
 For this portion of the lab, you're going to be using the Palo Alto Networks
 `Ansible modules <https://ansible-pan.readthedocs.io/en/latest/>`_.
 
-First, change to the ``~/multicloud-automation-lab/configuration/ansible`` directory.
+First, let's change to the Ansible configuration directory.
+
+.. code-block:: bash
+
+  $ cd ~/multicloud-automation-lab/configuration/ansible
 
 
-Module Communication
-====================
+Module Communications
+---------------------
 
 Just like with Terraform, your first task is setting up the communication with
 the firewall.  The IP address, username, and password (or API key) can be set
@@ -39,7 +53,7 @@ playbook.
 
 
 Address Objects
-===============
+---------------
 
 Your ``playbook.yml`` file contains the following:
 
@@ -80,7 +94,7 @@ to wait on a commit each time a module runs.
 
 
 Service Objects
-===============
+---------------
 
 Next, create some service objects.  We want to allow SSH on some non-standard
 ports so we can easily communicate with web and DB servers behind our firewall.
@@ -112,7 +126,7 @@ following definitions:
 
 
 Security Rules
-==============
+--------------
 
 Now we need to create security rules to allow traffic.  You'll need to refer to
 the `panos_security_rule module <https://ansible-pan.readthedocs.io/en/latest/modules/panos_security_rule_module.html>`_
@@ -142,7 +156,7 @@ Use the ``panos_security_rule`` module to create the following security rules:
 
 
 NAT Rules
-=========
+---------
 
 Now we need to create the required NAT rules.  You'll need to refer to the
 `panos_nat_rule module <https://ansible-pan.readthedocs.io/en/latest/modules/panos_nat_rule_module.html>`_
@@ -177,8 +191,8 @@ Use the ``panos_nat_rule`` module to create the following NAT rules:
           write a NAT rule on PAN-OS with multiple destination zones or services.
 
 
-Committing Your Configuration
-=============================
+Commit the Configuration
+------------------------
 
 If you have been writing your playbook with ``commit`` set to **False** each
 time, you have an uncommitted candidate configuration.  There's a panos_commit
@@ -193,8 +207,8 @@ The example code for the module should do what you need:
       provider: '{{ provider }}'
 
 
-Run Your Playbook
-=================
+Run the Playbook
+----------------
 
 Save and exit your ``playbook.yml`` file.  Then run your playbook with the
 following command:
