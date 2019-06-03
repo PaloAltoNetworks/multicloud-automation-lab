@@ -4,7 +4,7 @@ Terraform Configuration
 
 In this activity you will:
 
-- Establish Provider Communications
+- Initialize the Provider
 - Configure Network Interfaces 
 - Configure Virtual Router 
 - Configure Security Zones 
@@ -20,8 +20,8 @@ First, change to the Terraform configuration directory.
     $ cd ~/multicloud-automation-lab/configuration/terraform
 
 
-Establish Provider Communications
----------------------------------
+Provider Initialization
+-----------------------
 Your first task is to set up the communications between the provider and your
 lab firewall.  There's several ways this can be done.  The IP address,
 username, and password (or API key) can be set as variables in Terraform, and

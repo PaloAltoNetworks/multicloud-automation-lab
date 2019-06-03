@@ -1,6 +1,6 @@
-===============================
-Comparing Terraform and Ansible
-===============================
+===============
+Tool Comparison
+===============
 At this point, you've now used both Ansible and Terraform to configure a Palo
 Alto Networks firewall. Though you've used these two tools to deploy the same
 configuration, they differ in some important ways. Let's discuss some of those
