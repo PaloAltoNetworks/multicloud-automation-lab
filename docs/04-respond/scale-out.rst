@@ -41,7 +41,7 @@ For AWS:
 
 .. code-block:: bash
 
-    $ cd ~/multicloud-automation-lab/deployment/AWS
+    $ cd ~/multicloud-automation-lab/deployment/aws
 
 In the ``main.tf`` file there is a module called ``scale`` that is commented out.  Open ``main.tf`` in a text editor and uncomment that entire section.  
 
