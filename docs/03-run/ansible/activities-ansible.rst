@@ -48,14 +48,14 @@ objects or rules configured.  We're going to implement that with an Ansible
 playbook.
 
 .. note:: You wouldn't actually change tools in the middle of configuration
-   like we're doing here.  We just want you to get exposure to both, and see
-   that you can accomplish the same tasks with either.
+   like we're doing here.  We just want you to get exposure to both tools and see
+   that you can accomplish the same tasks with either one.
 
 
 Address Objects
 ---------------
 
-Your ``playbook.yml`` file contains the following:
+Open the ``playbook.yml`` file in your text editor.  It will contain the following:
 
 .. code-block:: yaml
 
