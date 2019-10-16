@@ -168,13 +168,11 @@ resource "aws_security_group" "firewall_mgmt_sg" {
 }
 
 module "web" {
-  source = "./modules/web"
-
+  source       = "./modules/web"
   name         = "web-vm"
   ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
-
-  subnet_id  = "${module.vpc.web_subnet_id}"
-  private_ip = "10.5.2.5"
+  subnet_id    = "${module.vpc.web_subnet_id}"
+  private_ip   = "10.5.2.5"
 
   tags {
     Environment = "Multicloud-AWS"
@@ -183,13 +181,11 @@ module "web" {
 }
 
 module "db" {
-  source = "./modules/db"
-
+  source       = "./modules/db"
   name         = "db-vm"
   ssh_key_name = "${aws_key_pair.ssh_key.key_name}"
-
-  subnet_id  = "${module.vpc.db_subnet_id}"
-  private_ip = "10.5.3.5"
+  subnet_id    = "${module.vpc.db_subnet_id}"
+  private_ip   = "10.5.3.5"
 
   tags {
     Environment = "Multicloud-AWS"
@@ -199,15 +195,9 @@ module "db" {
 
 #module "scale" {
 #  source                = "./modules/scale"
-
-
 #  name                  = "db-vm"
 #  ssh_key_name          = "${aws_key_pair.ssh_key.key_name}"
-
-
 #  subnet_id             = "${module.vpc.db_subnet_id}"
-
-
 #  tags {
 #    Environment         = "Multicloud-AWS"
 #    server-type         = "database"
