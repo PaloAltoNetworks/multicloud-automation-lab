@@ -23,7 +23,7 @@ For AWS:
 
 .. code-block:: bash
 
-    $ cd ~/multicloud-automation-lab/deployment/AWS
+    $ cd ~/multicloud-automation-lab/deployment/aws
 
 
 Tell Terraform to destroy the contents of its plan files.

@@ -48,6 +48,11 @@ resources:
           cat /etc/ssh/sshd_config.orig | sed 's/^PasswordAuthentication no/PasswordAuthentication yes/g' > /etc/ssh/sshd_config
           service sshd restart
 
+          echo "Updating GO vars in .bashrc ..."
+          echo "" >> /home/student/.bashrc
+          echo "export PATH=$PATH:/usr/local/go/bin" >> /home/student/.bashrc
+          echo "export GOPATH=/home/student/go" >> /home/student/.bashrc
+
           echo "Creating .vimrc ..."
           cat > /home/student/.vimrc << EOF
           set paste
@@ -78,6 +83,15 @@ resources:
           unzip terraform.zip
           mv terraform /usr/local/bin/
           rm -f terraform.zip
+
+          echo "Installing Go ..."
+          golang_url="https://dl.google.com/go/go1.12.5.linux-amd64.tar.gz"
+          cd /tmp
+          curl -o golang.zip $golang_url
+          tar zxf golang.zip
+          mv go /usr/local/
+          chown -R root:root /usr/local/go
+          rm -f golang.zip
 
           echo "Fixing all permissions ..."
           chown -R student:student /home/student

@@ -128,8 +128,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'multicloud-automation-lab.tex', 'multicloud-automation-lab Documentation',
-     'Robert Hagen', 'manual'),
+    (master_doc, 'multicloud-automation-lab.tex', 'Multi-Cloud Security Automation Lab Documentation',
+     author, 'manual'),
 ]
 
 
@@ -138,7 +138,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'multicloud-automation-lab', 'multicloud-automation-lab Documentation',
+    (master_doc, 'multicloud-automation-lab', 'Multi-Cloud Security Automation Lab Documentation',
      [author], 1)
 ]
 
@@ -149,7 +149,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'multicloud-automation-lab', 'multicloud-automation-lab Documentation',
+    (master_doc, 'multicloud-automation-lab', 'Multi-Cloud Security Automation Lab Documentation',
      author, 'multicloud-automation-lab', 'One line description of project.',
      'Miscellaneous'),
 ]

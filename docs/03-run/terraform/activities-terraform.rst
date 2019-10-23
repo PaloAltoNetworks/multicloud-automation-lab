@@ -2,16 +2,27 @@
 Terraform Configuration
 =======================
 
+In this activity you will:
+
+- Initialize the Provider
+- Configure Network Interfaces 
+- Configure Virtual Router 
+- Configure Security Zones 
+
 
 For this portion of the lab, you will be using the Palo Alto Networks
 `Terraform for PAN-OS provider <https://www.terraform.io/docs/providers/panos/index.html>`_.
 
-First, change to the ``~/multicloud-automation-lab/configuration/terraform`` directory.
+First, change to the Terraform configuration directory.
+
+.. code-block:: bash
+
+    $ cd ~/multicloud-automation-lab/configuration/terraform
 
 
-Provider Communication
-----------------------
-Your first task is to set up the communication between the provider and your
+Provider Initialization
+-----------------------
+Your first task is to set up the communications between the provider and your
 lab firewall.  There's several ways this can be done.  The IP address,
 username, and password (or API key) can be set as variables in Terraform, and
 can be typed in manually each time the Terraform plan is run, or specified on
@@ -47,8 +58,8 @@ With these values defined, we can now initialize the Terraform panos provider wi
 
 The provider is now ready to communicate with our firewall.
 
-Network Interface Configuration
--------------------------------
+Network Interfaces
+------------------
 Your firewall has been bootstrapped with an initial password and nothing else.
 We're going to be performing the initial networking configuration with
 Terraform.
@@ -89,8 +100,8 @@ Now, you can run ``terraform apply``, and the interfaces will be created on the
 firewall.
 
 
-Virtual Router Configuration
-----------------------------
+Virtual Router
+--------------
 Now, you'll have to assign those interfaces to the default virtual router.
 You will need the
 `panos_virtual_router <https://www.terraform.io/docs/providers/panos/r/virtual_router.html>`_
@@ -153,9 +164,9 @@ You will need to create three resources for the static routes depicted below:
 Define those resources in ``main.tf``, and run ``terraform apply``.
 
 
-Zone Configuration
-------------------
-Next is creating the zones for the firewall.  You will need the
+Security Zones
+--------------
+Next is creating the security zones for the firewall.  You will need the
 `panos_zone <https://www.terraform.io/docs/providers/panos/r/zone.html>`_ resource.
 
 The example code from that page looks like this:
@@ -180,7 +191,7 @@ The example code from that page looks like this:
         mode = "layer3"
     }
 
-You need to create three zones (similar to ``e1`` or ``e5`` in this example),
+You need to create three security zones (similar to ``e1`` or ``e5`` in this example),
 but they need to have the following definition:
 
 .. figure:: untrust_zone.png
@@ -196,144 +207,5 @@ but they need to have the following definition:
    Definition of **db-zone**.
 
 Define those resources in ``main.tf``, and run ``terraform apply``.
-
-
-Committing Your Configuration
------------------------------
-One thing you have to remember when working with Terraform is it does not have
-support for committing your configuration.  To commit your configuration, you
-can use the following Go code, which has been provided for you in
-``commit.go``:
-
-.. code-block:: go
-
-    package main
-
-    import (
-        "encoding/json"
-        "flag"
-        "log"
-        "os"
-
-        "github.com/PaloAltoNetworks/pango"
-    )
-
-    type Credentials struct {
-        Hostname string `json:"hostname"`
-        Username string `json:"username"`
-        Password string `json:"password"`
-        ApiKey string `json:"api_key"`
-        Protocol string `json:"protocol"`
-        Port uint `json:"port"`
-        Timeout int `json:"timeout"`
-    }
-
-    func getCredentials(configFile, hostname, username, password, apiKey string) (Credentials) {
-        var (
-            config Credentials
-            val string
-            ok bool
-        )
-
-        // Auth from the config file.
-        if configFile != "" {
-            fd, err := os.Open(configFile)
-            if err != nil {
-                log.Fatalf("ERROR: %s", err)
-            }
-            defer fd.Close()
-
-            dec := json.NewDecoder(fd)
-            err = dec.Decode(&config)
-            if err != nil {
-                log.Fatalf("ERROR: %s", err)
-            }
-        }
-
-        // Auth from env variables.
-        if val, ok = os.LookupEnv("PANOS_HOSTNAME"); ok {
-            config.Hostname = val
-        }
-        if val, ok = os.LookupEnv("PANOS_USERNAME"); ok {
-            config.Username = val
-        }
-        if val, ok = os.LookupEnv("PANOS_PASSWORD"); ok {
-            config.Password = val
-        }
-        if val, ok = os.LookupEnv("PANOS_API_KEY"); ok {
-            config.ApiKey = val
-        }
-
-        // Auth from CLI args.
-        if hostname != "" {
-            config.Hostname = hostname
-        }
-        if username != "" {
-            config.Username = username
-        }
-        if password != "" {
-            config.Password = password
-        }
-        if apiKey != "" {
-            config.ApiKey = apiKey
-        }
-
-        if config.Hostname == "" {
-            log.Fatalf("ERROR: No hostname specified")
-        } else if config.Username == "" && config.ApiKey == "" {
-            log.Fatalf("ERROR: No username specified")
-        } else if config.Password == "" && config.ApiKey == "" {
-            log.Fatalf("ERROR: No password specified")
-        }
-
-        return config
-    }
-
-    func main() {
-        var (
-            err error
-            configFile, hostname, username, password, apiKey string
-            job uint
-        )
-
-        log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
-
-        flag.StringVar(&configFile, "config", "", "JSON config file with panos connection info")
-        flag.StringVar(&hostname, "host", "", "PAN-OS hostname")
-        flag.StringVar(&username, "user", "", "PAN-OS username")
-        flag.StringVar(&password, "pass", "", "PAN-OS password")
-        flag.StringVar(&apiKey, "key", "", "PAN-OS API key")
-        flag.Parse()
-
-        config := getCredentials(configFile, hostname, username, password, apiKey)
-
-        fw := &pango.Firewall{Client: pango.Client{
-            Hostname: config.Hostname,
-            Username: config.Username,
-            Password: config.Password,
-            ApiKey: config.ApiKey,
-            Protocol: config.Protocol,
-            Port: config.Port,
-            Timeout: config.Timeout,
-            Logging: pango.LogOp | pango.LogAction,
-        }}
-        if err = fw.Initialize(); err != nil {
-            log.Fatalf("Failed: %s", err)
-        }
-
-        job, err = fw.Commit(flag.Arg(0), true, true, false, true)
-        if err != nil {
-            log.Fatalf("Error in commit: %s", err)
-        } else if job == 0 {
-            log.Printf("No commit needed")
-        } else {
-            log.Printf("Committed config successfully")
-        }
-    }
-
-This code reads the hostname, username, and password from the environment
-variables we set earlier.  You can run it with ``go run commit.go``.
-Additionally, you can add a commit comment with
-``go run commit.go <your commit comment>``.
 
 You're done with the Terraform portion of the lab!
