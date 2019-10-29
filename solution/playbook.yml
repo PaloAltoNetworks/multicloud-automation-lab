@@ -29,7 +29,7 @@
     - name: Create service object 'service-tcp-221'
       panos_service_object:
         provider: "{{ provider }}"
-        name: "servcice-tcp-221"
+        name: "service-tcp-221"
         destination_port: "221"
         description: "SSH on tcp/221"
         commit: false
