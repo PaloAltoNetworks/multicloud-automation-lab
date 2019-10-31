@@ -39,7 +39,7 @@ following commands to add the appropriate environment variables:
     $ export PANOS_USERNAME="admin"
     $ export PANOS_PASSWORD="Ignite2019!"
 
-.. note:: Replace the text ``<YOUR FIREWALL MGMT IP GOES HERE>`` with your firewall's management IP address.  
+.. note:: Replace the text ``<YOUR FIREWALL MGMT IP GOES HERE>`` with your firewall's management IP address.
 
 Now, you should see the variables exported in your shell, which you can verify
 using the ``env | grep PANOS`` command:
@@ -131,7 +131,7 @@ Define the virtual router resource in ``main.tf``, and run ``terraform apply``.
    be configured.  **If you chose GCP as your cloud, you have an additional
    step!**
 
-   If you chose AWS, please continue to `Zone Configuration <#zone-configuration>`_ section and skip the following.
+   If you chose AWS, please continue to `Security Zones <#security-zones>`_ section and skip the following.
 
 GCP requires static routes for each subnet to be defined on the virtual router.
 You will need the `panos_static_route_ipv4 <https://www.terraform.io/docs/providers/panos/r/static_route_ipv4.html>`_

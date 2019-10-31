@@ -79,8 +79,8 @@ file.
 
 .. code-block:: terraform
 
-    aws_region_name     = "<SEE INSTRUCTOR PRESENTATION>"
-    aws_az_name         = "<SEE INSTRUCTOR PRESENTATION>"
+    aws_region_name     = "<SEE_INSTRUCTOR_PRESENTATION>"
+    aws_az_name         = "<SEE_INSTRUCTOR_PRESENTATION>"
     public_key_file     = "~/.ssh/lab_ssh_key.pub"
 
 
@@ -144,8 +144,8 @@ At a high level these are each of the steps this plan will perform:
     #. Create the database server interface
 
 The deployment process should finish in a few minutes and you will be presented
-with the public IP addresses of the VM-Series firewall management and untrust 
-interfaces.  However, the VM-Series firewall can take up to *ten minutes* to 
+with the public IP addresses of the VM-Series firewall management and untrust
+interfaces.  However, the VM-Series firewall can take up to *ten minutes* to
 complete the initial bootstrap process.
 
 It is recommended that you skip ahead and read the :doc:`../03-run/terraform/background-terraform` section while you wait.
@@ -160,11 +160,17 @@ SSH into the firewall with the following credentials.
 
 .. code-block:: bash
 
-    $ ssh admin@<firewall-ip>
+    $ ssh admin@<FIREWALL_MGMT_IP>
 
-.. warning:: If you are unsuccessful the firewall instance is likely still 
-   bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again 
-   after waiting a few minutes.
+Replace ``<FIREWALL_MGMT_IP>`` with the IP address of the firewall management
+interface that was provided in the Terraform plan results.  This information
+can be easily recalled using the ``terraform output`` command within the
+deployment directory.
+
+.. warning:: If you are unsuccessful the firewall instance is likely still
+   bootstrapping or performing an autocommit.  Hit ``Ctrl-C`` and try again
+   after waiting a few minutes.  The bootstrap process can take up to *ten
+   minutes* to complete before you are able to successfully log in.
 
 Once you have logged into the firewall you can check to ensure the management
 plane has completed its initialization.

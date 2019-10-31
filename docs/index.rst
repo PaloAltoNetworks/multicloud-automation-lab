@@ -6,7 +6,7 @@
 Multi-Cloud Security Automation Lab Guide
 =========================================
 
-.. image:: ignite19-europe-grey.png
+.. image:: ignite19-us.jpg
    :align: center
 
 Welcome
