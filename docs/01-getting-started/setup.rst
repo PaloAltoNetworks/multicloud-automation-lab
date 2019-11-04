@@ -40,13 +40,13 @@ Confirm that the course containing the phrase *"Multi-Cloud Automation"* is
 listed under In Progress on the welcome screen.  Click on the this course in
 order to add it to your My Learning inventory.
 
-.. figure:: qwiklabs-main.png
+.. figure:: qwiklabs-main-europe.png
 
 You will be presented with two lab environments within this course: one for GCP
 and the other for AWS.  You may choose either one depending on your learning
 objectives or platform familiarity.
 
-.. figure:: qwiklabs-labs.png
+.. figure:: qwiklabs-labs-europe.png
 
 .. note:: If you finish all the activities for one lab environment, you are
           free to launch the other (time permitting).  The lab activities are
@@ -57,11 +57,11 @@ Once you've selected the lab evironment, you will need to click the
 credentials and instantiate a "launchpad" virtual machine that you will SSH
 into to perform the rest of the lab activities.
 
-.. figure:: qwiklabs-start-gcp.png
+.. figure:: qwiklabs-start-gcp-europe.png
 
     Provisioning the GCP lab environment
 
-.. figure:: qwiklabs-start-aws.png
+.. figure:: qwiklabs-start-aws-europe.png
 
     Provisioning the AWS lab environment
 
