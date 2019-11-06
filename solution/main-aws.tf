@@ -1,6 +1,6 @@
 provider "panos" {}
 
-resource "panos_ethernet_interface" "eth1" {
+resource "panos_ethernet_interface" "untrust" {
   name                      = "ethernet1/1"
   comment                   = "untrust interface"
   vsys                      = "vsys1"
@@ -9,7 +9,7 @@ resource "panos_ethernet_interface" "eth1" {
   create_dhcp_default_route = true
 }
 
-resource "panos_ethernet_interface" "eth2" {
+resource "panos_ethernet_interface" "web" {
   name        = "ethernet1/2"
   comment     = "web interface"
   vsys        = "vsys1"
@@ -17,7 +17,7 @@ resource "panos_ethernet_interface" "eth2" {
   enable_dhcp = true
 }
 
-resource "panos_ethernet_interface" "eth3" {
+resource "panos_ethernet_interface" "db" {
   name        = "ethernet1/3"
   comment     = "database interface"
   vsys        = "vsys1"
@@ -29,26 +29,26 @@ resource "panos_virtual_router" "lab_vr" {
   name = "default"
 
   interfaces = [
-    "${panos_ethernet_interface.eth1.name}",
-    "${panos_ethernet_interface.eth2.name}",
-    "${panos_ethernet_interface.eth3.name}",
+    "${panos_ethernet_interface.untrust.name}",
+    "${panos_ethernet_interface.web.name}",
+    "${panos_ethernet_interface.db.name}",
   ]
 }
 
-resource "panos_zone" "untrust" {
+resource "panos_zone" "untrust_zone" {
   name       = "untrust-zone"
   mode       = "layer3"
-  interfaces = ["${panos_ethernet_interface.eth1.name}"]
+  interfaces = ["${panos_ethernet_interface.untrust.name}"]
 }
 
-resource "panos_zone" "web" {
+resource "panos_zone" "web_zone" {
   name       = "web-zone"
   mode       = "layer3"
-  interfaces = ["${panos_ethernet_interface.eth2.name}"]
+  interfaces = ["${panos_ethernet_interface.web.name}"]
 }
 
-resource "panos_zone" "database" {
+resource "panos_zone" "db_zone" {
   name       = "db-zone"
   mode       = "layer3"
-  interfaces = ["${panos_ethernet_interface.eth3.name}"]
+  interfaces = ["${panos_ethernet_interface.db.name}"]
 }
