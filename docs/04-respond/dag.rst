@@ -48,6 +48,6 @@ Now that we've defined a VM Information Source and a Dynamic Address Group, let'
 
 Find the rule that allows *mysql* traffic from the ``web-srv`` address object in the ``web-zone`` to the ``db-srv`` address object in the ``db-zone``.
 
-Replace the ``db-srv`` destination with the ``db-srv`` Dynamic Address Group you've created.
+Replace the ``db-srv`` destination with the ``db-grp`` Dynamic Address Group you've created.
 
 Click **OK** and then commit your changes by clicking **Commit**.
