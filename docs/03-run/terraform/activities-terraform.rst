@@ -70,7 +70,7 @@ You've been provided with the following Terraform plan in ``main.tf``:
 
     provider "panos" {}
 
-    resource "panos_ethernet_interface" "untrust" {
+    resource "panos_ethernet_interface" "eth1" {
         name                      = "ethernet1/1"
         vsys                      = "vsys1"
         mode                      = "layer3"
@@ -78,14 +78,14 @@ You've been provided with the following Terraform plan in ``main.tf``:
         create_dhcp_default_route = true
     }
 
-    resource "panos_ethernet_interface" "web" {
+    resource "panos_ethernet_interface" "eth2" {
         name        = "ethernet1/2"
         vsys        = "vsys1"
         mode        = "layer3"
         enable_dhcp = true
     }
 
-    resource "panos_ethernet_interface" "db" {
+    resource "panos_ethernet_interface" "eth3" {
         name        = "ethernet1/3"
         vsys        = "vsys1"
         mode        = "layer3"
