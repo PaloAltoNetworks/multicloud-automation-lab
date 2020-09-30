@@ -1,7 +1,9 @@
 {
     "variables": {
         "aws_access_key": "",
-        "aws_secret_key": ""
+        "aws_secret_key": "",
+        "gcp_project_id": "",
+        "gcp_account_file": ""
     },
     "builders": [
         {
