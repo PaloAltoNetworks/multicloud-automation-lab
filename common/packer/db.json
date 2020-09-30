@@ -17,7 +17,7 @@
                     "name": "debian-stretch-hvm-x86_64-gp2-*",
                     "root-device-type": "ebs"
                 },
-                "owners": ["932037237461"],
+                "owners": ["379101102735"],
                 "most_recent": true
             },
             "instance_type": "t2.medium",
