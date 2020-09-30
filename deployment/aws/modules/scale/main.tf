@@ -14,19 +14,20 @@
 # limitations under the License.
 ############################################################################################
 
-data "aws_ami" "db_ami" {
-  most_recent = true
+# data "aws_ami" "db_ami" {
+#   most_recent = true
 
-  filter {
-    name   = "name"
-    values = ["multicloud-aws-db-*"]
-  }
+#   filter {
+#     name   = "name"
+#     values = ["multicloud-aws-db-*"]
+#   }
 
-  owners = ["640680520898"]
-}
+#   owners = ["640680520898"]
+# }
 
 resource "aws_instance" "db" {
-  ami           = "${data.aws_ami.db_ami.id}"
+#   ami           = "${data.aws_ami.db_ami.id}"
+  ami = "ami-0a5811e4e59cc0e01"
   instance_type = "t2.micro"
   count         = 4
   key_name      = "${var.ssh_key_name}"
